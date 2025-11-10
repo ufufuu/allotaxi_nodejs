@@ -8,7 +8,7 @@ const options = {
 		info: {
         title: 'alloEscrow API',
         version: '1.0.0',
-        description: 'alloEscrow APir demonstration purposes',
+        description: 'alloEscrow APi',
       }
 	},
 	servers:[
