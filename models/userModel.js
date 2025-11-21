@@ -1,5 +1,31 @@
 const pg = require("pg");
 
+
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('../dbConnection');
+
+const Author = sequelize.define('Author', {
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  age: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+  createdAt: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW
+  }
+}, { tableName: 'authors' });
+
+module.exports = {
+  Author,
+  
+  //Book
+};
+
+
 //const bcrypt = require("bcrypt");
 //const jwt = require("jsonwebtoken");
   /*

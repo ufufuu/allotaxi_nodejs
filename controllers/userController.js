@@ -3,12 +3,10 @@ const express = require("express");
 const app = express();
 
 exports.signupUser = async ( req, res ) => {
-	
 	//const { userName, userPassword } = req.body;
+	//res.send("from User Controller");
 	
-	res.send("from User Controller");
-	
-	/*try {
+	try {
         const userExists = await UserModel.findOne({ email });
         if (userExists) return res.status(400).json({ message: " User already exists " });
 
@@ -16,8 +14,10 @@ exports.signupUser = async ( req, res ) => {
         const savedUser = await user.save();
         res.status(201).json(savedUser);
     } catch (error) {
-        res.status(400).json({ message: "Failed to register user" });
-    }*/
+        //res.status(400).json({ message: "Failed to register user" });
+		
+		res.send(error);
+    }
 	
 	
 	//try 
