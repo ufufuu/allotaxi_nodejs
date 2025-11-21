@@ -1,12 +1,12 @@
 const UserModel = require('../models/User.model');
 
-exports.signupUser = async( req, res ) => {
-	
-	const { name, email, password } = req.body;
-	try {
-        const userExists = await UserModel.findOne({ email });
-        if (userExists) return res.status(400).json({ message: " User already exists " });
 
+exports.createPayment = async( req, res ) => {
+	const { amount, sellerId } = req.body;
+	try {
+        if (!req?.session?.user?.id) { 
+			return res.status(400).json({ message: " User already exists " });
+		}
         const user = new User({ name, email, password, role: "admin" });
         const savedUser = await user.save();
 
@@ -16,8 +16,8 @@ exports.signupUser = async( req, res ) => {
     }
 };
 
-exports.loginUser = async (req, res) => {
-	
+
+exports.transferFunds = async (req, res) => {
     const { email, password } = req.body;
     try {
         const user = await UserModel.findOne({ email, password }).select("-password");

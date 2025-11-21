@@ -4,17 +4,23 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
     "express": "^4.17.0",
     "express-jwt": "^8.5.1",
     "express-oauth2-jwt-bearer": "^1.7.1",
     "mongoose": "^8.19.1",
     "nodemon": "^3.1.10",
+    "pg": "^8.16.3",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.37.7",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
   }

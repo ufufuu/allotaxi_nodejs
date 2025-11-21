@@ -1,10 +1,9 @@
-
 const express = require('express');
 const { signup,
 	signupUser,
 	login,
 	getUser
-} = require('../controllers/authController');
+} = require('../controllers/userController');
 
 const router = express.Router();
 
@@ -13,3 +12,5 @@ router.post('/signup/user', signupUser);
 router.post('/login', login);
 
 router.get('/user/:id', getUser);
+
+
