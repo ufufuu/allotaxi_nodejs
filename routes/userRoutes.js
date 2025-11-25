@@ -31,11 +31,23 @@ const userController = require("../controllers/userController");
 *             schema:
 *               type: object
 *               properties:
-*                 user:
-*                   $ref: '#/components/schemas/UserAccount'
-*   get:
-*     summary: get a user
+*                 id:
+*                   type:string
+* /user/login:
+*   post:
+*     summary: login a user
 *     tags: [User]
+*     requestBody:
+*       required: true
+*       content:
+*         application/json:
+*           schema:
+*             type: object
+*             properties:
+*               userName:
+*                 type: string
+*               userPassword:
+*                 type: string
 *     responses:
 *       '200':
 *         description: OK
@@ -57,9 +69,9 @@ const userController = require("../controllers/userController");
 *           type: string
 */
 
-router.get("/login", userController.loginUser);
-
 router.post("/register", userController.signupUser);
+router.post("/login", userController.loginUser);
+router.get("user:id", userController.loginUser);
 
 module.exports = router;
 

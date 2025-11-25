@@ -8,7 +8,7 @@ const options = {
 		info: {
         title: 'alloTAXI Api endpoints',
         version: '1.0.0',
-        description: 'alloTaxi APi',
+        description: 'alloTaxi API ',
       }
 	},
 	servers:[

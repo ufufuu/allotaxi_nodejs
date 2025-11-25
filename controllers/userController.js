@@ -1,23 +1,75 @@
 const UserModel = require('../models/userModel');
 const express = require("express");
 const app = express();
+const { User } = require("../models/userModel");
+const { City , Country } = require("../models/cityModel");
+const { sequelize } = require('../dbConnection');
+const { QueryTypes } = require("sequelize");
 
-exports.signupUser = async ( req, res ) => {
-	//const { userName, userPassword } = req.body;
-	//res.send("from User Controller");
+//const { Pool }  = require('../config/dbConnection');
+
+const { Pool } = require("pg");
+
+exports.signupUser = async (req, res) => {
+	const { userName, userPassword } = req.body;
 	
-	try {
-        const userExists = await UserModel.findOne({ email });
-        if (userExists) return res.status(400).json({ message: " User already exists " });
-
-        const user = new User({ name, email, password, role: "admin" });
-        const savedUser = await user.save();
-        res.status(201).json(savedUser);
-    } catch (error) {
-        //res.status(400).json({ message: "Failed to register user" });
+	//res.status(400).json({message:userPassword});mnmnmn
+	
+	//try {
 		
-		res.send(error);
-    }
+		/*
+		const [results ] = await sequelize.query(
+		'insert into Countries("countryId", "countryName", "regionId") values("2", "togo", "1")',
+		  {	
+			type: QueryTypes.INSERT,
+			returning: true, // required to get results
+		  }
+		);*/
+		//const query1= `insert into "Countries" ("countryId", "countryName", "regionId") values(2, "togo",1)`;
+		
+		const  pool = new Pool({
+			user: 'allopromo_user',
+			host: 'localhost',
+			database: 'allopromo_dbPostGres',
+			password: 'Kad@1207',
+			port: 5432,
+		});
+		var ret ='Togo';
+		const result = await pool.query(
+		'insert into "Countries" ("countryId", "countryName", "regionId") values($1, $2, $3) returning *',[4, "Mali", null])
+		
+		
+		
+		/*
+		
+		const data = sequelize.query(
+		'insert into Countries (countryId, countryName, regionId) values($1, $2, $3) returning * ", [1,Togo, 3]'
+		)
+		.catch(err =>{
+			res.status(400).json({ yoomsg: err });
+		});
+		//await data.save();
+		*/
+		
+		/*
+		const id=2;
+		const name="Dapaong";
+		const country=1;
+		const region =null;
+		
+		const data = await Country.create({
+			Id: "2",
+			Name: "name",
+			Region: "1"
+		});*/
+		//await data.save();
+	
+        //res.status(201).json(data);
+		
+    //} catch (error) {
+      //res.status(400).json({ message: "Failed to register user" });
+	  //res.send(error);
+    //}
 	
 	
 	//try 

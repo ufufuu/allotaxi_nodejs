@@ -4,6 +4,7 @@ const swaggerUI = require('swagger-ui-express');
 //const {signupUser} = require('./controllers/authController');
 //const swaggerDoc = YAML.load(path.join(__dirname, './swagger.yaml'));
 //const YAML = require('yamljs');
+
 const cors = require("cors");
 const userController = require('./controllers/userController');
 const swaggerDocument = require('./swagger.js');
@@ -45,8 +46,6 @@ const pool = new Pool({
 */
 
 const prodConnectionString ={
-	
-	
 };
 const pool = new pg.Pool(connectionString);
 
@@ -65,8 +64,8 @@ pool.connect((err, client, release) => {
     })
 });
 
-
 app.use(cors());
+app.use(express.json());
 app.use("/user", userRoutes);
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec)); //swaggerDocument, options));
 

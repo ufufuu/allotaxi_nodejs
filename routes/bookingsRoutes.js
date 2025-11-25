@@ -2,7 +2,7 @@
  * @swagger
  * components:
  *   schemas:
- *     Driver:
+ *     Booking:
  *       type: object
  *       required:
  *         - title
@@ -44,18 +44,18 @@ router.post("/register",
 /**
  * @swagger
  * tags:
- *   name: Drivers
- *   description: API managing Drivers 
- * /driver:
+ *   name: Bookings
+ *   description: API managing Bookings 
+ * /bookings:
  *   post:
- *     summary: Become a new Driver
- *     tags: [Drivers]
+ *     summary: Create a new booking
+ *     tags: [Bookings]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Driver'
+ *             $ref: '#/components/schemas/Booking'
  *     responses:
  *       200:
  *         description: The created booking.
@@ -65,10 +65,35 @@ router.post("/register",
  *         description: Some server error
  *
  */
-
 router.post("/login", 
     driverController.loginDriver
 );
+/**
+ * @swagger
+ * tags:
+ *   name: Bookings
+ *   description: API managing Bookings 
+ * /bookings:
+ *   get:
+ *     summary: Get a booking
+ *     tags: [Bookings]
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Booking'
+ *     responses:
+ *       200:
+ *         description: The created booking.
+ *         content:
+ *           application/json:
+ *       500:
+ *         description: Some server error
+ *
+ */
+router.get("/profile", authCaptain, driverController.captainProfile);
+
 /*
 router.post("/verify-account", 
 	driverController.verifyEmail);
@@ -77,7 +102,7 @@ router.post("/update",
     driverController.updateCaptainProfile
 );
 
-router.get("/profile", authCaptain, driverController.captainProfile);
+
 
 router.get("/logout", authCaptain, driverController.logoutCaptain);
 
