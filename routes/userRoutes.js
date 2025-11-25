@@ -21,7 +21,13 @@ const userController = require("../controllers/userController");
 *             properties:
 *               userName:
 *                 type: string
+*               userFirstName:
+*                 type: string
+*               userLogin:
+*                 type: string
 *               userPassword:
+*                 type: string
+*               userRole:
 *                 type: string
 *     responses:
 *       '200':
@@ -33,8 +39,6 @@ const userController = require("../controllers/userController");
 *               properties:
 *                 id:
 *                   type:string
-* tags:
-*   name: User
 * /user/login:
 *   post:
 *     summary: login a user
@@ -58,30 +62,24 @@ const userController = require("../controllers/userController");
 *             schema:
 *               type: object
 *               properties:
-*                 user:
+*                 registeruser:
 *                   $ref: '#/components/schemas/RegisterUser'
 * components:
 *   schemas:
 *     RegisterUser:
 *       type: object
 *       required:
-*         - userName
-*         - userPassword
+*         - userNameRR
 *       properties:
-*         userName:
-*           type: string
-*         userPassword:
+*         userNameRR:
 *           type: string
 *     LoginUser:
 *       type: object
 *       required:
-*         - userName
-*         - userPassword
+*         - userNameRON
 *       properties:
-*         userName:
+*         userNameRON:
 *           type: string
-*		  userPassword:
-*			type:string
 */
 
 router.post("/register", userController.signupUser);
@@ -110,6 +108,7 @@ Appsmith enables you to quickly build, deploy and share applications
 with end-users for running critical business operations. You can connect to any database
 
 https://www.roundthecode.com/dotnet-tutorials/integrating-signalr-with-react-typescript-and-asp-net-core
+
 https://hackernoon.com/react-native-signalr-net-core-with-dotnetify-f919083170d4
 
 // https://dotnetify.net/

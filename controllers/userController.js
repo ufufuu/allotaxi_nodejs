@@ -35,14 +35,17 @@ exports.signupUser = async (req, res) => {
 			port: 5432,
 		});
 		var ret ='Togo';
+		
+		const createUser = await pool.query(
+		'insert into "AspNetUsers" ("countryId", "countryName", "regionId") values($1, $2, $3) returning *',[4, "Mali", null]);
+		
 		const result = await pool.query(
-		'insert into "Countries" ("countryId", "countryName", "regionId") values($1, $2, $3) returning *',[4, "Mali", null])
+		'insert into "Countries" ("countryId", "countryName", "regionId") values($1, $2, $3) returning *',[4, "Mali", null]);
 		
 		
 		
 		/*
-		
-		const data = sequelize.query(
+		const [results] = sequelize.query(
 		'insert into Countries (countryId, countryName, regionId) values($1, $2, $3) returning * ", [1,Togo, 3]'
 		)
 		.catch(err =>{
@@ -62,8 +65,6 @@ exports.signupUser = async (req, res) => {
 			Name: "name",
 			Region: "1"
 		});*/
-		//await data.save();
-	
         //res.status(201).json(data);
 		
     //} catch (error) {
