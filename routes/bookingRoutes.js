@@ -1,3 +1,9 @@
+const express = require("express");
+const router = require("express").Router();
+
+const bookingController = require("../controllers/bookingController");
+const { adminAuth } = require("../middlewares/auth")
+
 /**
  * @swagger
  * components:
@@ -9,37 +15,41 @@
  *         - author
  *         - finished
  *       properties:
- *         id:
+ *         bookingReference:
  *           type: string
  *           description: The auto-generated id of the booking
- *         title:
+ *         bookingTitle:
  *           type: string
  *           description: The title of your booking
- *         author:
+ *         bookingContactInfo:
  *           type: string
  *           description: The booking author
- *         finished:
+ *         originAdress:
  *           type: boolean
  *           description: Whether you have finished reading the booking
- *         createdAt:
+ *         destinationAdress:
+ *           type: boolean
+ *           description: Whether you have finished reading the booking
+ *         bookingCreatedAt:
  *           type: string
  *           format: date
  *           description: The date the booking was added
+ *         bookingEta:
+ *           type: boolean
+ *           description: Whether you have finished reading the booking
+ *         specialInstructions:
+ *           type: boolean
+ *           description: Whether you have finished reading the booking
  *       example:
- *         id: d5fE_asz
- *         title: The New Turing Omnibus
- *         author: Alexander K. Dewdney
- *         finished: false
- *         createdAt: 2020-03-10T04:05:06.157Z
+ *         bookingReference: D5FEASZ
+ *         bookingTitle: ""
+ *         bookingContactInfo: Alexander K. Dewdney
+ *         originAdress: Camp Gp
+ *         destinationAdress: Aeroport Lome Tokoin
+ *         bookingCreatedAt: 2020-03-10T04:05:06.157Z
+ *         bookingEta: 45 mns
+ *         specialInstructions: None
  */
-
-const express = require("express");
-const router = require("express").Router();
-const driverController = require("../controllers/driverController");
-
-router.post("/register",
-    driverController.registerDriver
-);
 
 /**
  * @swagger
@@ -65,9 +75,7 @@ router.post("/register",
  *         description: Some server error
  *
  */
-router.post("/login", 
-    driverController.loginDriver
-);
+router.post("/", bookingController.createBooking);
 /**
  * @swagger
  * tags:
@@ -92,25 +100,16 @@ router.post("/login",
  *         description: Some server error
  *
  */
-router.get("/profile", authCaptain, driverController.captainProfile);
-
-/*
-router.post("/verify-account", 
-	driverController.verifyEmail);
-
-router.post("/update", 
-    driverController.updateCaptainProfile
-);
-
-
-
-router.get("/logout", authCaptain, driverController.logoutCaptain);
-
-router.post("reset-Password",
-    driverController.resetPassword
-);
-*/
+ router.get("/bookings:id", bookingController.cancelBooking);
+ 
+//router.get("/booking:id", authCaptain, driverController.captainProfile);
 
 module.exports = router;
 
 // https://blog.logrocket.com/documenting-express-js-api-swagger/
+/*
+router.post("/verify-account", driverController.verifyEmail);
+router.post("/update", driverController.updateCaptainProfile);
+router.get("/logout", authCaptain, driverController.logoutCaptain);
+router.post("reset-Password", driverController.resetPassword);
+*/

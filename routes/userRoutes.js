@@ -66,6 +66,9 @@ const userController = require("../controllers/userController");
 *               properties:
 *                 registeruser:
 *                   $ref: '#/components/schemas/RegisterUser'
+*               example:
+*                 userName: "joe@allo.cc"
+*                 userPassword: "Kad@1207"
 * components:
 *   schemas:
 *     RegisterUser:

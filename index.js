@@ -11,6 +11,9 @@ const pg = require('pg');
 const app = express();
 
 const Pool = require('pg').Pool;
+//const cookieParser = require("cookie-parser");
+
+const bookingRoutes = require("./routes/bookingRoutes");
 const userRoutes = require('./routes/userRoutes');
 const driverRoutes = require("./routes/driverRoutes");
 
@@ -62,13 +65,14 @@ pool.connect((err, client, release) => {
 
 app.use(cors());					
 app.disable("x-powered-by"); 	//// Change To Allow oringin only !
-
-
 //app.use(cookieParser());
+
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.use("/user", userRoutes);
+app.use("/bookings", bookingRoutes);
+ 
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec)); //swaggerDocument, options));
 
 app.listen( port, () =>{
