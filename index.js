@@ -1,10 +1,6 @@
 const express = require('express');
 const swaggerUI = require('swagger-ui-express');
 
-//const {signupUser} = require('./controllers/authController');
-//const swaggerDoc = YAML.load(path.join(__dirname, './swagger.yaml'));
-//const YAML = require('yamljs');
-
 const cors = require("cors");
 const userController = require('./controllers/userController');
 const swaggerDocument = require('./swagger.js');
@@ -64,11 +60,23 @@ pool.connect((err, client, release) => {
     })
 });
 
-app.use(cors());
+app.use(cors());					
+app.disable("x-powered-by"); 	//// Change To Allow oringin only !
+
+
+//app.use(cookieParser());
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+
 app.use("/user", userRoutes);
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec)); //swaggerDocument, options));
 
 app.listen( port, () =>{
 	console.log(`app started and listening on ${port}`);
 });
+
+// Handling Errors
+app.on("unhandledRejection", err => {
+  console.log(`An error occurred: ${err.message}`)
+  server.close(() => process.exit(1))
+})

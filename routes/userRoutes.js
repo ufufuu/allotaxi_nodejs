@@ -29,6 +29,8 @@ const userController = require("../controllers/userController");
 *                 type: string
 *               userRole:
 *                 type: string
+*               userPhoneNumber:
+*                 type: string
 *     responses:
 *       '200':
 *         description: OK
