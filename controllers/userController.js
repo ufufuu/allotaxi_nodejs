@@ -129,8 +129,8 @@ exports.loginUser = async(req, res) => {
 	
     const { userName, userPassword } = req.body;
 	
-    //try 
-	//{
+    try 
+	{
         //const user = await UserModel.findOne({ userName, userPassword }).select("-password");
 		
         if ((!userName) || (!userPassword)) {
@@ -147,7 +147,7 @@ exports.loginUser = async(req, res) => {
 		});
 		const userLogin = await pool.query(`SELECT * from "AspNetUsers" where "UserName" =$1 and "PasswordHash"=$2`,[
         userName,
-        hashedPwd
+        userPassword
 		]);
 		if(userLogin.rowCount > 0) {
 			return res.status(200).json(
@@ -168,21 +168,10 @@ exports.loginUser = async(req, res) => {
             "statusCode": 401
 			});
 		}
-		
-        //req.session.user = {
-          //  id: user._id.toString(),
-        //};
-
-        /*return res.status(200).json({
-            message: "Login successful",
-            userName: userName
-        });*/
-		
-		
-    //}catch (error){
-      //  console.error("Login error:", error);
-        //return res.status(500).json({ error: "Failed to log in." });
-    //}
+    }catch (error){
+        console.error("Login error:", error);
+        return res.status(500).json({ error: "Failed to log in." });
+    }
 };
 
 
