@@ -59,6 +59,9 @@ const { adminAuth } = require("../middlewares/auth")
  * /bookings:
  *   post:
  *     summary: Create a new booking
+ *     description: Post request that requires authorization
+ *     security:
+ *       - BearerAuth: []
  *     tags: [Bookings]
  *     requestBody:
  *       required: true
@@ -69,6 +72,10 @@ const { adminAuth } = require("../middlewares/auth")
  *     responses:
  *       200:
  *         description: The created booking.
+ *         content:
+ *           application/json:
+ *       401:
+ *         description: Unauthorized
  *         content:
  *           application/json:
  *       500:

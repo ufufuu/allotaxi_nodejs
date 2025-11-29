@@ -1,4 +1,4 @@
-// swagger.js
+// swagger.jss
 
 const swaggerJsdoc = require('swagger-jsdoc');
 
@@ -10,6 +10,39 @@ const options = {
         version: '1.0.0',
         description: 'alloTaxi API ',
       }
+	},
+	//Defining security schemes globally
+	components: {
+		securitySchemes: {
+			BearerAuth: {
+				type: 'http',
+				scheme: 'bearer',
+				bearerFormat: 'JWT',
+				description: 'Either your Bearer token  in the format **Bearer <token>**'
+			},
+			CustomHeader: {
+				type: 'apiKey',
+				in: 'header',
+				name: 'X-Custom-Header',
+				description: 'An example of a custom required header'
+			}
+		}
+	},
+	security: [{
+		// this applied BearerAuth to all endpoints by default
+		"Bearer": []
+	}],
+	securityDefinitions: {
+		Bearer: {
+			type: "apiKey",
+			name: "Authorization",
+			in: "header"
+		},
+		JWT: {
+			type: "apiKey",
+			name: "token",
+			in: "header"
+		}
 	},
 	servers:[
 		{
@@ -29,12 +62,12 @@ module.exports = swaggerSpec;
 
 /*
 https://www.rqap.gouv.qc.ca/en
-
 https://www.pimco.com/ca/fr/investment-strategies/real-estate
 https://fr.wikipedia.org/wiki/Trade_Republic
 https://automag.tg/2025/06/09/importation-de-voiture-au-togo-taxes-et-demarches/
 
-You can do surveys in free time (like commute) to help reach your goal amount, its completely flexible and doesn't require skills or capital.
+You can do surveys in free time (like commute) to help reach your goal amount, its completely flexible a
+nd doesn't require skills or capital.
 
 Legit survey apps include Attapol, PrimeOpinion, swagbucks, prolific and LifePoints...
 
@@ -137,28 +170,19 @@ Barka Change, Ejara ou HIROPAY qui acceptent les paiements locaux via des moyens
 //X6QOXC
 
 // https://www.reddit.com/r/passive_income/comments/1kx05n1/im_in_togo_just_looking_for_a_way_to_earn_10/
-
 // https://novascotia.ca/coms/employment/income_assistance/index.html
-
 // -- https://novascotia.ca/coms/employment/basic-needs-assistance/index.html
-
 // -- https://www.fishjobs.ca/job/lobster-processor-fish-processing-2/
-
 // -- https://www.jobbank.gc.ca/jobsearch/jobposting/45943909
-
 // -- https://novascotiaworks.ca/nsdc/careers/fishing-vessel-deckhands/84121
-
 // -- https://emploisfp-psjobs.cfp-psc.gc.ca
-
 // -- https://money.ca/managing-money/how-to-earn-money/totally-legit-ways-to-get-free-money-from-the-canadian-government
-
 // -- https://benefitswayfinder.org/starting-points/emergency-money-need/nova-scotia
 
 
 // -- HOCCareers-CarrieresCDC@parl.gc.ca
 
 // -- https://docs.cometh.io/core-features/create-a-wallet
-
 // -- https://prod-auth.cloud.applause.com\
 // trding de cryptomaiians
 // - produits de ervenure passfis

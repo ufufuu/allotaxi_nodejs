@@ -16,6 +16,8 @@ const Pool = require('pg').Pool;
 const bookingRoutes = require("./routes/bookingRoutes");
 const userRoutes = require('./routes/userRoutes');
 const driverRoutes = require("./routes/driverRoutes");
+const userAuth = require("./middlewares/auth");
+const { connectionString } = require("./config/db");
 
 const port = 3001; // process.env.PORT || 3000;
 
@@ -23,29 +25,6 @@ var options = {
   explorer: true
 };
 
-var connectionString = {
-  user: 'allopromo_user',
-  host: 'localhost',
-  database: 'allopromo_dbPostGres',
-  password: 'Kad@1207',
-  port: 5432,
-};
-
-/*
-const pool = new Pool({
-	user: 'allopromo_db_px8b_user',
-    host: 'dpg-d4909rm3jp1c73cqqo00-a.oregon-postgres.render.com',
-    database: 'allopromo_db_px8b',
-    password: 'Gel30X8RPqqksAO1LDHlJRali2hFA1ep',
-    //dialect: 'postgres',
-	//Persist Security Info: 'true',
-	//SSL Mode: 'require',
-    port: 5432,
-});
-*/
-
-const prodConnectionString ={
-};
 const pool = new pg.Pool(connectionString);
 
 pool.connect((err, client, release) => {
@@ -71,7 +50,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.use("/user", userRoutes);
-app.use("/bookings", bookingRoutes);
+app.use("/bookings", userAuth, bookingRoutes);
  
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec)); //swaggerDocument, options));
 
@@ -84,3 +63,17 @@ app.on("unhandledRejection", err => {
   console.log(`An error occurred: ${err.message}`)
   server.close(() => process.exit(1))
 })
+
+
+/*
+const pool = new Pool({
+	user: 'allopromo_db_px8b_user',
+    host: 'dpg-d4909rm3jp1c73cqqo00-a.oregon-postgres.render.com',
+    database: 'allopromo_db_px8b',
+    password: 'Gel30X8RPqqksAO1LDHlJRali2hFA1ep',
+    //dialect: 'postgres',
+	//Persist Security Info: 'true',
+	//SSL Mode: 'require',
+    port: 5432,
+});
+*/

@@ -1,6 +1,7 @@
 
 const { DataTypes } = require('sequelize');
-const { sequelize } = require('../dbConnection');
+const { sequelize } = require('../config/db');
+
 //const { Rider } = require('./riderModel');
 //const { sequelize } = require('../config/dbConnection');
 //const { sequelize } = require("sequelize"); //../config/dbConnection');
@@ -10,11 +11,11 @@ const BookingModel = sequelize.define('BookingModel', {
     type: DataTypes.STRING,
     allowNull: false
   },
-  origin: {
+  fromOrigin: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  destination: {
+  toDestination: {
     type: DataTypes.STRING,
     allowNull: false
   },

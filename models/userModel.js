@@ -1,29 +1,31 @@
 const pg = require("pg");
 const { DataTypes } = require('sequelize');
-const { sequelize } = require('../dbConnection');
+const { sequelize } = require('../config/db');
 
 const User= sequelize.define('User', {
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  password: {
-    type: DataTypes.STRING,
-    allowNull: true
-  },
-  role: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  createdAt: {
-    type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW
-  }
-},{ 
-	tableName: 'AspNetUsers',
-	createdAt:false,
-	updatedAt:false
-});
+	  name: {
+		type: DataTypes.STRING,
+		allowNull: false
+	  },
+	  password: {
+		type: DataTypes.STRING,
+		allowNull: true
+	  },
+	  role: {
+		type: DataTypes.STRING,
+		allowNull: false
+	  },
+	  createdAt: {
+		type: DataTypes.DATE,
+		defaultValue: DataTypes.NOW
+	  }
+	},{ 
+		tableName: 'AspNetUsers',
+		createdAt:false,
+		updatedAt:false
+	}
+);
+
 
 module.exports = {
   User

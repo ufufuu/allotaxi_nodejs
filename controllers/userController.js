@@ -3,12 +3,11 @@ const express = require("express");
 const app = express();
 const { User } = require("../models/userModel");
 const { City , Country } = require("../models/cityModel");
-const { sequelize } = require('../dbConnection');
 const { QueryTypes } = require("sequelize");
 const jwt = require('../services/jwtService');
+const { pool, sequelize }  = require('../config/db');
 
-//const { Pool }  = require('../config/dbConnection');
-const { Pool } = require("pg");
+//const { Pool } = require("pg");
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");
 
@@ -35,13 +34,16 @@ exports.signupUser = async (req, res) => {
 		const myuuid = crypto.randomBytes(20).toString('hex');//randomBytes(35)vs ? 
 		const hash = await bcrypt.hash(userPassword, saltRounds);
 		
+		/*
 		const  pool = new Pool({
-			user: 'allopromo_user',
+			user: 'postgres',
 			host: 'localhost',
-			database: 'allopromo_dbPostGres',
+			database: 'postgres',
 			password: 'Kad@1207',
 			port: 5432,
 		});
+		*/
+		
 		var ret ='Togo';
 		
 		const createUser = await pool.query(
@@ -138,6 +140,8 @@ exports.loginUser = async(req, res) => {
 		let hashedPwd = crypto.createHash('md5').update(userPassword).digest('hex');
 		
 		//const user = await UserModel.findOne({ userName, userPassword }).select("-password");
+
+		/*
 		const  pool = new Pool({
 			user: 'allopromo_user',
 			host: 'localhost',
@@ -145,6 +149,8 @@ exports.loginUser = async(req, res) => {
 			password: 'Kad@1207',
 			port: 5432,
 		});
+		*/
+		
 		const userLogin = await pool.query(`SELECT * from "AspNetUsers" where "UserName" =$1 and "PasswordHash"=$2`,[
         userName,
         userPassword
@@ -249,4 +255,9 @@ app.get("/logout", (req, res) => {
 https://dev.to/m_josh/build-a-jwt-login-and-logout-system-using-expressjs-nodejs-hd2
 https://www.loginradius.com/blog/engineering/guest-post/nodejs-authentication-guide
 https://stackoverflow.com/questions/53206309/going-from-asp-net-web-api-to-node-js-with-express
+
+https://www.w3schools.com/nodejs/nodejs_api_auth.asp
+
+https://dev.to/m_josh/build-a-jwt-login-and-logout-system-using-expressjs-nodejs-hd2
+
 */

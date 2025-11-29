@@ -1,15 +1,18 @@
 const jwt = require("jsonwebtoken")
 const jwtSecret = "4715aed3c946f7b0a38e6b534a9583628d84e96d10fbc04700770d572af3dce43625dd"
 
-exports.adminAuth = (req, res, next) => {
-  const token = req.cookies.jwt
+module.exports = (req, res, next) => {
+	
+  //const token = req.cookies.jwt;
+  let token = req.headers.authorization || req.headers.Authorization;
+  
   if (token) {
     jwt.verify(token, jwtSecret, (err, decodedToken) => {
       if (err) {
-        return res.status(401).json({ message: "Not authorized" })
+        return res.status(401).json({ message: "Not authorized, from middleware " })
       } else {
-        if (decodedToken.role !== "admin") {
-          return res.status(401).json({ message: "Not authorized" })
+        if (decodedToken.role !== "Basic") {
+          return res.status(401).json({ message: "Not authorized from middleware " })
         } else {
           next()
         }
@@ -18,18 +21,18 @@ exports.adminAuth = (req, res, next) => {
   } else {
     return res
       .status(401)
-      .json({ message: "Not authorized, token not available" })
+      .json({ message: "Not authorized, token not available, from auth middleware" })
   }
 }
 
-exports.userAuth = (req, res, next) => {
+exports.adminAuth = (req, res, next) => {
   const token = req.cookies.jwt
   if (token) {
     jwt.verify(token, jwtSecret, (err, decodedToken) => {
       if (err) {
         return res.status(401).json({ message: "Not authorized" })
       } else {
-        if (decodedToken.role !== "Basic") {
+        if (decodedToken.role !== "admin") {
           return res.status(401).json({ message: "Not authorized" })
         } else {
           next()
