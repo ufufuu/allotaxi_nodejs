@@ -50,7 +50,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.use("/user", userRoutes);
-app.use("/bookings", userAuth, bookingRoutes);
+app.use("/bookings", bookingRoutes);  // userAuth, bookingRoutes);
  
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec)); //swaggerDocument, options));
 
@@ -65,15 +65,19 @@ app.on("unhandledRejection", err => {
 })
 
 
-/*
-const pool = new Pool({
-	user: 'allopromo_db_px8b_user',
-    host: 'dpg-d4909rm3jp1c73cqqo00-a.oregon-postgres.render.com',
-    database: 'allopromo_db_px8b',
-    password: 'Gel30X8RPqqksAO1LDHlJRali2hFA1ep',
-    //dialect: 'postgres',
-	//Persist Security Info: 'true',
-	//SSL Mode: 'require',
-    port: 5432,
-});
-*/
+// https://www.tigerdata.com/blog/how-we-made-postgresql-the-best-vector-database
+
+ // https://dev.to/biswasprasana001/designing-a-ride-hailing-service-system-eg-uberlyft-a-beginner-friendly-guide-252o
+ // https://www.geeksforgeeks.org/sql/how-to-design-a-database-for-ride-sharing-and-carpooling-services/
+
+// // https://stackoverflow.com/questions/34997598/sql-database-ride-sharing
+// https://analyticsengines.com/resources/insights/analysing-nyc-taxi-data-with-postgresql-timescaledb-and-python/
+
+// https://www.hellointerview.com/learn/system-design/problem-breakdowns/uber
+// https://www.alibabacloud.com/blog/database-design-and-implementation-of-a-ride-hailing-dispatch-system_597161
+
+// https://medium.com/@deepdeepak2222/how-to-implement-a-ride-matching-system-using-postgres-postgis-and-python-93cdcc5d0d55
+
+// https://www.geeksforgeeks.org/sql/how-to-design-a-database-for-ride-sharing-and-carpooling-services/
+
+// POST GRES GIS Extensions for Ride Sharing ?

@@ -41,14 +41,10 @@ const { adminAuth } = require("../middlewares/auth")
  *           type: boolean
  *           description: Whether you have finished reading the booking
  *       example:
- *         bookingReference: D5FEASZ
- *         bookingTitle: ""
- *         bookingContactInfo: Alexander K. Dewdney
- *         originAdress: Camp Gp
- *         destinationAdress: Aeroport Lome Tokoin
- *         bookingCreatedAt: 2020-03-10T04:05:06.157Z
- *         bookingEta: 45 mns
- *         specialInstructions: None
+ *         originAdress: " Aeroport Lome Tokoin"
+ *         destinationAdress: "Carrefour Edem"
+ *         contactInfo: " 99-98-90-90"
+ *         specialInstructions: "Je suis a la porte deja"
  */
 
 /**

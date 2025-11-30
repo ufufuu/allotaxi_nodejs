@@ -10,7 +10,7 @@ const port = 5432;
 const pool = new Pool({
 	user: 'postgres',
 	host: 'localhost',
-	database: 'postGres',
+	database: 'postgres',
 	password: 'Kad@1207',
 	port: 5432,
 });
@@ -28,6 +28,18 @@ const connectionString = {
   port: 5432,
 };
 
+/*
+const pool = new Pool({
+	user: 'allopromo_db_px8b_user',
+    host: 'dpg-d4909rm3jp1c73cqqo00-a.oregon-postgres.render.com',
+    database: 'allopromo_db_px8b',
+    password: 'Gel30X8RPqqksAO1LDHlJRali2hFA1ep',
+    //dialect: 'postgres',
+	//Persist Security Info: 'true',
+	//SSL Mode: 'require',
+    port: 5432,
+});
+*/
 const prodConnectionString ={
 };
 

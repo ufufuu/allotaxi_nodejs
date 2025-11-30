@@ -26,7 +26,6 @@ exports.signupUser = async (req, res) => {
 		);
 		*/
 		//const query1= `insert into "Countries" ("countryId", "countryName", "regionId") values(2, "togo",1)`;
-		//const myuuid = crypto.randomUUID();
 		if (userPassword.length < 6) {
 			return res.status(400).json({ message: "Password less than 6 characters" })
 		}
