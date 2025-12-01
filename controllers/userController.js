@@ -12,7 +12,7 @@ const crypto = require("crypto");
 const bcrypt = require("bcrypt");
 
 exports.signupUser = async (req, res) => {
-	const { userName, userFirstName, userLogin, userPassword, userPhoneNumber } = req.body;
+	const { userName, userFirstName, userLastName, userLogin, userPassword, userPhoneNumber } = req.body;
 	
 	//res.status(400).json({message:userPassword});mnmnmn
 	//try {
@@ -30,45 +30,41 @@ exports.signupUser = async (req, res) => {
 			return res.status(400).json({ message: "Password less than 6 characters" })
 		}
 		const saltRounds = 10;
-		const myuuid = crypto.randomBytes(20).toString('hex');//randomBytes(35)vs ? 
-		const hash = await bcrypt.hash(userPassword, saltRounds);
-		
-		/*
-		const  pool = new Pool({
-			user: 'postgres',
-			host: 'localhost',
-			database: 'postgres',
-			password: 'Kad@1207',
-			port: 5432,
-		});
-		*/
-		
-		var ret ='Togo';
+		const uId = crypto.randomBytes(20).toString('hex');
+		const hashedPwd = await bcrypt.hash(userPassword, saltRounds);	
 		
 		const createUser = await pool.query(
 		`insert into "AspNetUsers"(
+		
 		"Id",
-		"firstName",
-		"lastName",
-		"isAdmin",
-		"isMerchant",
-		"Type",
 		"UserName",
 		"NormalizedUserName",
 		"Email",
 		"NormalizedEmail",
+		
 		"EmailConfirmed",
 		"PasswordHash",
 		"SecurityStamp",
 		"ConcurrencyStamp",
 		"PhoneNumber",
+		
 		"PhoneNumberConfirmed",
 		"TwoFactorEnabled",
 		"LockoutEnd",
 		"LockoutEnabled",
-		"AccessFailedCount"
-		) 
-		values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20) returning *`,[myuuid, userFirstName, userFirstName, 0,0,0, userName, userName,userName,userName,0, hash ,"","",userPhoneNumber,0,0,null,0,0]);
+		"AccessFailedCount",
+		
+		"Discriminator",
+		"firstName",
+		"lastName",
+		"middleName",
+		"Longitude",
+		
+		"Latitude",
+		"isAdmin",
+		"isDriver") 
+		values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23) returning *`,
+		[uId, userName, "USERNAME", userName, "USERNAME", false, hashedPwd ,"securityStamp", "concurrrencyStamp", userPhoneNumber, false, false, null, false, 0,  "discriminator", userFirstName, "lastName", "middleName", 1.23456789, 9.87654321, false,false ]);
 		
 		
 		//const result = await pool.query(
@@ -245,6 +241,7 @@ app.get("/logout", (req, res) => {
   res.redirect("/")
 });
 
+// https://www.geeksforgeeks.org/sql/how-to-design-a-database-for-ride-sharing-and-carpooling-services/
 
 //http://localhost:3000/bookings?driverId=65ca5821fc586669549c1cc8
 //http://localhost:3000/bookings/search?origin=Kabatas
@@ -258,5 +255,24 @@ https://stackoverflow.com/questions/53206309/going-from-asp-net-web-api-to-node-
 https://www.w3schools.com/nodejs/nodejs_api_auth.asp
 
 https://dev.to/m_josh/build-a-jwt-login-and-logout-system-using-expressjs-nodejs-hd2
+
+https://www.apurple.co/ride-sharing-app-development/
+
+
+https://stackoverflow.com/questions/34997598/sql-database-ride-sharing
+
+Ride Match : https://medium.com/@deepdeepak2222/how-to-implement-a-ride-matching-system-using-postgres-postgis-and-python-93cdcc5d0d55
+*/
+// https://dev.to/biswasprasana001/designing-a-ride-hailing-service-system-eg-uberlyft-a-beginner-friendly-guide-252o
+
+//-- https://github.com/richxcame/ride-hailing
+
+
+// -- https://www.alibabacloud.com/blog/database-design-and-implementation-of-a-ride-hailing-dispatch-system_597161
+/*
+1
+docker run — name loc_psql -e POSTGRES_USER=user -e POSTGRES_PASSWORD=pass -e POSTGRES_DB=mydb -p 5434:5432 -d postgis/postgis
+2.
+docker exec -it loc_psql bash. loc_psql
 
 */
