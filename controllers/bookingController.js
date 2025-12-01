@@ -3,8 +3,11 @@ const crypto = require("crypto");
 const { pool } = require("../config/db");
 
 exports.createBooking = async( req, res, next ) => {
-	const { originAdress, destinationAdress, contactInfo, specialInstructions } = req.body;
+	const { originAdress, destinationAdress, contactInfo, specialInstructions , rider } = req.body;
 	const bookingId = crypto.randomBytes(20).toString('hex');
+	
+	// How To Get current Logged User ID  or Name here ?
+	
 	
 	//try {
         //if (!req?.session?.user?.id) {
@@ -28,6 +31,8 @@ exports.createBooking = async( req, res, next ) => {
 			password: 'Kad@1207',
 			port: 5432,
 		});*/
+		
+		const riderId = "821650f4f741652419c954b662f2be9683c60625";
 		const booking = await pool.query(
 		`INSERT INTO "Bookings"(
 		"Id",
@@ -40,7 +45,7 @@ exports.createBooking = async( req, res, next ) => {
 		"RiderId",
 		"DriverId")
 		values($1, $2, $3, $4, $5, $6, $7, $8, $9) returning *`,
-		[bookingId, originAdress, destinationAdress, 100, 1, "2020-03-10T04:05:06.157Z", "2020-03-10T04:05:06.157Z", null, null ]);
+		[bookingId, originAdress, destinationAdress, 100, 1, "2020-03-10T04:05:06.157Z", "2020-03-10T04:05:06.157Z", riderId, null ]);
         res.status(201).json(booking);
 		
     //} catch (error) {

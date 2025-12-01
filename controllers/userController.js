@@ -63,9 +63,12 @@ exports.signupUser = async (req, res) => {
 		"Latitude",
 		"isAdmin",
 		"isDriver") 
-		values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23) returning *`,
-		[uId, userName, "USERNAME", userName, "USERNAME", false, hashedPwd ,"securityStamp", "concurrrencyStamp", userPhoneNumber, false, false, null, false, 0,  "discriminator", userFirstName, "lastName", "middleName", 1.23456789, 9.87654321, false,false ]);
+		values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23) returning $1, $2`,
+		[uId, userName, "USERNAME10", userName, "USERNAME10", false, hashedPwd ,"securityStamp", "concurrrencyStamp", userPhoneNumber, false, false, null, false, 0,  "discriminator", userFirstName, "lastName", "middleName", 1.23456789, 9.87654321, false,false ]);
 		
+		res.status(201).json(createUser);
+		//res.status(201).json(createUser["userName"]);
+		res.status(201).json(userName);
 		
 		//const result = await pool.query(
 		//'insert into "Countries" ("countryId", "countryName", "regionId") values($1, $2, $3) returning *',[4, "Mali", null]);

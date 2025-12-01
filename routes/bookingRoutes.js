@@ -45,6 +45,7 @@ const { adminAuth } = require("../middlewares/auth")
  *         destinationAdress: "Carrefour Edem"
  *         contactInfo: " 99-98-90-90"
  *         specialInstructions: "Je suis a la porte deja"
+ *         rider: "joe7"
  */
 
 /**
