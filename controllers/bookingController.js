@@ -2,37 +2,39 @@ const Booking = require('../models/BookingModel');
 const crypto = require("crypto");
 const { pool } = require("../config/db");
 
+//const matcher = require("../matching-engine/DynamicTripVehicleAssignmentMatcher");
+const dispatchService = require("../dispatchEngine/dispatchService");
+const geoService = require("../dispatchEngine/geoService");
+
+
 exports.createBooking = async( req, res, next ) => {
-	const { originAdress, destinationAdress, contactInfo, specialInstructions , rider } = req.body;
+	const { originAdress, destinationAdress, contactInfo, specialInstructions, rider } = req.body;
 	const bookingId = crypto.randomBytes(20).toString('hex');
 	
 	// How To Get current Logged User ID  or Name here ?
-	
-	
-	//try {
+	//try 
+	//{
         //if (!req?.session?.user?.id) {
 			//return res.status(400).json({ message: " Unauthorized " });
 		//}
         //const user = new User({ name, email, password, role: "admin" });
         //const savedUser = await user.save();
 		/*
-		const booking = new Booking({
-			"reference": "4idfk",
-			"fromOrigin": "orign",
-			"toDestination":"dest",
-			"createdAt":"2025 11 28",
-		});
 		const savedRideRequest = await booking.save();
 		*/
-		/*const  pool = new Pool({
-			user: 'postgres',
-			host: 'localhost',
-			database: 'postgres',
-			password: 'Kad@1207',
-			port: 5432,
-		});*/
+		
+		const longitude = 114.179677;
+		const latitude = 22.304239;
+		
+		//matcher.match(booking, driverId);
+		
+		const nearByDrivers = geoService.findNearbyPoints(114.179677, 22.304239, 10000);
+		return res.status(200).json(nearByDrivers);
+		
 		
 		const riderId = "821650f4f741652419c954b662f2be9683c60625";
+		const driverId = "821650f4f741652419c954b662f2be9683c60625";
+		
 		const booking = await pool.query(
 		`INSERT INTO "Bookings"(
 		"Id",
@@ -46,10 +48,14 @@ exports.createBooking = async( req, res, next ) => {
 		"DriverId")
 		values($1, $2, $3, $4, $5, $6, $7, $8, $9) returning *`,
 		[bookingId, originAdress, destinationAdress, 100, 1, "2020-03-10T04:05:06.157Z", "2020-03-10T04:05:06.157Z", riderId, null ]);
-        res.status(201).json(booking);
+        //res.status(201).json(booking);
 		
-    //} catch (error) {
-      //  res.status(400).json({ message: "Failed to register user" });
+        
+		
+		
+		
+    //} catch(error){
+		//res.status(400).json({ message: "Failed to create Booking" });
     //}
 };
 
@@ -80,5 +86,71 @@ exports.updateBooking = async (req, res) => {
 exports.cancelBooking = async ( req, res, next ) => {
 	return res.status(400).json({ message: "cancelling booking"});
 };
-	
-	
+/*
+Core Components : real-time communication: Implements WebSockets (e.g., Socket.IO) to 
+facilitate instant updates of driver locations and ride requests/status.
+
+Database with Geospatial Indexing: Uses solutions like MongoDB or Redis with spatial 
+indexing (e.g., Geohash or R-tree) to efficiently query nearby drivers based on location data.
+
+Integrates third-party APIs like Google Maps for route calculations, distance/time estimations, and map visualization
+
+2.Geospatial Filtering
+When a rider submits a request, the system first queries the database for drivers
+within a certain geographical radius of the rider's origin. This initial filtering is crucial for performance
+
+ 3 Feasibility Check (Spatial and Temporal)
+For each potential driver match, the algorithm checks feasibility using constraints: 
+
+    Spatial Feasibility: The rider's origin and destination must be along the driver's route or within a maximum allowed detour distance.
+    Temporal Feasibility: The driver must be able to pick up the rider within their specified time window and arrive at the destination on time.
+    Capacity Constraint: The driver must have enough empty seats 
+
+Scoring/Ranking
+Feasible matches are then scored based on the system's objective function. Common factors include: 
+
+    Proximity: Closeness of the driver to the rider's pickup location.
+    Efficiency: Minimal driver detour time/distance.
+    User Ratings: Prioritizing drivers with higher ratings.
+    Compatibility: (For shared-ride pooling) Using data like social preferences to improve match quality. 
+Assignment
+The system selects the best-ranked driver. In simple systems, the top choice is notified immediately. 
+For complex, real-time systems with many concurrent requests, advanced algorithms like the Hungarian algorithm or other heuristic 
+approaches might be used to find the optimal global matching solution across all available drivers and riders. 
+*/
+//  Libraries like node-geohash or built-in geospatial queries in MongoDB are very useful for the filtering step
+
+// https://github.com/eric19960304/Ridesharing-App-For-HK-Back-End/tree/master/src
+
+//https://github.com/eric19960304/Ridesharing-App-For-HK-Back-End
+
+// https://github.com/hhc97/routescc-client-driver-matching-app
+
+// - Distance Matrix API
+// - Geocoding API: 
+// - Maps JavaScript API Nearby Search
+
+// https://medium.com/@shubhamrajput252000/how-to-find-the-nearest-location-using-google-maps-in-a-mern-stack-application-81baab1cca1c ***
+
+// https://www.uber.com/en-GH/blog/tech-stack-part-one-foundation/
+
+
+
+// ** https://www.dhiwise.com/post/ride-matching-algorithm-for-a-smoother-rideshare-experience
+
+// https://dev.to/biswasprasana001/designing-a-ride-hailing-service-system-eg-uberlyft-a-beginner-friendly-guide-252o
+
+// ###
+
+//https://jurajmajerik.com/blog/matching-drivers-customers/ (3)
+
+// https://dilipkumar.medium.com/system-design-for-uber-ride-hailing-application-b95ac796c90d
+
+// https://www.geeksforgeeks.org/system-design/how-uber-finds-nearby-drivers-at-1-million-requests-per-second/
+
+// " uber like ride matching algorithm
+
+// https://github.com/hhc97/routescc-client-driver-matching-app   --- (2)
+
+ //(1)
+// https://medium.com/@shubhamrajput252000/how-to-find-the-nearest-location-using-google-maps-in-a-mern-stack-application-81baab1cca1c
