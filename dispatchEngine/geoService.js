@@ -1,6 +1,6 @@
 const express = require("express");
 
-//const env = require("env");
+const { pool } = require("../config/db");
 const config = require('dotenv').config();
 const address = '';
 const googleApiKey = process.env.GOOGLE_MAPS_API_KEY;
@@ -29,12 +29,9 @@ class geoService {
 	};
 	
 	async findNearbyPoints (lng, lat, radius) {
-		const query =`
-		SELECT name, ST_AsText(geom)
-		FROM Locations
-		WHERE ST_DWithin(geom, ST_SetSRID(ST_MakePoint (${lng}, ${lat}), 4326, ${radius});
-		`;
-		const result = await client.query(query);
+		const result = await pool.query(
+			`SELECT * FROM "Locations"
+			`);
 		console.log(result.rows);
 		return result;
 	}
@@ -80,3 +77,8 @@ module.exports = new geoService();
 //https://medium.com/@shubhamrajput252000/how-to-find-the-nearest-location-using-google-maps-in-a-mern-stack-application-81baab1cca1c
 // https://dev.to/biswasprasana001/designing-a-ride-hailing-service-system-eg-uberlyft-a-beginner-friendly-guide-252oz
 // https://sigm.tg/portal/apps/webappviewer/index.html?id=a1cd40a866d14a8f9112bc887af88bda
+
+
+//WHERE ST_DWithin(geom, ST_SetSRID(ST_MakePoint (${lng}, ${lat}), 4326, ${radius})
+
+//name, ST_AsText(geom)

@@ -47,7 +47,7 @@ exports.createBooking = async( req, res, next ) => {
 		"RiderId",
 		"DriverId")
 		values($1, $2, $3, $4, $5, $6, $7, $8, $9) returning *`,
-		[bookingId, originAdress, destinationAdress, 100, 1, "2020-03-10T04:05:06.157Z", "2020-03-10T04:05:06.157Z", riderId, null ]);
+		[bookingId, originAdress, destinationAdress, 100, 1, "2020-03-10T04:05:06.157Z", "2020-03-10T04:05:06.157Z", null, null ]);
         //res.status(201).json(booking);
 		
         
