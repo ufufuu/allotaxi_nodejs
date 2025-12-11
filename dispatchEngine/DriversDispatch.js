@@ -1,18 +1,30 @@
 const express = require("express");
+
 const geoService = require("../services/geoService");
 const driversTracking = require("./DriversTracking");
 const bookingModel = require("../models/BookingModel");
+const http = require("http");
 const pool = require("../config/db");
-const io = require("socket.io");
+const socketio = require("socket.io");
+
+const app = express();
+const httpServer = http.createServer(app);
+
+
+const io = socketio(httpServer, {
+  cors: {
+    origin: "*", // Or '*' for any origin (less secure)
+    methods: ["GET", "POST"],
+    credentials: true
+  }
+});
 
 class DriversDispatch {
 	
-	async matchBookingToDriver ( bookingModel ) {
-		
+	async matchBookingToDriver ( bookingModel ) {	
 	}
 	
-	//async DispatchBooking (bookingModel, riderId ) {
-	async DispatchBooking ( riderId, driverId, originCoords, destinationCoords ) {
+	async DispatchBooking ( riderId, driverId, originCoords, destinationCoords ) { // bookingModel, riderId )
 		
 		// Obtain from APi user-location post Api to Server: riderId, latCoords, lngCoords
 		// var riderCoordinates = await this.getRiderLocation();
@@ -24,7 +36,7 @@ class DriversDispatch {
 			//console.log('io on connection:', socket.id);
 			//console.log('io on connection:', riderId);
 			
-			// start listening for coords
+			// start listening for coords //io.to('CI3bN_CtNW5T9SrMAAAH').emit('onPickUpRider', data);
 			io.to(driverId).emit('sendRiderCoords', function (riderOriginCoords ) {
 				// broadcast your coordinates to everyone except you
 				//socket.broadcast.emit('load:coords', data);  // or is it socket.emit ?
@@ -48,6 +60,7 @@ class DriversDispatch {
 				console.log('User disconnected:', socket.id);
 		    });
 		});
+		return true;
 	}
 		
 	async updateLocationDb ( lat, lng, driverId ) {

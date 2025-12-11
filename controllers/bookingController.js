@@ -13,24 +13,40 @@ exports.createBooking = async ( req, res, next ) => {
 	//{
         //if (!req?.session?.user?.id) {
 			//return res.status(400).json({ message: " Unauthorized " });
-		//}	
-		const currentLocation = await geoService.getCurrentPosition();
+		//}
+		
+		/*
+		const closestLocation = locations.reduce(( r, o) => {
+			const distance= haversine (o, targetLocation);
+			if( distance < r.minDistance || !r.minDistance) {
+				return { location: o, minDistance: distance };
+			}
+			return r;
+		}, {});
+		*/
+		const radius = 6371;
+		const currentLocation= { latitude: 55.87, longitude:  4.20};
+		const nearbyDrivers = 
+		[	{ latitude: 55.85, longitude:  4.20 }, 
+			{ latitude: 55.8, longitude:  4.20 },
+			{ latitude: 55.89, longitude:  4.20 }
+		];
+		
+		const currentLocation23 = await geoService.getCurrentPosition();
 		const originLat = currentLocation.latitude;
 		const originLng = currentLocation.longitude;
 		
-		const nearbyDrivers = await geoService.queryNearByDrivers(originLat, originLng, radius );
+		const nearbyDrivers34 = await geoService.queryNearByDrivers(originLat, originLng, radius );
+		console.log("nearby drivers:", nearbyDrivers34);
+		
 		var bestDriverMatch =  await geoService.getBestDriverMatch(nearbyDrivers);
+		console.log("best driver Match is:", bestDriverMatch);
+		
 		const driverId = bestDriverMatch.Id;
 		
-		//await bookingService.Book( riderId3 );
-		
-		//io.to('CI3bN_CtNW5T9SrMAAAH').emit('onPickUpRider', data);
 		const driverAccepted = await driversDispatch.DispatchBooking (riderId, driverId, originCoords, destinationCoords  );
 		
-		//await driversDispatch.DispatchBooking( bestDriverMatch.socketId );
-		
 		if(driverAccepted) {
-		//return res.status(200).json(currentLocation);
 			const booking = await pool.query(
 			`INSERT INTO "Bookings"(
 			"Id",
@@ -43,8 +59,9 @@ exports.createBooking = async ( req, res, next ) => {
 			"RiderId",
 			"DriverId")
 			values($1, $2, $3, $4, $5, $6, $7, $8, $9) returning *`,
-			[bookingId, originAdress, destinationAdress, 100, 1, "2020-03-10T04:05:06.157Z", "2020-03-10T04:05:06.157Z", null, null]);
+			[bookingId, originCoords, destinationCoords, 100, 1, "2020-03-10T04:05:06.157Z", "2020-03-10T04:05:06.157Z", null, null]);
 			res.status(201).json(booking);	
+			//return res.status(200).json(currentLocation);
 		}
     //} catch(error){
 		//res.status(400).json({ message: "Failed to create Booking" });

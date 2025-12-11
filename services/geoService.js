@@ -21,10 +21,8 @@ class GeoService {
 	
 	async getCurrentPosition() {
 		// Get lat and lng Data from Api Being hitten by Client updating his adress
-		
 		const updatingApi = `api/v1/services/location-update`;
 		const Url = baseApiUrl+ updatingApi;
-		
 		//const { data } = axios.post(Url, {latidude, longitude, userId});
 		return {
 			'latitude':6.1833216,
@@ -44,7 +42,7 @@ class GeoService {
 	async queryNearByDrivers ( lat, lng, radius ) {
 		const findNearbyDrivers = await pool.query(
 			`SELECT * FROM "Locations"
-			WHERE "latitude"=${lat} AND "longitude"=${lng}`);
+			WHERE "Latitude"=${lat} AND "Longitude"=${lng}`);
 		return findNearbyDrivers;
 	};
 	
@@ -67,17 +65,49 @@ class GeoService {
 		if (response.data.status !== 'OK') 
 		{
 			return res.status(400).send('Invalid address');
-			} catch(err){
-				console.log("Error gain - ouatchi --- watchi vs ewe --- tem vs kabye"); 
-			}
+			//} catch(err){
+				//console.log("Error gain - ouatchi --- watchi vs ewe --- tem vs kabye"); 
+			//}
 		}
 	}
+	async haversine ( p1, p2 ) {
+		
+		const targetLocation= { latitude: 55.87, longitude:  4.20};
+		const locations = [{ latitude: 55.85, longitude:  4.20}, 
+						{ latitude: 55.8, longitude:  4.20},
+					{ latitude: 55.89, longitude:  4.20}
+				];
+		const R = 6371; // radius of earth in kms
+		const r = Math.PI / 180; // degree to radian conversion
+		
+		const deltaLat = (p2.Latitude - p1.Latitude);
+		const deltaLng = (p2.Longitude - p1.Longitude);
+		
+		const a = (
+			Math.sin(deltaLat /2) ** 2+
+			Math.cos(p1.latidude * r) *
+			Math.cos(p2.latidude * r) *
+			Math.sin(deltaLat /2) ** 2
+		);
+		const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+		return R * c;
+	}
 	
+	/*
+	const closestLocation = locations.reduce(( r, o) => {
+		const distance= haversine (o, targetLocation);
+		if( distance < r.minDistance || !r.minDistance) {
+			return { location: o, minDistance: distance };
+		}
+		return r;
+	}, {});
+	*/
+	
+		
 	async haversineDistance (location1, location2) {
 		const toRad = (x) => {
 			return x * Math.PI / 180;
-		};
-	  
+	};
 		const lat1 = location1.latitude;
 		const lat2 = location2.latitude;
 	  
@@ -93,8 +123,9 @@ class GeoService {
 	};
 	
 	async getBestDriverMatch() {
-		const latitude = 22.304239;
-		const longitude = 114.179677;
+		const lt = 22.304239;
+		const lg = 114.179677;
+		const res = await this.haversine(lt, lg);
 		return "821650f4f7416524";
 		return {
 			'lat': latitude,
