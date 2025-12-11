@@ -1,9 +1,7 @@
 const express = require("express");
 const router = require("express").Router();
-
 const bookingController = require("../controllers/bookingController");
 const { adminAuth } = require("../middlewares/auth")
-
 /**
  * @swagger
  * components:
@@ -47,7 +45,6 @@ const { adminAuth } = require("../middlewares/auth")
  *         specialInstructions: "Je suis a la porte deja"
  *         rider: "joe7"
  */
-
 /**
  * @swagger
  * tags:
@@ -85,9 +82,9 @@ router.post("/", bookingController.createBooking);
  * tags:
  *   name: Bookings
  *   description: API managing Bookings 
- * /bookings:
+ * /bookings/id:
  *   get:
- *     summary: Get a booking
+ *     summary: Get a single booking
  *     tags: [Bookings]
  *     requestBody:
  *       required: false
@@ -104,16 +101,62 @@ router.post("/", bookingController.createBooking);
  *         description: Some server error
  *
  */
- router.get("/bookings:id", bookingController.cancelBooking);
- 
+router.get("/", bookingController.getBookings);
+/**
+ * @swagger
+ * tags:
+ *   name: Bookings
+ *   description: API managing Bookings 
+ * /bookings:
+ *   get:
+ *     summary: Get multi booking
+ *     tags: [Bookings]
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Booking'
+ *     responses:
+ *       200:
+ *         description: The created booking.
+ *         content:
+ *           application/json:
+ *       500:
+ *         description: Some server error
+ *
+ */
+router.get("/:id", bookingController.getBooking);
+/**
+ * @swagger
+ * tags:
+ *   name: Bookings
+ *   description: API managing Bookings 
+ * /bookings/id/accept:
+ *   post:
+ *     summary: Accept a booking
+ *     tags: [Bookings]
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Booking'
+ *     responses:
+ *       200:
+ *         description: booking Accepted
+ *         content:
+ *           application/json:
+ *       500:
+ *         description: Some server error
+ *
+ */
+router.post("/:id/accept", bookingController.miseajourBooking);
+router.post("/:id/deny", bookingController.updateBooking);
+router.post("/:id/cancel", bookingController.cancelBooking);
+  
 //router.get("/booking:id", authCaptain, driverController.captainProfile);
 
 module.exports = router;
 
 // https://blog.logrocket.com/documenting-express-js-api-swagger/
-/*
-router.post("/verify-account", driverController.verifyEmail);
-router.post("/update", driverController.updateCaptainProfile);
-router.get("/logout", authCaptain, driverController.logoutCaptain);
-router.post("reset-Password", driverController.resetPassword);
-*/

@@ -90,8 +90,21 @@ exports.updateBooking = async (req, res) => {
     }
 };
 
+exports.getBookings = async ( req, res, next ) => {
+	return res.status(400).json({ message: "getting multiple gets bookings"});
+};
+
+
 exports.cancelBooking = async ( req, res, next ) => {
 	return res.status(400).json({ message: "cancelling booking"});
+};
+
+exports.getBooking = async ( req, res, next ) => {
+	return res.status(400).json({ message: "getting single get booking"});
+};
+
+exports.miseajourBooking = async ( req, res, next ) => {
+	return res.status(400).json({ message: "mise a jour bookings"});
 };
 
 /*

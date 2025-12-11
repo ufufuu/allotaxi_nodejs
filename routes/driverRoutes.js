@@ -89,3 +89,10 @@ router.post("reset-Password",
 module.exports = router;
 
 // https://blog.logrocket.com/documenting-express-js-api-swagger/
+
+/*
+router.post("/verify-account", driverController.verifyEmail);
+router.post("/update", driverController.updateCaptainProfile);
+router.get("/logout", authCaptain, driverController.logoutCaptain);
+router.post("reset-Password", driverController.resetPassword);
+*/
