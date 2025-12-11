@@ -6,35 +6,30 @@ const driversDispatch = require("../dispatchEngine/DriversDispatch");
 const geoService = require("../services/geoService");
 
 exports.createBooking = async ( req, res, next ) => {
-	const { originAdress, destinationAdress, contactInfo, specialInstructions, riderId } = req.body;
+	const { originCoords, destinationCoords, contactInfo, specialInstructions, riderId } = req.body;
 	const bookingId = crypto.randomBytes(20).toString('hex');
 	
-	// Get Requesting User Location onto server with socket.io ?
-	
-	// then look for nearByDrivers
-	// then routes the request to best Driver
-	// who Accepts it
 	//try 
 	//{
         //if (!req?.session?.user?.id) {
 			//return res.status(400).json({ message: " Unauthorized " });
-		//}
-        //const user = new User({ name, email, password, role: "admin" });
-        //const savedUser = await user.save();
-		
+		//}	
 		const currentLocation = await geoService.getCurrentPosition();
-		const lat = currentLocation.latitude;
-		const lng = currentLocation.longitude;
+		const originLat = currentLocation.latitude;
+		const originLng = currentLocation.longitude;
 		
-		const nearbyDrivers = await geoService.queryNearByDrivers(lat, lng, radius );
+		const nearbyDrivers = await geoService.queryNearByDrivers(originLat, originLng, radius );
 		var bestDriverMatch =  await geoService.getBestDriverMatch(nearbyDrivers);
+		const driverId = bestDriverMatch.Id;
+		
 		//await bookingService.Book( riderId3 );
 		
 		//io.to('CI3bN_CtNW5T9SrMAAAH').emit('onPickUpRider', data);
-		const driverAccepted = await driversDispatch.matchBookingToDriver(booking, driverId);
+		const driverAccepted = await driversDispatch.DispatchBooking (riderId, driverId, originCoords, destinationCoords  );
+		
+		//await driversDispatch.DispatchBooking( bestDriverMatch.socketId );
 		
 		if(driverAccepted) {
-		//await driversDispatch.DispatchBooking( bestDriverMatch.socketId );
 		//return res.status(200).json(currentLocation);
 			const booking = await pool.query(
 			`INSERT INTO "Bookings"(
@@ -83,15 +78,12 @@ exports.cancelBooking = async ( req, res, next ) => {
 	return res.status(400).json({ message: "cancelling booking"});
 };
 
-
-
 /*
 Core Components : real-time communication: Implements WebSockets (e.g., Socket.IO) to 
 facilitate instant updates of driver locations and ride requests/status.
 
 Database with Geospatial Indexing: Uses solutions like MongoDB or Redis with spatial 
 indexing (e.g., Geohash or R-tree) to efficiently query nearby drivers based on location data.
-
 
 0. Integrates third-party APIs like Google Maps for route calculations, distance/time estimations, and map visualization
 
@@ -121,11 +113,8 @@ other heuristic approaches might be used to find the optimal global matching sol
 */
 
 //  Libraries like node-geohash or built-in geospatial queries in MongoDB are very useful for the filtering step
-
 // https://github.com/eric19960304/Ridesharing-App-For-HK-Back-End/tree/master/src
-
 //https://github.com/eric19960304/Ridesharing-App-For-HK-Back-End
-
 // https://github.com/hhc97/routescc-client-driver-matching-app
 
 // - Distance Matrix API
@@ -133,13 +122,8 @@ other heuristic approaches might be used to find the optimal global matching sol
 // - Maps JavaScript API Nearby Search
 
 // https://medium.com/@shubhamrajput252000/how-to-find-the-nearest-location-using-google-maps-in-a-mern-stack-application-81baab1cca1c ***
-
 // https://www.uber.com/en-GH/blog/tech-stack-part-one-foundation/
-
-
-
 // ** https://www.dhiwise.com/post/ride-matching-algorithm-for-a-smoother-rideshare-experience
-
 // https://dev.to/biswasprasana001/designing-a-ride-hailing-service-system-eg-uberlyft-a-beginner-friendly-guide-252o
 
 // ###

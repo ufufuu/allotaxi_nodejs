@@ -38,7 +38,6 @@ const { connectionString } = require("./config/db");
 
 
 const port = process.env.PORT || 3001;
-
 var options = {
   explorer: true
 };
@@ -75,7 +74,6 @@ app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec)); //swaggerDo
 io.on("connection", ( socket ) => { //, onSocketConnection(io))
 
     console.log(' WebSocket connection from a User in index.js', socket.id);
-	
 	socket.on('onBookingRequest',  (data ) => {
 		
 		console.log(' in onBookingRequest event, position is: ', data);
@@ -110,8 +108,6 @@ app.on("unhandledRejection", err => {
   httpServer.close(() => process.exit(1))
 })
 
-
-
 // https://www.tigerdata.com/blog/how-we-made-postgresql-the-best-vector-database
 // https://dev.to/biswasprasana001/designing-a-ride-hailing-service-system-eg-uberlyft-a-beginner-friendly-guide-252o
 // https://www.geeksforgeeks.org/sql/how-to-design-a-database-for-ride-sharing-and-carpooling-services/
@@ -122,6 +118,5 @@ app.on("unhandledRejection", err => {
 // https://medium.com/@deepdeepak2222/how-to-implement-a-ride-matching-system-using-postgres-postgis-and-python-93cdcc5d0d55
 // https://www.geeksforgeeks.org/sql/how-to-design-a-database-for-ride-sharing-and-carpooling-services/
 // POST GRES GIS Extensions for Ride Sharing ?
-
 
 // event and delega in nodejs ?

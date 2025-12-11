@@ -6,7 +6,7 @@ const { onSocketConnection } = require("../sockets/");
 
 class BookingService {
 	
-	async Book ( driverId, passengerId, origin, destination ) {
+	async Book ( passengerId, driverId, origin, destination ) {
 	
 		io.on("connection", onSocketConnection(io));
 		var currentLocation = await geoService.getCurrentPosition();

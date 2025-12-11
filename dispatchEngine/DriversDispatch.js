@@ -7,16 +7,36 @@ const io = require("socket.io");
 
 class DriversDispatch {
 	
-	async DispatchBooking (bookingModel, riderId ) {
-		// Obtain from APi user-location post Api to Server: riderId, latCoords, lngCoords
-		//var riderCoordinates = await this.getRiderLocation();
-		// listen for incoming connections from client or Is it io.sockets.on ?
+	async matchBookingToDriver ( bookingModel ) {
 		
-		io.on("connection", function (socket) {
-			console.log('io on connection:', socket.id);
-			console.log('io on connection:', riderId);
+	}
+	
+	//async DispatchBooking (bookingModel, riderId ) {
+	async DispatchBooking ( riderId, driverId, originCoords, destinationCoords ) {
+		
+		// Obtain from APi user-location post Api to Server: riderId, latCoords, lngCoords
+		// var riderCoordinates = await this.getRiderLocation();
+		// listen for incoming connections from client or Is it io.sockets.on ?
+		// io.to('CI3bN_CtNW5T9SrMAAAH').emit('onPickUpRider', data);
+		
+		io.on("connection", function (socket) 
+		{
+			//console.log('io on connection:', socket.id);
+			//console.log('io on connection:', riderId);
 			
-		    // start listening for coords
+			// start listening for coords
+			io.to(driverId).emit('sendRiderCoords', function (riderOriginCoords ) {
+				// broadcast your coordinates to everyone except you
+				//socket.broadcast.emit('load:coords', data);  // or is it socket.emit ?
+				console.log('socket on send coords:', riderOriginCoords );
+			});
+			
+			socket.on('notifyDriver', function (data) {
+				// broadcast your coordinates to everyone except you
+				//socket.broadcast.emit('load:coords', data);  // or is it socket.emit ?
+				console.log('socket on send coords:', data);
+			});
+			
 			socket.on('send coords', function (data) {
 				// broadcast your coordinates to everyone except you
 				//socket.broadcast.emit('load:coords', data);  // or is it socket.emit ?
@@ -29,15 +49,7 @@ class DriversDispatch {
 		    });
 		});
 	}
-	
-	async matchBookingToDriver ( bookingModel ) {	
-	
-	}
-	
-	async updateDriverLocation ( lat, lng, driverId ) {
 		
-	}
-	
 	async updateLocationDb ( lat, lng, driverId ) {
 		const update = await pool.query(`
 		
@@ -49,6 +61,10 @@ class DriversDispatch {
 		where Id = driverId
 		values($1, $2, $3) returuning *`
 		[lat, lgn]);
+	}
+	
+	async updateDriverLocation ( lat, lng, driverId ) {
+		
 	}
 }
 

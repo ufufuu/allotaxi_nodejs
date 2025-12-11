@@ -49,7 +49,6 @@ class GeoService {
 	};
 	
 	async HHJ(){
-		// Get nearby locations API
 		app.get('/nearest-locations', async (req, res) => {
 		  const { lat, lng } = req.query;
 		  // Find locations within 10km radius (using MongoDB geospatial query)
@@ -63,14 +62,14 @@ class GeoService {
 	}
 	
 	async kkj () {
-		//try{
+	//try{
 		const { lat, lng } = response.data.results[0].geometry.location;
 		if (response.data.status !== 'OK') 
 		{
 			return res.status(400).send('Invalid address');
-			//} catch(err){
+			} catch(err){
 				console.log("Error gain - ouatchi --- watchi vs ewe --- tem vs kabye"); 
-			//}
+			}
 		}
 	}
 	
@@ -97,12 +96,11 @@ class GeoService {
 		const latitude = 22.304239;
 		const longitude = 114.179677;
 		return "821650f4f7416524";
-		
 		return {
 			'lat': latitude,
 			'lng': longitude
 		};
-	}
+	};
 }
 module.exports = new GeoService();
 
