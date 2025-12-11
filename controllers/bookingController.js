@@ -5,7 +5,6 @@ const { pool } = require("../config/db");
 const driversDispatch = require("../dispatchEngine/DriversDispatch");
 const geoService = require("../services/geoService");
 
-
 exports.createBooking = async ( req, res, next ) => {
 	const { originAdress, destinationAdress, contactInfo, specialInstructions, riderId } = req.body;
 	const bookingId = crypto.randomBytes(20).toString('hex');
@@ -22,41 +21,36 @@ exports.createBooking = async ( req, res, next ) => {
 		//}
         //const user = new User({ name, email, password, role: "admin" });
         //const savedUser = await user.save();
-		/*
-		const savedRideRequest = await booking.save();
-		*/
 		
 		const currentLocation = await geoService.getCurrentPosition();
-		console.log(currentLocation);
-		const 
+		const lat = currentLocation.latitude;
+		const lng = currentLocation.longitude;
 		
-		const riderId3 = "821650f4f741652419c954b662f2be9683c60625";
-		const driverId = "821650f4f741652419c954b662f2be9683c60625";
-		var driverId2 = geoService.DispatchBooking();
+		const nearbyDrivers = await geoService.queryNearByDrivers(lat, lng, radius );
+		var bestDriverMatch =  await geoService.getBestDriverMatch(nearbyDrivers);
+		//await bookingService.Book( riderId3 );
 		
-		await geoService.DispatchBooking( riderId3 );
+		//io.to('CI3bN_CtNW5T9SrMAAAH').emit('onPickUpRider', data);
+		const driverAccepted = await driversDispatch.matchBookingToDriver(booking, driverId);
+		
+		if(driverAccepted) {
+		//await driversDispatch.DispatchBooking( bestDriverMatch.socketId );
 		//return res.status(200).json(currentLocation);
-		
-		//const nearByDrivers = geoService.getNearByDrivers (22.304239, 114.179677, 10);
-		//driversDispatch.matchBookingToDriver(booking, driverId);
-		//return res.status(200).json(nearByDrivers);
-		
-		const booking = await pool.query(
-		`INSERT INTO "Bookings"(
-		"Id",
-		"Origin",
-		"Destination",
-		"Fare",
-		"Status",
-		"Created",
-		"Expiry",
-		"RiderId",
-		"DriverId")
-		values($1, $2, $3, $4, $5, $6, $7, $8, $9) returning *`,
-		[bookingId, originAdress, destinationAdress, 100, 1, "2020-03-10T04:05:06.157Z", "2020-03-10T04:05:06.157Z", null, null ]);
-        res.status(201).json(booking);	
-		
-		
+			const booking = await pool.query(
+			`INSERT INTO "Bookings"(
+			"Id",
+			"Origin",
+			"Destination",
+			"Fare",
+			"Status",
+			"Created",
+			"Expiry",
+			"RiderId",
+			"DriverId")
+			values($1, $2, $3, $4, $5, $6, $7, $8, $9) returning *`,
+			[bookingId, originAdress, destinationAdress, 100, 1, "2020-03-10T04:05:06.157Z", "2020-03-10T04:05:06.157Z", null, null]);
+			res.status(201).json(booking);	
+		}
     //} catch(error){
 		//res.status(400).json({ message: "Failed to create Booking" });
     //}

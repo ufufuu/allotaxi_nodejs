@@ -9,10 +9,9 @@ const configureSockets = ( io, socket ) => {
 	};
 };
 
-const onSocketConnection = ( io) => ( socket ) => {
-	const { driverLocation } = configureSockets(io, socket);
-	
+const onGeoLocationSocketConnection = ( io) => ( socket ) => {
+	const { driverLocation } = configureSockets (io, socket);
 	socket.on("driver-move", driverLocation);
 };
 
-module.exports = { onSocketConnection };
+module.exports = { onGeoLocationSocketConnection };

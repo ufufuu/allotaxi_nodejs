@@ -6,6 +6,34 @@ const pool = require("../config/db");
 const io = require("socket.io");
 
 class DriversDispatch {
+	
+	async DispatchBooking (bookingModel, riderId ) {
+		// Obtain from APi user-location post Api to Server: riderId, latCoords, lngCoords
+		//var riderCoordinates = await this.getRiderLocation();
+		// listen for incoming connections from client or Is it io.sockets.on ?
+		
+		io.on("connection", function (socket) {
+			console.log('io on connection:', socket.id);
+			console.log('io on connection:', riderId);
+			
+		    // start listening for coords
+			socket.on('send coords', function (data) {
+				// broadcast your coordinates to everyone except you
+				//socket.broadcast.emit('load:coords', data);  // or is it socket.emit ?
+				console.log('socket on send coords:', data);
+			});
+			
+			// Handle disconnection
+		    socket.on('disconnect', () => {
+				console.log('User disconnected:', socket.id);
+		    });
+		});
+	}
+	
+	async matchBookingToDriver ( bookingModel ) {	
+	
+	}
+	
 	async updateDriverLocation ( lat, lng, driverId ) {
 		
 	}
@@ -22,13 +50,7 @@ class DriversDispatch {
 		values($1, $2, $3) returuning *`
 		[lat, lgn]);
 	}
-
-	async matchBookingToDriver ( bookingModel ) {
-		
-	
-	}
 }
-
 
 module.exports = new DriversDispatch();
 

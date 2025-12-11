@@ -19,30 +19,6 @@ const io = new Server (httpServer, {
 });
 class GeoService {
 	
-	async DispatchBooking ( riderId ) {
-		// Obtain from APi user-location post Api to Server: riderId, latCoords, lngCoords
-		
-		//var riderCoordinates = await this.getRiderLocation();
-		// listen for incoming connections from client or Is it io.sockets.on ?
-		
-		io.on("connection", function (socket) {
-			console.log('io on connection:', socket.id);
-			console.log('io on connection:', riderId);
-			
-		    // start listening for coords
-			socket.on('send coords', function (data) {
-				// broadcast your coordinates to everyone except you
-				//socket.broadcast.emit('load:coords', data);  // or is it socket.emit ?
-				console.log('socket on send coords:', data);
-			});
-			
-			// Handle disconnection
-		    socket.on('disconnect', () => {
-				console.log('User disconnected:', socket.id);
-		    });
-		});
-	}
-	
 	async getCurrentPosition() {
 		// Get lat and lng Data from Api Being hitten by Client updating his adress
 		
@@ -86,14 +62,15 @@ class GeoService {
 		});
 	}
 	
-	async kkj(){
+	async kkj () {
 		//try{
-			const { lat, lng } = response.data.results[0].geometry.location;
-			if (response.data.status !== 'OK') {
+		const { lat, lng } = response.data.results[0].geometry.location;
+		if (response.data.status !== 'OK') 
+		{
 			return res.status(400).send('Invalid address');
-		//} catch(err){
-			console.log("Error gain - ouatchi --- watchi vs ewe --- tem vs kabye"); 
-		//}
+			//} catch(err){
+				console.log("Error gain - ouatchi --- watchi vs ewe --- tem vs kabye"); 
+			//}
 		}
 	}
 	
@@ -119,6 +96,8 @@ class GeoService {
 	async getBestDriverMatch() {
 		const latitude = 22.304239;
 		const longitude = 114.179677;
+		return "821650f4f7416524";
+		
 		return {
 			'lat': latitude,
 			'lng': longitude
