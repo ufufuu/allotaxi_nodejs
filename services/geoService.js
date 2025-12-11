@@ -48,15 +48,19 @@ class GeoService {
 			WHERE "Latitude"=${lat} AND "Longitude"=${lng}`);
 		return findNearbyDrivers;*/
 		
-		const pointT = { 'Lat':6.1833216,'Lng':1.2025856 };
-		//const pointT= { Lat: 55.87, Lng:  4.20 };
-		
 		const pointOne ={
 			'Lat': point.Lat,
 			'Lng':point.Lng
 		};
+		const pointT = { 'Lat':6.1833216,'Lng':1.2025856 };
+		const nearBydrivers = 
+		[	{ Lat: 55.87, Lng:  4.20 }, 
+			{ Lat: 55.89, Lng:  4.20 },
+			{ Lat: 55.89, Lng:  4.10 }
+		];
 		
 		try{
+			//return nearBydrivers;
 			return await this.haversine(pointOne, pointT );
 		}
 		catch(error){
@@ -77,9 +81,10 @@ class GeoService {
 			Math.sin(deltaLat /2) * 2
 		);
 		const b = Math.sin(deltaLat/2) * Math.sin(deltaLat/2) + (p1.Lat * r) * Math.cos (p2.Lat *r ) * Math.sin (deltaLng/2) * Math.sin(deltaLng/2);
-		console.log("a or b :", a);
+		console.log("a or b in geoService :", a);
 		
 		const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+		console.log("c in geoService :", c);
 		return R * c;
 	}
 	

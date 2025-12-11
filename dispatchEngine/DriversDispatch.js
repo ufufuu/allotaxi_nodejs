@@ -95,7 +95,6 @@ Key Concepts:
 */
 
 // Using socket io Events transfer drivers gps coordinates 2 server 
-
 // https://pmc.ncbi.nlm.nih.gov/articles/PMC7055897/	??? 
 // mapserver npm ?
 // geoServer npm ?
