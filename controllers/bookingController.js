@@ -24,23 +24,33 @@ exports.createBooking = async ( req, res, next ) => {
 			return r;
 		}, {});
 		*/
+		
+		//const targetLocation= { latitude: 55.87, longitude:  4.20};
+		/*const locations = [{ latitude: 55.85, longitude:  4.20}, 
+						{ latitude: 55.8, longitude:  4.20},
+					{ latitude: 55.89, longitude:  4.20}
+				];
+		*/
+		
 		const radius = 6371;
-		const currentLocation= { latitude: 55.87, longitude:  4.20};
-		const nearbyDrivers = 
-		[	{ latitude: 55.85, longitude:  4.20 }, 
-			{ latitude: 55.8, longitude:  4.20 },
-			{ latitude: 55.89, longitude:  4.20 }
+		const currentLocation= { Lat: 55.87, Lng:  4.20};
+		const drivers = 
+		[	{ Lat: 55.85, Lng:  4.22 }, 
+			//{ latitude: 55.89, longitude:  4.20 },
+			//{ latitude: 55.89, longitude:  4.10 }
 		];
 		
-		const currentLocation23 = await geoService.getCurrentPosition();
-		const originLat = currentLocation.latitude;
-		const originLng = currentLocation.longitude;
+		//const currentLocation23 = await geoService.getCurrentPosition();
+		//console.log("drivers 0:", drivers[0]);
 		
-		const nearbyDrivers34 = await geoService.queryNearByDrivers(originLat, originLng, radius );
-		console.log("nearby drivers:", nearbyDrivers34);
+		const nearbyDrivers = await geoService.queryNearByDrivers(currentLocation, drivers[0], 2.5 );
+		console.log("nearby drivers:", nearbyDrivers);
+		
+		return res.status(201).json(nearbyDrivers);	
 		
 		var bestDriverMatch =  await geoService.getBestDriverMatch(nearbyDrivers);
 		console.log("best driver Match is:", bestDriverMatch);
+		res.status(201).json(bestDriverMatch);	
 		
 		const driverId = bestDriverMatch.Id;
 		

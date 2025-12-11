@@ -39,12 +39,49 @@ class GeoService {
 		return response.data.results[0].geometry.location;
 	}
 	
-	async queryNearByDrivers ( lat, lng, radius ) {
-		const findNearbyDrivers = await pool.query(
+	//async queryNearByDrivers ( Lat, Lng, radius ) {
+		
+	async queryNearByDrivers ( point, radius ) {
+		
+		/*const findNearbyDrivers = await pool.query(
 			`SELECT * FROM "Locations"
 			WHERE "Latitude"=${lat} AND "Longitude"=${lng}`);
-		return findNearbyDrivers;
+		return findNearbyDrivers;*/
+		
+		const pointT = { 'Lat':6.1833216,'Lng':1.2025856 };
+		//const pointT= { Lat: 55.87, Lng:  4.20 };
+		
+		const pointOne ={
+			'Lat': point.Lat,
+			'Lng':point.Lng
+		};
+		
+		try{
+			return await this.haversine(pointOne, pointT );
+		}
+		catch(error){
+			console.log("error in haversine:", error);
+		}
 	};
+	
+	async haversine ( p1, p2 ) {	// or npm @turf/nearest-point 
+	
+		const R = 2.5; // radius of earth in kms: 6371 
+		const r = Math.PI / 180; // degree to radian conversion
+		const deltaLat = (p2.Lat - p1.Lat);
+		const deltaLng = (p2.Lng - p1.Lng);
+		const a = (
+			Math.sin(deltaLat /2) * 2+
+			Math.cos(p1.Lat * r) *
+			Math.cos(p2.Lat * r) *
+			Math.sin(deltaLat /2) * 2
+		);
+		const b = Math.sin(deltaLat/2) * Math.sin(deltaLat/2) + (p1.Lat * r) * Math.cos (p2.Lat *r ) * Math.sin (deltaLng/2) * Math.sin(deltaLng/2);
+		console.log("a or b :", a);
+		
+		const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+		return R * c;
+	}
 	
 	async HHJ(){
 		app.get('/nearest-locations', async (req, res) => {
@@ -70,28 +107,6 @@ class GeoService {
 			//}
 		}
 	}
-	async haversine ( p1, p2 ) {
-		
-		const targetLocation= { latitude: 55.87, longitude:  4.20};
-		const locations = [{ latitude: 55.85, longitude:  4.20}, 
-						{ latitude: 55.8, longitude:  4.20},
-					{ latitude: 55.89, longitude:  4.20}
-				];
-		const R = 6371; // radius of earth in kms
-		const r = Math.PI / 180; // degree to radian conversion
-		
-		const deltaLat = (p2.Latitude - p1.Latitude);
-		const deltaLng = (p2.Longitude - p1.Longitude);
-		
-		const a = (
-			Math.sin(deltaLat /2) ** 2+
-			Math.cos(p1.latidude * r) *
-			Math.cos(p2.latidude * r) *
-			Math.sin(deltaLat /2) ** 2
-		);
-		const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-		return R * c;
-	}
 	
 	/*
 	const closestLocation = locations.reduce(( r, o) => {
@@ -102,8 +117,7 @@ class GeoService {
 		return r;
 	}, {});
 	*/
-	
-		
+
 	async haversineDistance (location1, location2) {
 		const toRad = (x) => {
 			return x * Math.PI / 180;
@@ -122,10 +136,12 @@ class GeoService {
 		return distance;
 	};
 	
-	async getBestDriverMatch() {
-		const lt = 22.304239;
-		const lg = 114.179677;
-		const res = await this.haversine(lt, lg);
+	async getBestDriverMatch( lt,lg ) {
+		const pt1 = {'latitude' :22.304239, 'longitude': 0};
+		const pt2 = {'latitude': 114.179677, 'longitude': 0};
+		const res = await this.haversine(pt1, pt2);
+		return res;
+		
 		return "821650f4f7416524";
 		return {
 			'lat': latitude,
