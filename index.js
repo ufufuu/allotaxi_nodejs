@@ -1,23 +1,34 @@
 const express = require('express');
 const http = require("http");
+const { Server } = require("socket.io");
 const socketio = require("socket.io");
+
 const cors = require("cors");
 const swaggerUI = require('swagger-ui-express');
-
 const userController = require('./controllers/userController');
+const { onSocketConnection } = require("./sockets");
+
 const swaggerDocument = require('./swagger.js');
 const swaggerSpec = require('./swagger');
-
 const path = require('path');
 const pg = require('pg');
 const { Client } = require("pg");
 const Postgis = require("postgis");
-
 const app = express();
-const server = http.createServer(app);
+const httpServer = http.createServer(app);
 
-const io = socketio(server);
-//const Pool = require('pg').Pool;
+//const jwt = require('jsonwebtoken');
+app.use(cors({ origin: 'http://localhost:3000'}));
+
+//const io = socketio(httpServer);
+const io = socketio(httpServer, {
+  cors: {
+    origin: "*", // Or '*' for any origin (less secure)
+    methods: ["GET", "POST"],
+    credentials: true
+  }
+});
+
 //const cookieParser = require("cookie-parser");
 const bookingRoutes = require("./routes/bookingRoutes");
 const userRoutes = require('./routes/userRoutes');
@@ -26,7 +37,7 @@ const userAuth = require("./middlewares/auth");
 const { connectionString } = require("./config/db");
 
 
-const port = 3001; // process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 
 var options = {
   explorer: true
@@ -49,7 +60,7 @@ pool.connect((err, client, release) => {
     })
 });
 
-app.use(cors());					
+					
 app.disable("x-powered-by"); 	//// Change To Allow oringin only !
 //app.use(cookieParser());
 
@@ -61,30 +72,45 @@ app.use("/bookings", bookingRoutes);  // userAuth, bookingRoutes);
  
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec)); //swaggerDocument, options));
 
-io.on('connection', (socket) => { 
-    console.log('New WebSocket connection from a User') 
-	socket.on('updateLocation', async (data ) => {
-		// update in Db
+io.on("connection", ( socket ) => { //, onSocketConnection(io))
+
+    console.log(' WebSocket connection from a User in index.js', socket.id);
+	
+	socket.on('onBookingRequest',  (data ) => {
+		
+		console.log(' in onBookingRequest event, position is: ', data);
+		
 		//2. Broadcast the update in real-time to other subscribers
-		io.emit('driverLocationUpdate', data);
+		//socket.emit('onPickUpRider', data);   // vs io.emit to All connected clients
+		
+		io.to('CI3bN_CtNW5T9SrMAAAH').emit('onPickUpRider', data);
+		
 		// from client
-		// const socket =io();
+		// io.addEventListener('user-ocation-update', ()=> {
+		//})
 		// socket.emit('udpateLocation', {driverId, lng, lat});
+		
 	});
 	socket.on('disconnect', () => {
-		console.log('User disconnected');
+		console.log(' User disconnected', socket.id );
 	});
 });
- 
-app.listen( port, () =>{
+io.on('user-location-update', ( userCoordinates ) => {
+	//io.emi, call fct to Updsate user Location in db
+	const { lat, lng, userId }  = userCoordinates;
+	
+});
+httpServer.listen( port, () =>{
 	console.log(`app started and listening on ${port}`);
 });
 
 // Handling Errors
 app.on("unhandledRejection", err => {
   console.log(`An error occurred: ${err.message}`)
-  server.close(() => process.exit(1))
+  httpServer.close(() => process.exit(1))
 })
+
+
 
 // https://www.tigerdata.com/blog/how-we-made-postgresql-the-best-vector-database
 // https://dev.to/biswasprasana001/designing-a-ride-hailing-service-system-eg-uberlyft-a-beginner-friendly-guide-252o
@@ -96,3 +122,6 @@ app.on("unhandledRejection", err => {
 // https://medium.com/@deepdeepak2222/how-to-implement-a-ride-matching-system-using-postgres-postgis-and-python-93cdcc5d0d55
 // https://www.geeksforgeeks.org/sql/how-to-design-a-database-for-ride-sharing-and-carpooling-services/
 // POST GRES GIS Extensions for Ride Sharing ?
+
+
+// event and delega in nodejs ?

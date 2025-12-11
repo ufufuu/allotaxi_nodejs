@@ -1,0 +1,45 @@
+<!DOCTYPE html> 
+<html> 
+    <head> 
+        <title>Chat App</title> 
+        <link rel="icon" href="/img/favicon.png"> 
+        <link rel="stylesheet" href="/css/styles.min.css"> 
+		<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.8.1/socket.io.min.js"></script>-->
+			<script src="./src/socketio/socket.io.min.js"></script>-->
+		<script>
+			const socket = io('http://localhost:3001');
+			const latitude = 22.304239;
+			const longitude = 114.179677;
+			socket.emit('onBookingRequest', {'lat':latitude, 'lng':longitude });
+			
+			socket.on('onPickUpRider', (count) => {
+				alert("pick Up Rider Notification to One Driver:", count);
+				
+			});
+		
+		</script>
+    </head> 
+    <body> 
+        <div class="centered-form"> 
+            <div class="centered-form__box"> 
+                <h1>Join</h1> 
+                <form action="/chat.html"> 
+                    <label>Display name</label> 
+                    <input type="text" name="username" placeholder="Display name" required> 
+                    <label>Room</label> 
+                    <input type="text" name="room" placeholder="Room" required> 
+                    <button>Join</button> 
+                </form> 
+            </div> 
+        </div> 
+    </body> 
+</html>
+
+
+<!-- https://www.elephantsql.com/
+-- https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.3/socket.io.min
+-- https://taborder.co.za/taborder/db-context
+-- how to make money creating blockchain
+-- https://tympanus.net/codrops/2012/10/11/real-time-geolocation-service-with-node-js/
+-- https://gist.github.com/bhubr/bbddcb34d570aec75b5c53943fb7f5d1
+-->

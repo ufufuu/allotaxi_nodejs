@@ -1,23 +1,49 @@
 const express = require("express");
-
-//const pool = require("..\..\config\db");
-
-//const notificationService = require("firebASE"); // firebase cloud messaging
-
-const geoService = require("./geoService");
+const geoService = require("../services/geoService");
 const driversTracking = require("./DriversTracking");
+const bookingModel = require("../models/BookingModel");
+const pool = require("../config/db");
+const io = require("socket.io");
 
+class DriversDispatch {
+	async updateDriverLocation ( lat, lng, driverId ) {
+		
+	}
+	
+	async updateLocationDb ( lat, lng, driverId ) {
+		const update = await pool.query(`
+		
+		// Add Driver driverIsOnline to tb
+		
+		update "DriverLocation"(
+			"driverId", "longitude", "latitude"
+			)
+		where Id = driverId
+		values($1, $2, $3) returuning *`
+		[lat, lgn]);
+	}
 
-class DispatchService {
+	async matchBookingToDriver ( bookingModel ) {
+		
 	
-	
+	}
 }
 
 
-module.exports = new DispatchService();
+module.exports = new DriversDispatch();
 
+/*
+2. 📍 Real-Time Location Tracking
+What happens?
+The app continuously updates the location of drivers and passengers.
+COntinuously Updatet Location Table per se driver
+Key Concepts:
+    Use the phone’s GPS and mobile network.
+    Send location updates every few seconds.
+    Backend uses WebSockets or MQTT for real-time updates.
+*/
 
-
+// Using socket io Events transfer drivers gps coordinates 2 server 
 
 // https://pmc.ncbi.nlm.nih.gov/articles/PMC7055897/	??? 
 // mapserver npm ?

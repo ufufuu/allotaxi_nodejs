@@ -2,7 +2,7 @@ const pg = require("pg");
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/db');
 
-const locationModel = sequelize.define('Location', {
+const LocationModel = sequelize.define('Location', {
 	  name: {
 		type: DataTypes.STRING,
 		allowNull: false
@@ -28,7 +28,7 @@ const locationModel = sequelize.define('Location', {
 
 
 module.exports = {
-  Location
+  LocationModel
 };
 
 
