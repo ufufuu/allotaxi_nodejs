@@ -3,10 +3,11 @@ const radius = process.env.LOCATION_MATCHING_RADIUS;
 const { userIODriver } = require("../sockets/driverSocket");
 //const { usreIORider } = require("../sockets/riderSocket");
 const { onSocketConnection } = require("../sockets/");
+const { pool } = require("../config/db");
 
 class BookingService {
 	
-	async Book ( passengerId, driverId, origin, destination ) {
+	async createBooking ( passengerId, driverId, origin, destination ) {
 	
 		io.on("connection", onSocketConnection(io));
 		var currentLocation = await geoService.getCurrentPosition();
@@ -18,7 +19,7 @@ class BookingService {
 	
 		//const passenger = await passengerService.find(passengerId)
 		//const driver = await driverService.find(driverId)
-		//io.to('bestDriverMatch.socketId').emit('onPickUpRider', data);
+		//io.to('bestDriverMatch.socketId').emit('onPickUpRider', data);   
 
 		const booking = await this.insert({ driver, passenger, origin, destination })
 		passenger.bookings.push(booking)
@@ -26,6 +27,26 @@ class BookingService {
 		await passenger.save()
 		return booking;
     }
+	
+	async GetBookings () {
+		const bookings = await pool.query(
+			`SELECT * FROM "Bookings"
+			`);
+		return bookings;
+	}
+	
+	async deleteBooking( bookingId){
+		const query = `DELETE FROM "Bookings" WHERE "Id"= $1 RETURNING *`;
+		try{
+			await pool.query(
+			`DELETE FROM "Bookings"
+			WHERE "Id"=$1 RETURNING*`,[bookingId]);
+			return true;
+		} catch(err) {
+			console.log("err:", err);
+		}
+		
+	}
 }
 
 module.exports = new BookingService();

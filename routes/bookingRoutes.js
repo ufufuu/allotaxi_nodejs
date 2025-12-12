@@ -23,7 +23,7 @@ const { adminAuth } = require("../middlewares/auth")
  *           type: string
  *           description: The booking author
  *         originAdress:
- *           type: boolean
+ *           type: object
  *           description: Whether you have finished reading the booking
  *         destinationAdress:
  *           type: boolean
@@ -39,9 +39,13 @@ const { adminAuth } = require("../middlewares/auth")
  *           type: boolean
  *           description: Whether you have finished reading the booking
  *       example:
- *         originAdress: " Aeroport Lome Tokoin"
- *         destinationAdress: "Carrefour Edem"
- *         contactInfo: " 99-98-90-90"
+ *         origin: " Aeroport Lome Tokoin "
+ *         originLat: "55.87"
+ *         originLng: "4.20"
+ *         destination: "Carrefour Edem Agoe Dalime "
+ *         destinationLat: "null"
+ *         destinationLng: "null"
+ *         contactInfo: "99.98.90.90"
  *         specialInstructions: "Je suis a la porte deja"
  *         rider: "joe7"
  */
@@ -76,7 +80,7 @@ const { adminAuth } = require("../middlewares/auth")
  *         description: Some server error
  *
  */
-router.post("/", bookingController.createBooking);
+router.post("/", bookingController.rideBook);
 /**
  * @swagger
  * tags:
@@ -115,8 +119,6 @@ router.get("/", bookingController.getBookings);
  *       required: false
  *       content:
  *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/Booking'
  *     responses:
  *       200:
  *         description: The created booking.
@@ -132,8 +134,8 @@ router.get("/:id", bookingController.getBooking);
  * tags:
  *   name: Bookings
  *   description: API managing Bookings 
- * /bookings/id/accept:
- *   post:
+ * /bookings/{id}/accept:
+ *   put:
  *     summary: Accept a booking
  *     tags: [Bookings]
  *     requestBody:
@@ -141,7 +143,12 @@ router.get("/:id", bookingController.getBooking);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Booking'
+ *             type: object
+ *             properties:
+ *               driverId:
+ *                 type: string
+ *               response:
+ *                 type: boolean
  *     responses:
  *       200:
  *         description: booking Accepted
@@ -151,10 +158,65 @@ router.get("/:id", bookingController.getBooking);
  *         description: Some server error
  *
  */
-router.post("/:id/accept", bookingController.miseajourBooking);
+router.put("/:id/accept", bookingController.miseajourBooking);
+/**
+ * @swagger
+ * tags:
+ *   name: Bookings
+ *   description: API managing Bookings 
+ * /bookings/{id}/deny:
+ *   put:
+ *     summary: Deny Booking by Driver
+ *     tags: [Bookings]
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               driverId:
+ *                 type: string
+ *               response:
+ *                 type: boolean
+ *     responses:
+ *       200:
+ *         description: booking Accepted
+ *         content:
+ *           application/json:
+ *       500:
+ *         description: Some server error
+ *
+ */
 router.post("/:id/deny", bookingController.updateBooking);
-router.post("/:id/cancel", bookingController.cancelBooking);
-  
+/**
+ * @swagger
+ * tags:
+ *   name: Bookings
+ *   description: API managing Bookings 
+ * /bookings/{id}/delete:
+ *   delete:
+ *     summary: Delete or Cancel Booking by Client
+ *     tags: [Bookings]
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               bookingId:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: booking Accepted
+ *         content:
+ *           application/json:
+ *       500:
+ *         description: Some server error
+ *
+ */
+router.delete("/:id/delete", bookingController.deleteBooking);
 //router.get("/booking:id", authCaptain, driverController.captainProfile);
 
 module.exports = router;

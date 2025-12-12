@@ -39,10 +39,14 @@ class GeoService {
 		return response.data.results[0].geometry.location;
 	}
 	
+	async continuousUpdateUserPositions(userId, userSocketId, currentLat, currentLng) {
+		const updateQuery = `UPDATE "Location" SET "Latitude" = $1 "Longitude" =$2
+			WHERE "UserId" = $3 RETURNNG *`;
+		pool.query(updateQuery, [currentLat, currentLng, userSocketId]);
+	}
+	
 	//async queryNearByDrivers ( Lat, Lng, radius ) {
-		
 	async queryNearByDrivers ( point, radius ) {
-		
 		/*const findNearbyDrivers = await pool.query(
 			`SELECT * FROM "Locations"
 			WHERE "Latitude"=${lat} AND "Longitude"=${lng}`);
@@ -101,32 +105,19 @@ class GeoService {
 		});
 	}
 	
-	async kkj () {
-	//try{
-		const { lat, lng } = response.data.results[0].geometry.location;
-		if (response.data.status !== 'OK') 
-		{
-			return res.status(400).send('Invalid address');
-			//} catch(err){
-				//console.log("Error gain - ouatchi --- watchi vs ewe --- tem vs kabye"); 
-			//}
-		}
-	}
-	
-	/*
-	const closestLocation = locations.reduce(( r, o) => {
+	//const closestLocation = locations.reduce(( r, o) => {
+	/*closestLocation (){
 		const distance= haversine (o, targetLocation);
 		if( distance < r.minDistance || !r.minDistance) {
 			return { location: o, minDistance: distance };
 		}
 		return r;
-	}, {});
-	*/
+	}, {});*/
 
 	async haversineDistance (location1, location2) {
 		const toRad = (x) => {
 			return x * Math.PI / 180;
-	};
+		};
 		const lat1 = location1.latitude;
 		const lat2 = location2.latitude;
 	  
@@ -160,6 +151,5 @@ module.exports = new GeoService();
 // https://medium.com/@shubhamrajput252000/how-to-find-the-nearest-location-using-google-maps-in-a-mern-stack-application-81baab1cca1c
 // https://dev.to/biswasprasana001/designing-a-ride-hailing-service-system-eg-uberlyft-a-beginner-friendly-guide-252oz
 // https://sigm.tg/portal/apps/webappviewer/index.html?id=a1cd40a866d14a8f9112bc887af88bda
-
 //WHERE ST_DWithin(geom, ST_SetSRID(ST_MakePoint (${lng}, ${lat}), 4326, ${radius})
 //name, ST_AsText(geom)

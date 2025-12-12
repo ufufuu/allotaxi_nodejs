@@ -1,14 +1,19 @@
 const Booking = require('../models/BookingModel');
 const crypto = require("crypto");
 const { pool } = require("../config/db");
-//const matcher = require("../matching-engine/DynamicTripVehicleAssignmentMatcher");
+//const matcher = require("../matching-engine/DynamicTripVehicleAssignmentMatcher");  GetBookings
 const driversDispatch = require("../dispatchEngine/DriversDispatch");
+const bookingService = require("../services/bookingService");
 const geoService = require("../services/geoService");
 
-exports.createBooking = async ( req, res, next ) => {
-	const { originCoords, destinationCoords, contactInfo, specialInstructions, riderId } = req.body;
+exports.rideBook = async ( req, res, next ) => {
+	const { originCoords, originLat, originLng,  destinationCoords, contactInfo, specialInstructions, riderId } = req.body;
 	const bookingId = crypto.randomBytes(20).toString('hex');
 	
+	console.log("Origine lat:", originLat);
+	console.log("Origine lng:", originLng);
+	
+	const currentLocation= { Lat: originLat, Lng: originLng };
 	//try 
 	//{
         //if (!req?.session?.user?.id) {
@@ -24,8 +29,8 @@ exports.createBooking = async ( req, res, next ) => {
 			return r;
 		}, {});
 		*/
-		const Radius_Length = 2.5; // 6371
-		const currentLocation= { Lat: 55.87, Lng:  4.20};
+		
+		const Radius_Length = 2.5; // 6371 // process.env.LOCATION_MATCHING_RADIUS
 		
 		//const currentLocation = await geoService.getCurrentPosition();
 		const alldrivers = await geoService.queryNearByDrivers(currentLocation, Radius_Length );
@@ -91,7 +96,10 @@ exports.updateBooking = async (req, res) => {
 };
 
 exports.getBookings = async ( req, res, next ) => {
-	return res.status(400).json({ message: "getting multiple gets bookings"});
+	
+	const bookings = await bookingService.GetBookings();
+	console.log("Bookings:", bookings);
+	return res.status(201).json(bookings);
 };
 
 
@@ -99,12 +107,26 @@ exports.cancelBooking = async ( req, res, next ) => {
 	return res.status(400).json({ message: "cancelling booking"});
 };
 
+exports.deleteBooking = async ( req, res, next ) => {
+	const { bookingId } = req.body;
+	//console.log("id in controller is:", bookingId);
+	
+	const deleted = await bookingService.deleteBooking(bookingId);
+	if(deleted){
+		return res.status(400).json({ message: "booking deleted !"});
+	}
+};
+
 exports.getBooking = async ( req, res, next ) => {
 	return res.status(400).json({ message: "getting single get booking"});
 };
 
 exports.miseajourBooking = async ( req, res, next ) => {
-	return res.status(400).json({ message: "mise a jour bookings"});
+	const { driveId, response } = req;		// af55253452a826cca80c922b5878f767e216af95
+	if(!response) {
+		// Driver Accepted
+	}
+	
 };
 
 /*
