@@ -31,20 +31,13 @@ exports.rideBook = async ( req, res, next ) => {
 		*/
 		
 		const Radius_Length = 2.5; // 6371 // process.env.LOCATION_MATCHING_RADIUS
-		
-		//const currentLocation = await geoService.getCurrentPosition();
 		const alldrivers = await geoService.queryNearByDrivers(currentLocation, Radius_Length );
 		const nearbyDrivers = await geoService.queryNearByDrivers(currentLocation, alldrivers, 2.5 );
-		//const drivers = await geoService.queryNearByDrivers(currentLocation, drivers[0], 2.5 );
 		
 		console.log("nearby drivers:", nearbyDrivers);
 		
-		//return res.status(201).json(nearbyDrivers);	
-		
 		var bestDriverMatch =  await geoService.getBestDriverMatch(nearbyDrivers);
 		console.log(" best driver Match is:", bestDriverMatch);
-		//return res.status(201).json(bestDriverMatch);	
-		
 		const driverId = bestDriverMatch.Id;
 		
 		const driverAccepted = await driversDispatch.DispatchBooking (riderId, driverId, originCoords, destinationCoords );

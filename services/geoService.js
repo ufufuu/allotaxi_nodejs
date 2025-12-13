@@ -21,6 +21,7 @@ class GeoService {
 	
 	async getCurrentPosition() {
 		// Get lat and lng Data from Api Being hitten by Client updating his adress
+		
 		const updatingApi = `api/v1/services/location-update`;
 		const Url = baseApiUrl+ updatingApi;
 		//const { data } = axios.post(Url, {latidude, longitude, userId});
@@ -135,10 +136,12 @@ class GeoService {
 	async getBestDriverMatch( lt,lg ) {
 		const pt1 = {'latitude' :22.304239, 'longitude': 0};
 		const pt2 = {'latitude': 114.179677, 'longitude': 0};
-		const res = await this.haversine(pt1, pt2);
-		return res;
-		
-		return "821650f4f7416524";
+		//const res = await this.haversine(pt1, pt2);
+		//return res;
+		return{
+			"Id": 1,
+			"UserId": "4d08af0312b492e4ef225422c140c5b45e8a833c"
+		};
 		return {
 			'lat': latitude,
 			'lng': longitude

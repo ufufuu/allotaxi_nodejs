@@ -1,73 +1,81 @@
 const express = require("express");
-
 const geoService = require("../services/geoService");
 const driversTracking = require("./DriversTracking");
 const bookingModel = require("../models/BookingModel");
 const http = require("http");
-const pool = require("../config/db");
-const socketio = require("socket.io");
 
+const { getIO } = require("../sockets/initSocket");
+const socketio = require("socket.io");
 const app = express();
 const httpServer = http.createServer(app);
+//const pool = require("../config/db");
+const { getPersistedSocketId } = require("../services/socketService");
 
-
+/*
 const io = socketio(httpServer, {
   cors: {
     origin: "*", // Or '*' for any origin (less secure)
     methods: ["GET", "POST"],
     credentials: true
   }
-});
+});*/
+
 
 class DriversDispatch {
 	
-	async matchBookingToDriver ( bookingModel ) {	
+	async matchBookingToDriver ( bookingModel ) 
+	{	
 	}
 	
-	async DispatchBooking ( riderId, driverId, originCoords, destinationCoords ) { // bookingModel, riderId )
+	async DispatchBooking ( riderId, driverId, originCoords, destinationCoords ) {
 		
 		// Obtain from APi user-location post Api to Server: riderId, latCoords, lngCoords
-		// var riderCoordinates = await this.getRiderLocation();
 		// listen for incoming connections from client or Is it io.sockets.on ?
-		// io.to('CI3bN_CtNW5T9SrMAAAH').emit('onPickUpRider', data);
+		const io = getIO();
+		var driver = await getPersistedSocketId(driverId);
 		
-		io.on("connection", function (socket) 
-		{
-			//console.log('io on connection:', socket.id);
-			//console.log('io on connection:', riderId);
+		io.emit('onPickUpRider', riderId);
+		
+		//io.on("connection", function (socket) 
+		//{
+			console.log(" Driver Id in dispatch io on connection : ", driverId);
+			console.log("sending Notify to user with Socket Id in io on connection:", driver.socketId);
 			
-			// start listening for coords //io.to('CI3bN_CtNW5T9SrMAAAH').emit('onPickUpRider', data);
-			io.to(driverId).emit('sendRiderCoords', function (riderOriginCoords ) {
-				// broadcast your coordinates to everyone except you
+			//console.log('io on connection:', socket.id);
+			// start listening for coords
+			//io.to('CI3bN_CtNW5T9SrMAAAH').emit('onPickUpRider', data);
+			//io.to('voqrnOwtkmCTS1zGAAAF').emit('onPickUpRider', data);
+			
+			io.to(driver.socketId).emit('sendRiderCoords', function (riderOriginCoords ) {
 				//socket.broadcast.emit('load:coords', data);  // or is it socket.emit ?
 				console.log('socket on send coords:', riderOriginCoords );
 			});
 			
-			socket.on('notifyDriver', function (data) {
-				// broadcast your coordinates to everyone except you
-				//socket.broadcast.emit('load:coords', data);  // or is it socket.emit ?
-				console.log('socket on send coords:', data);
+			io.to(driver.socketId).emit('onPickUpRider', function (riderOriginCoords ) {
+				
+				
+				console.log('socket on send coords:', riderOriginCoords );
 			});
 			
-			socket.on('send coords', function (data) {
+			
+			socket.on('onPickUpRider', function (data) {
 				// broadcast your coordinates to everyone except you
 				//socket.broadcast.emit('load:coords', data);  // or is it socket.emit ?
-				console.log('socket on send coords:', data);
+				console.log('onPickUpRider:', data);
 			});
 			
-			// Handle disconnection
-		    socket.on('disconnect', () => {
-				console.log('User disconnected:', socket.id);
-		    });
-		});
+			socket.on('onPickUpRider', function (data) {
+				// broadcast your coordinates to everyone except you
+				//socket.broadcast.emit('load:coords', data);  // or is it socket.emit ?
+				console.log('onPickUpRider:', data);
+			});
+			
 		return true;
 	}
 		
-	async updateLocationDb ( lat, lng, driverId ) {
+	/*async updateLocationDb ( lat, lng, driverId ) {
 		const update = await pool.query(`
-		
 		// Add Driver driverIsOnline to tb
-		
 		update "DriverLocation"(
 			"driverId", "longitude", "latitude"
 			)
@@ -78,7 +86,8 @@ class DriversDispatch {
 	
 	async updateDriverLocation ( lat, lng, driverId ) {
 		
-	}
+	}*/
+	
 }
 
 module.exports = new DriversDispatch();

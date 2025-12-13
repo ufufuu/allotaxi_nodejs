@@ -1,6 +1,6 @@
 const db = require("./models/locationModel");
 
-const updateDbWithNewLocation = async (payload, oldGeoLocationInfo) => {
+const updateDbWithNewLocation = async ( payload, oldGeoLocationInfo) => {
 	
   const { id, socketID } = payload;
   const [, [newLocation]] = await db.Geolocation.update(

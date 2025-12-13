@@ -7,7 +7,8 @@ const { pool } = require("../config/db");
 
 class BookingService {
 	
-	async createBooking ( passengerId, driverId, origin, destination ) {
+	async createBooking ( passengerId, driverId, origin, destination ) 
+	{
 	
 		io.on("connection", onSocketConnection(io));
 		var currentLocation = await geoService.getCurrentPosition();

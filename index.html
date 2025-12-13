@@ -8,11 +8,11 @@
 			<script src="./src/socketio/socket.io.min.js"></script>-->
 		<script>
 			const socket = io('http://localhost:3001');
-			const latitude = 22.304239;
-			const longitude = 114.179677;
-			socket.emit('onBookingRequest', {'lat':latitude, 'lng':longitude });
+			
+			//socket.emit('onBookingRequest', {'lat':latitude, 'lng':longitude });
+			
 			socket.on('onPickUpRider', (count) => {
-				alert("pick Up Rider Notification to One Driver:", count);				
+				alert("pick Up Rider Notification to One Driver in HTML :", count);				
 			});
 		</script>
     </head> 
