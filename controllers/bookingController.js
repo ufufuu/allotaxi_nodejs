@@ -7,28 +7,17 @@ const bookingService = require("../services/bookingService");
 const geoService = require("../services/geoService");
 
 exports.rideBook = async ( req, res, next ) => {
-	const { originCoords, originLat, originLng,  destinationCoords, contactInfo, specialInstructions, riderId } = req.body;
+	const { originLat, originLng,  destinationCoords, contactInfo, specialInstructions, riderId } = req.body;
 	const bookingId = crypto.randomBytes(20).toString('hex');
 	
-	console.log("Origine lat:", originLat);
-	console.log("Origine lng:", originLng);
-	
+	const originCoords ={ originLat, originLng };
 	const currentLocation= { Lat: originLat, Lng: originLng };
-	//try 
-	//{
+	
+	try 
+	{
         //if (!req?.session?.user?.id) {
 			//return res.status(400).json({ message: " Unauthorized " });
 		//}
-		
-		/*
-		const closestLocation = locations.reduce(( r, o) => {
-			const distance= haversine (o, targetLocation);
-			if( distance < r.minDistance || !r.minDistance) {
-				return { location: o, minDistance: distance };
-			}
-			return r;
-		}, {});
-		*/
 		
 		const Radius_Length = 2.5; // 6371 // process.env.LOCATION_MATCHING_RADIUS
 		const alldrivers = await geoService.queryNearByDrivers(currentLocation, Radius_Length );
@@ -38,9 +27,11 @@ exports.rideBook = async ( req, res, next ) => {
 		
 		var bestDriverMatch =  await geoService.getBestDriverMatch(nearbyDrivers);
 		console.log(" best driver Match is:", bestDriverMatch);
+		
 		const driverId = bestDriverMatch.Id;
 		
 		const driverAccepted = await driversDispatch.DispatchBooking (riderId, driverId, originCoords, destinationCoords );
+		
 		console.log(" Driver Accepted ?", driverAccepted);
 		
 		if(driverAccepted) {
@@ -60,9 +51,9 @@ exports.rideBook = async ( req, res, next ) => {
 			res.status(201).json(booking);	
 			//return res.status(200).json(currentLocation);
 		}
-    //} catch(error){
-		//res.status(400).json({ message: "Failed to create Booking" });
-    //}
+    } catch(error){
+		res.status(400).json({ message: error });
+    }
 };
 
 exports.updateBooking = async (req, res) => {
@@ -89,7 +80,6 @@ exports.updateBooking = async (req, res) => {
 };
 
 exports.getBookings = async ( req, res, next ) => {
-	
 	const bookings = await bookingService.GetBookings();
 	console.log("Bookings:", bookings);
 	return res.status(201).json(bookings);
@@ -102,8 +92,6 @@ exports.cancelBooking = async ( req, res, next ) => {
 
 exports.deleteBooking = async ( req, res, next ) => {
 	const { bookingId } = req.body;
-	//console.log("id in controller is:", bookingId);
-	
 	const deleted = await bookingService.deleteBooking(bookingId);
 	if(deleted){
 		return res.status(400).json({ message: "booking deleted !"});

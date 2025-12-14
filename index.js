@@ -1,45 +1,33 @@
 const express = require('express');
 const http = require("http");
-const { Server } = require("socket.io");
-const socketio = require("socket.io");
+const app = express();
 
+const httpServer = http.createServer(app);
 const cors = require("cors");
 const swaggerUI = require('swagger-ui-express');
 const userController = require('./controllers/userController');
-const { onSocketConnection } = require("./sockets");
-const { logInitialSocketConnection } = require("./services/socketService");
+//const { initSocket } = require("./sockets/initSocket");
 
+const socketio = require("./sockets/init");
 const swaggerDocument = require('./swagger.js');
+
 const swaggerSpec = require('./swagger');
 const path = require('path');
 const pg = require('pg');
 const { Client } = require("pg");
 const Postgis = require("postgis");
-const app = express();
-const httpServer = http.createServer(app);
-const { initSocket } = require("./sockets/initSocket");
 
-//const io = socketio(httpServer);
-//const io = socketio(httpServer, {
-const io = initSocket(httpServer, {
-  cors: {
-    origin: "*", // Or '*' for any origin (less secure)
-    methods: ["GET", "POST"],
-    credentials: true
-  }
-});
 const bookingRoutes = require("./routes/bookingRoutes");
 const userRoutes = require('./routes/userRoutes');
 const driverRoutes = require("./routes/driverRoutes");
 const userAuth = require("./middlewares/auth");
 const { connectionString } = require("./config/db");
 
-
 //const cookieParser = require("cookie-parser");
 //const jwt = require('jsonwebtoken');
 app.use(cors({ origin: 'http://localhost:3000'}));
 
-const port = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3001;
 var options = {
   explorer: true
 };
@@ -60,60 +48,33 @@ pool.connect((err, client, release) => {
         console.log("Connected to Database !")
     })
 });
-
+function startUpApp () {
+}
 app.disable("x-powered-by");
 //app.use(cookieParser());
-
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use("/user", userRoutes);
 app.use("/bookings", bookingRoutes);  // userAuth, bookingRoutes);
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec)); //swaggerDocument, options));
 
+//initSocket(httpServer);
+const io = socketio.getIO(httpServer);
 
-io.on("connection", ( socket ) => { //, onSocketConnection(io))
-
-    console.log(' WebSocket connection in index.js', socket.id);
-	
-	logInitialSocketConnection (socket.id);
-	
-	require("./sockets/handlers/dispatchDriverHandler");
-	
-	socket.on('onBookingRequest',  (data ) => {
-		
-		//console.log(' in onBookingRequest event, position is: ', data);
-		
-		
-		
-		//2. Broadcast the update in real-time to other subscribers
-		//socket.emit('onPickUpRider', data);   // vs io.emit to All connected clients
-		
-		io.to('CI3bN_CtNW5T9SrMAAAH').emit('onPickUpRider', data);
-		
-		// from client
-		// io.addEventListener('user-ocation-update', ()=> {
-		//})
-		// socket.emit('udpateLocation', {driverId, lng, lat});
-		
-	});
-	socket.on('disconnect', () => {
-		console.log(' User disconnected from index:', socket.id );
-	});
-});
-io.on('user-location-update', ( userCoordinates ) => {
-	const { lat, lng, userId }  = userCoordinates;
-	
-});
-
-httpServer.listen( port, () =>{
-	console.log(`app started and listening on ${port}`);
+httpServer.listen( PORT, () =>{
+	console.log(`app started and listening on ${PORT}`);
 });
 
 // Handling Errors
 app.on("unhandledRejection", err => {
   console.log(`An error occurred: ${err.message}`)
   httpServer.close(() => process.exit(1))
-})
+});
+
+module.exports={
+	//appConfig
+};
+
 
 // https://www.tigerdata.com/blog/how-we-made-postgresql-the-best-vector-database
 // https://dev.to/biswasprasana001/designing-a-ride-hailing-service-system-eg-uberlyft-a-beginner-friendly-guide-252o
@@ -128,7 +89,6 @@ app.on("unhandledRejection", err => {
 
 // event and delega in nodejs ?
 
-
 // #######################
 // Carte Vurtuelle de Wave
 // Carte virtuelle Wave , Visa
@@ -139,3 +99,19 @@ app.on("unhandledRejection", err => {
 // -- suite 100 nj 07
 // city East Orange nj  07018
 // make this my default adress
+
+//2. Broadcast the update in real-time to other subscribers
+//socket.emit('onPickUpRider', data);   // vs io.emit to All connected clients
+		
+//io.to('CI3bN_CtNW5T9SrMAAAH').emit('onPickUpRider', data);
+	
+// from client
+// io.addEventListener('user-ocation-update', ()=> {
+//})
+// socket.emit('udpateLocation', {driverId, lng, lat});
+
+// https://dev.to/olatisunkanmi/building-robust-nodejs-applications-with-socketio-best-practices-5hm5
+
+// https://ably.com/topic/socketio
+
+//https://medium.com/@mogold/nodejs-socket-io-express-multiple-modules-13f9f7daed4c

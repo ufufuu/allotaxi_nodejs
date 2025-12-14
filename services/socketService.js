@@ -17,4 +17,4 @@ module.exports.getPersistedSocketId = async (Id ) => {
 	const getQuery = `select "socketId" from "Connections" where "UserId" =$1`;
 	const socketId = await pool.query(getQuery, [Id]);
 	return socketId.rows[0];
-}
+};

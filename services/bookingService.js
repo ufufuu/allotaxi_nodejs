@@ -2,7 +2,8 @@ const userModel = require("../models/userModel");
 const radius = process.env.LOCATION_MATCHING_RADIUS;
 const { userIODriver } = require("../sockets/driverSocket");
 //const { usreIORider } = require("../sockets/riderSocket");
-const { onSocketConnection } = require("../sockets/");
+//const { onSocketConnection } = require("../sockets/in");
+
 const { pool } = require("../config/db");
 
 class BookingService {
@@ -53,3 +54,5 @@ class BookingService {
 module.exports = new BookingService();
 
 // https://www.capitalonecareers.com/job/new-york/senior-software-engineer-back-end-scala/1732/89303877920
+
+// https://ably.com/topic/websocket-architecture-best-practices

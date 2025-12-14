@@ -147,6 +147,30 @@ class GeoService {
 			'lng': longitude
 		};
 	};
+	
+	/*
+		const closestLocation = locations.reduce(( r, o) => {
+			const distance= haversine (o, targetLocation);
+			if( distance < r.minDistance || !r.minDistance) {
+				return { location: o, minDistance: distance };
+			}
+			return r;
+		}, {});
+	*/
+	/*async updateLocationDb ( lat, lng, driverId ) {
+		const update = await pool.query(`
+		// Add Driver driverIsOnline to tb
+		update "DriverLocation"(
+			"driverId", "longitude", "latitude"
+			)
+		where Id = driverId
+		values($1, $2, $3) returuning *`
+		[lat, lgn]);
+	}
+	
+	async updateDriverLocation ( lat, lng, driverId ) {
+		
+	}*/
 }
 module.exports = new GeoService();
 

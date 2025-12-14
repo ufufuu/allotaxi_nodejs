@@ -1,92 +1,49 @@
-const express = require("express");
 const geoService = require("../services/geoService");
 const driversTracking = require("./DriversTracking");
 const bookingModel = require("../models/BookingModel");
-const http = require("http");
+const socketio = require("../sockets/init");
+const { getIO } = require("../sockets/init");
 
-const { getIO } = require("../sockets/initSocket");
-const socketio = require("socket.io");
-const app = express();
-const httpServer = http.createServer(app);
-//const pool = require("../config/db");
 const { getPersistedSocketId } = require("../services/socketService");
-
-/*
-const io = socketio(httpServer, {
-  cors: {
-    origin: "*", // Or '*' for any origin (less secure)
-    methods: ["GET", "POST"],
-    credentials: true
-  }
-});*/
-
 
 class DriversDispatch {
 	
 	async matchBookingToDriver ( bookingModel ) 
-	{	
+	{
 	}
 	
-	async DispatchBooking ( riderId, driverId, originCoords, destinationCoords ) {
-		
+	async DispatchBooking ( rider, driverId, origin, destination ) {
+			
 		// Obtain from APi user-location post Api to Server: riderId, latCoords, lngCoords
 		// listen for incoming connections from client or Is it io.sockets.on ?
+		// io.to(userId).emit('userStatus', { status: status });
+		
 		const io = getIO();
+		//const io = await socketio.getIO();
 		var driver = await getPersistedSocketId(driverId);
 		
-		io.emit('onPickUpRider', riderId);
+		console.log(" In Dispatch Driver , driver receivin notif is:", origin);
 		
+		//io.emit('onBookingRequest', rider);
 		//io.on("connection", function (socket) 
 		//{
-			console.log(" Driver Id in dispatch io on connection : ", driverId);
-			console.log("sending Notify to user with Socket Id in io on connection:", driver.socketId);
-			
-			//console.log('io on connection:', socket.id);
-			// start listening for coords
-			//io.to('CI3bN_CtNW5T9SrMAAAH').emit('onPickUpRider', data);
-			//io.to('voqrnOwtkmCTS1zGAAAF').emit('onPickUpRider', data);
-			
-			io.to(driver.socketId).emit('sendRiderCoords', function (riderOriginCoords ) {
+
+			//io.to('voqrnOwtkmCTS1zGAAAF').emit('onPickUpRider', data)
+			io.to(driver.socketId).emit('onPickUpRider', function () {
 				//socket.broadcast.emit('load:coords', data);  // or is it socket.emit ?
-				console.log('socket on send coords:', riderOriginCoords );
+				console.log('socket on send info onPickUpRider:', origin );
 			});
 			
-			io.to(driver.socketId).emit('onPickUpRider', function (riderOriginCoords ) {
-				
-				
-				console.log('socket on send coords:', riderOriginCoords );
-			});
-			
-			
-			socket.on('onPickUpRider', function (data) {
+			socket.on('onBookingRequest', function () {
 				// broadcast your coordinates to everyone except you
 				//socket.broadcast.emit('load:coords', data);  // or is it socket.emit ?
-				console.log('onPickUpRider:', data);
+				console.log('onBookingRequest: ', origin);
 			});
-			
-			socket.on('onPickUpRider', function (data) {
-				// broadcast your coordinates to everyone except you
-				//socket.broadcast.emit('load:coords', data);  // or is it socket.emit ?
-				console.log('onPickUpRider:', data);
-			});
-			
+		//});
+		console.log("B4 send true back:");
+		
 		return true;
 	}
-		
-	/*async updateLocationDb ( lat, lng, driverId ) {
-		const update = await pool.query(`
-		// Add Driver driverIsOnline to tb
-		update "DriverLocation"(
-			"driverId", "longitude", "latitude"
-			)
-		where Id = driverId
-		values($1, $2, $3) returuning *`
-		[lat, lgn]);
-	}
-	
-	async updateDriverLocation ( lat, lng, driverId ) {
-		
-	}*/
 	
 }
 
