@@ -1,12 +1,9 @@
 const socketio = require("socket.io");
 const { Server } = require("socket.io");
-
 let io;
 
 /*
 const initSock =() => {
-	//let io;
-	
 module.exports = {
   init: function(server) {
     io = require("socket.io")(server);
@@ -21,7 +18,6 @@ module.exports = {
 };
 }
 */
-
 
 /*
 const io = require('socket.io')( httpServer, {
@@ -52,8 +48,9 @@ const getIO = ( ) => {
   return io;
 };
 */
+
 module.exports = {
-    getIO: async (server) => {
+    getSocketIO: (server) => {
         const io = new Server(server, {
 			cors: {
 			origin: "*", // Or '*' for any origin (less secure)
@@ -61,18 +58,39 @@ module.exports = {
 			credentials: true
 		}});
         io.on("connection", (socket) => {
-			console.log("a User connected :", socket.id);
+			console.log("a User connected  from socket init:", socket.id);
+			
+			/*socket.emit("onBookingRequest", function (data) {
+				console.log("emit onBookingRequest:", "baby");
+			});*/
 			
 			socket.on("disconnect", function () {
-				console.log(" user disconnected !");
+				console.log(" user disconnected from init!");
 			});
         });
-		io.on("onBookingRequest", function () {
-			console.log('onBookingRequest: ', origin);
-		});
         return io;
-    }
+    },
+	
+	// Function to send a message to all connected clients
+	sendMessageToAll: (eventName, message) => {
+		//let io= getIO();
+		if (io) {
+		  io.emit(eventName, message); // io.emit() sends to all connected clients
+		} else {
+		  console.error('Socket.io not initialized.');
+		}
+	},
+	// Function to send a message to a specific client
+	sendMessageToUser: (socketId, eventName, message) => {
+		//let io= getIO();
+		if (io) {
+		  io.to(socketId).emit(eventName, message); // io.to(roomId).emit() targets a specific socket/room
+		} else {
+		  console.error('Socket.io not initialized.');
+		}
+	}
 }
+
 
 /*
 const configureSockets = ( io, socket ) => {
@@ -86,11 +104,11 @@ const onSocketConnection = ( io) => ( socket ) => {
 	socket.on("driver-move", driverLocation);
 };
 */
-
-
 /*
 module.exports = {
   initSocket,
   getIO,
   getIo
 };*/
+
+// Trans Europ Expresss - transafr

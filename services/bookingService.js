@@ -30,11 +30,26 @@ class BookingService {
 		return booking;
     }
 	
+	async getBooking( Id ) {
+		const Query = `SELECT FROM "Bookings" WHERE "Id"= $1 RETURNING *`;
+		try{
+			const booking = await pool.query(Query,[Id]);
+			return res.status(200).json(booking);
+		} catch(err) {
+			console.log("err:", err);
+		}
+	}
+	
 	async GetBookings () {
 		const bookings = await pool.query(
 			`SELECT * FROM "Bookings"
 			`);
 		return bookings;
+	}
+	
+	async updateBooking ( Id, updatedValue ) {
+		const booking = this.getBooking(Id);
+		
 	}
 	
 	async deleteBooking( bookingId){
@@ -56,3 +71,5 @@ module.exports = new BookingService();
 // https://www.capitalonecareers.com/job/new-york/senior-software-engineer-back-end-scala/1732/89303877920
 
 // https://ably.com/topic/websocket-architecture-best-practices
+
+// https://kenokivabe.com/nodejs-setting-up-push-notifications-using-socket-io

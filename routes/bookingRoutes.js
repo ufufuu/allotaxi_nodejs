@@ -95,7 +95,10 @@ router.post("/", bookingController.rideBook);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Booking'
+ *             type: object
+ *             properties:
+ *               bookingId:
+ *                 type: string
  *     responses:
  *       200:
  *         description: The created booking.
@@ -106,6 +109,7 @@ router.post("/", bookingController.rideBook);
  *
  */
 router.get("/", bookingController.getBookings);
+
 /**
  * @swagger
  * tags:
@@ -129,6 +133,7 @@ router.get("/", bookingController.getBookings);
  *
  */
 router.get("/:id", bookingController.getBooking);
+
 /**
  * @swagger
  * tags:
@@ -159,6 +164,7 @@ router.get("/:id", bookingController.getBooking);
  *
  */
 router.put("/:id/accept", bookingController.miseajourBooking);
+
 /**
  * @swagger
  * tags:
@@ -189,6 +195,7 @@ router.put("/:id/accept", bookingController.miseajourBooking);
  *
  */
 router.post("/:id/deny", bookingController.updateBooking);
+
 /**
  * @swagger
  * tags:
@@ -220,5 +227,3 @@ router.delete("/:id/delete", bookingController.deleteBooking);
 //router.get("/booking:id", authCaptain, driverController.captainProfile);
 
 module.exports = router;
-
-// https://blog.logrocket.com/documenting-express-js-api-swagger/

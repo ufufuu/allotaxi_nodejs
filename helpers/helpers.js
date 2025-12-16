@@ -1,4 +1,4 @@
-const db = require("./models/locationModel");
+const db = require("../models/locationModel");
 
 const updateDbWithNewLocation = async ( payload, oldGeoLocationInfo) => {
 	

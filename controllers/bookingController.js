@@ -1,20 +1,25 @@
 const Booking = require('../models/BookingModel');
 const crypto = require("crypto");
 const { pool } = require("../config/db");
-//const matcher = require("../matching-engine/DynamicTripVehicleAssignmentMatcher");  GetBookings
 const driversDispatch = require("../dispatchEngine/DriversDispatch");
 const bookingService = require("../services/bookingService");
 const geoService = require("../services/geoService");
+const io = require("../server.js");
+
+//const socketio = require("../sockets/init");
+//const { getSocketIO } = require("../sockets/init");
+//const matcher = require("../matching-engine/DynamicTripVehicleAssignmentMatcher");  GetBookings
 
 exports.rideBook = async ( req, res, next ) => {
+	 console.log("io in booking controller:", io);
+	 
 	const { originLat, originLng,  destinationCoords, contactInfo, specialInstructions, riderId } = req.body;
 	const bookingId = crypto.randomBytes(20).toString('hex');
-	
 	const originCoords ={ originLat, originLng };
 	const currentLocation= { Lat: originLat, Lng: originLng };
 	
-	try 
-	{
+	//try 
+	//{
         //if (!req?.session?.user?.id) {
 			//return res.status(400).json({ message: " Unauthorized " });
 		//}
@@ -22,15 +27,19 @@ exports.rideBook = async ( req, res, next ) => {
 		const Radius_Length = 2.5; // 6371 // process.env.LOCATION_MATCHING_RADIUS
 		const alldrivers = await geoService.queryNearByDrivers(currentLocation, Radius_Length );
 		const nearbyDrivers = await geoService.queryNearByDrivers(currentLocation, alldrivers, 2.5 );
-		
-		console.log("nearby drivers:", nearbyDrivers);
-		
 		var bestDriverMatch =  await geoService.getBestDriverMatch(nearbyDrivers);
-		console.log(" best driver Match is:", bestDriverMatch);
+		
+		//console.log(" best driver Match is:", bestDriverMatch);
 		
 		const driverId = bestDriverMatch.Id;
 		
 		const driverAccepted = await driversDispatch.DispatchBooking (riderId, driverId, originCoords, destinationCoords );
+		//const driverAccepted = true;
+		//const io = getSocketIO();
+		
+		io.emit("onRideBooking", function() {
+			console.log("booking emitted from controller");
+		});
 		
 		console.log(" Driver Accepted ?", driverAccepted);
 		
@@ -48,12 +57,14 @@ exports.rideBook = async ( req, res, next ) => {
 			"DriverId")
 			values($1, $2, $3, $4, $5, $6, $7, $8, $9) returning *`,
 			[bookingId, originCoords, destinationCoords, 100, 1, "2020-03-10T04:05:06.157Z", "2020-03-10T04:05:06.157Z", null, null]);
-			res.status(201).json(booking);	
+			
+			return res.status(201).json(booking);
+			
 			//return res.status(200).json(currentLocation);
 		}
-    } catch(error){
-		res.status(400).json({ message: error });
-    }
+    //} catch(error){
+		//res.status(400).json({ message: error });
+    //}
 };
 
 exports.updateBooking = async (req, res) => {
@@ -103,12 +114,14 @@ exports.getBooking = async ( req, res, next ) => {
 };
 
 exports.miseajourBooking = async ( req, res, next ) => {
-	const { driveId, response } = req;		// af55253452a826cca80c922b5878f767e216af95
+	const { driveId, response } = req;// af55253452a826cca80c922b5878f767e216af95
 	if(!response) {
 		// Driver Accepted
 	}
 	
 };
+
+
 
 /*
 Core Components : real-time communication: Implements WebSockets (e.g., Socket.IO) to 

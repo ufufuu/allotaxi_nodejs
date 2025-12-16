@@ -1,10 +1,11 @@
 const geoService = require("../services/geoService");
 const driversTracking = require("./DriversTracking");
 const bookingModel = require("../models/BookingModel");
-const socketio = require("../sockets/init");
-const { getIO } = require("../sockets/init");
-
 const { getPersistedSocketId } = require("../services/socketService");
+const io = require("../server.js");
+//const { sendMessageToAll } = require("../sockets/init");
+//const socketio = require("../sockets/init");
+//const { getSocketIO } = require("../sockets/init");
 
 class DriversDispatch {
 	
@@ -13,41 +14,53 @@ class DriversDispatch {
 	}
 	
 	async DispatchBooking ( rider, driverId, origin, destination ) {
-			
+		
 		// Obtain from APi user-location post Api to Server: riderId, latCoords, lngCoords
-		// listen for incoming connections from client or Is it io.sockets.on ?
 		// io.to(userId).emit('userStatus', { status: status });
 		
-		const io = getIO();
-		//const io = await socketio.getIO();
+		//const io = getSocketIO();
+		//const io = socketio.getIO(httpServer);
+		
 		var driver = await getPersistedSocketId(driverId);
 		
-		console.log(" In Dispatch Driver , driver receivin notif is:", origin);
+		//sendMessageToAll("onBookingRequest", "baby");
 		
-		//io.emit('onBookingRequest', rider);
-		//io.on("connection", function (socket) 
-		//{
-
-			//io.to('voqrnOwtkmCTS1zGAAAF').emit('onPickUpRider', data)
-			io.to(driver.socketId).emit('onPickUpRider', function () {
-				//socket.broadcast.emit('load:coords', data);  // or is it socket.emit ?
-				console.log('socket on send info onPickUpRider:', origin );
-			});
+		//io.sockets.on('my other event', (data) => {
+			//console.log('Received data:', data);
+			// Emit an event to all connected clients
+			//io.emit('news', { hello: 'world' });
 			
-			socket.on('onBookingRequest', function () {
-				// broadcast your coordinates to everyone except you
-				//socket.broadcast.emit('load:coords', data);  // or is it socket.emit ?
-				console.log('onBookingRequest: ', origin);
-			});
+			//io.emit("onBookingRequest", function (data) {
+				//console.log("emitted onBookingRequest in driver dispatch:", origin);
+			//});
+			
+			
 		//});
-		console.log("B4 send true back:");
 		
+		//console.log("B4 send true back:");
 		return true;
 	}
-	
 }
 
 module.exports = new DriversDispatch();
+
+
+/*
+module.exports = (socket) => {
+  const io = getIO();
+
+  socket.on('my other event', (data) => {
+    console.log('Received data:', data);
+    // Emit an event to all connected clients
+    io.emit('news', { hello: 'world' }); 
+  });
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected:', socket.id);
+  });
+};
+*/
+
 
 /*
 2. 📍 Real-Time Location Tracking
@@ -94,3 +107,4 @@ Tech used:
 // https://stackoverflow.com/questions/11234413/node-js-library-for-geospatial-operations/11942832
 // https://dev.to/biswasprasana001/designing-a-ride-hailing-service-system-eg-uberlyft-a-beginner-friendly-guide-252o
 // https://stackoverflow.com/questions/68294906/how-does-uber-send-new-ride-requests-to-drivers
+

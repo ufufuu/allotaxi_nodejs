@@ -1,4 +1,4 @@
-const { updateDbWithNewLocation } = require("../helpers");
+const { updateDbWithNewLocation } = require("../helpers/helpers");
 const db = require("../models/LocationModel");
 
 const userIODriver = ( io, socket ) => {
