@@ -11,7 +11,6 @@ const configureSockets = ( io, socket ) => {
 
 const onSocketConnection = ( io) => ( socket ) => {
 	const { driverLocation } = configureSockets(io, socket);
-	
 	socket.on("driver-move", driverLocation);
 };
 

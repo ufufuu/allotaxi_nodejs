@@ -16,6 +16,8 @@ const socketio = require("./sockets/init");
 //const { initSocket } = require("./sockets/initSocket");
 //const rideBookedHandler = require("./sockets/whandlers/rideBookingHandler");
 
+
+
 const bookingRoutes = require("./routes/bookingRoutes");
 const userRoutes = require('./routes/userRoutes');
 const driverRoutes = require("./routes/driverRoutes");
@@ -27,12 +29,14 @@ const { connectionString } = require("./config/db");
 
 const app = express();
 const httpServer = http.createServer(app);
+const io = socketio.getSocketIO(httpServer);
+
 app.use(cors({ origin: 'http://localhost:3001'}));
 const PORT = process.env.PORT || 3001;
 var options = {
   explorer: true
 };
-const io = socketio.getSocketIO(httpServer);
+
 //const io = new Server (httpServer, {
 /*
   cors: {
@@ -67,7 +71,7 @@ app.use("/bookings", bookingRoutes);  // userAuth, bookingRoutes);
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec)); //swaggerDocument, options));
 
 io.on('connection', (socket) => {
-	console.log('A user connected index', socket.id);  
+	console.log('A user connected from main server', socket.id);  
 	if (process.env.ENVIRONMENT == "production") {
       socket.on("log", async (log) => {
         log.formattedTimestamp = moment().tz("Asia/Kolkata").format("MMM DD hh:mm:ss A");
@@ -85,7 +89,7 @@ io.on('connection', (socket) => {
 	//registerUserHandlers(io, socket);
 
 	socket.on('disconnect', () => {
-		console.log('User disconnected, index');
+		console.log('User disconnected, server');
 	});
 });
 

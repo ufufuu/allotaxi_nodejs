@@ -4,7 +4,10 @@ const { pool } = require("../config/db");
 const driversDispatch = require("../dispatchEngine/DriversDispatch");
 const bookingService = require("../services/bookingService");
 const geoService = require("../services/geoService");
+
+//const { io } = require("../server");
 const { getSocketIO } = require("../sockets/init");
+
 //const socketio = require("../sockets/init");
 //const io = require("../server.js");
 //const matcher = require("../matching-engine/DynamicTripVehicleAssignmentMatcher");  GetBookings
@@ -12,8 +15,8 @@ const { getSocketIO } = require("../sockets/init");
 exports.rideBook = async ( req, res, next ) => {
 	
 	const io = getSocketIO();
-	console.log("io in booking controller:", io);
-	 
+	//console.log("io in booking controller:", io);
+	
 	const { originLat, originLng,  destinationCoords, contactInfo, specialInstructions, riderId } = req.body;
 	const bookingId = crypto.randomBytes(20).toString('hex');
 	const originCoords ={ originLat, originLng };
@@ -29,18 +32,21 @@ exports.rideBook = async ( req, res, next ) => {
 		const alldrivers = await geoService.queryNearByDrivers(currentLocation, Radius_Length );
 		const nearbyDrivers = await geoService.queryNearByDrivers(currentLocation, alldrivers, 2.5 );
 		var bestDriverMatch =  await geoService.getBestDriverMatch(nearbyDrivers);
-		
 		//console.log(" best driver Match is:", bestDriverMatch);
 		
 		const driverId = bestDriverMatch.Id;
-		
 		const driverAccepted = await driversDispatch.DispatchBooking (riderId, driverId, originCoords, destinationCoords );
 		//const driverAccepted = true;
 		
+			console.log("User connected from COntroller");
 		
-		io.emit("onRideBooking", function() {
-			console.log("booking emitted from controller");
-		});
+			io.emit("onRideBooking", function() {
+				console.log("booking emitted from controller");
+			});
+			//io.sockets.on('disconnect', () => {
+				//console.log('User disconnected, index');
+			//});
+		//});
 		
 		console.log(" Driver Accepted ?", driverAccepted);
 		

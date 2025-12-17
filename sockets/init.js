@@ -49,6 +49,32 @@ const getIO = ( ) => {
 };
 */
 
+/*
+function getSocketIo ( server ) {
+	io = new Server(server, {
+		cors: {
+		origin: "*", // Or '*' for any origin (less secure)
+		methods: ["GET", "POST"],
+		credentials: true
+	}});
+	io.on("connection", (socket) => {
+		console.log(" a User connected  from socket init:", socket.id);	
+		socket.on("disconnect", function () {
+			console.log(" user disconnected from init!");
+		});
+    });
+    return io;
+}
+
+const sendMessageToAll = (eventName, message) => {
+	const io = getSocketIO();
+	if (io) {
+	  io.emit(eventName, message); // io.emit() sends to all connected clients
+	} else {
+	  console.error('Socket.io not initialized.');
+	}
+}*/
+	
 module.exports = {
     getSocketIO: (server) => {
         const io = new Server(server, {
@@ -58,7 +84,7 @@ module.exports = {
 			credentials: true
 		}});
         io.on("connection", (socket) => {
-			console.log("a User connected  from socket init:", socket.id);
+			console.log(" a User connected  from socket init:", socket.id);
 			
 			/*socket.emit("onBookingRequest", function (data) {
 				console.log("emit onBookingRequest:", "baby");
@@ -70,19 +96,17 @@ module.exports = {
         });
         return io;
     },
-	
-	// Function to send a message to all connected clients
 	sendMessageToAll: (eventName, message) => {
-		//let io= getIO();
+		const io = getSocketIO();
 		if (io) {
 		  io.emit(eventName, message); // io.emit() sends to all connected clients
 		} else {
 		  console.error('Socket.io not initialized.');
 		}
 	},
-	// Function to send a message to a specific client
+	
 	sendMessageToUser: (socketId, eventName, message) => {
-		//let io= getIO();
+		const io = getSocketIO();
 		if (io) {
 		  io.to(socketId).emit(eventName, message); // io.to(roomId).emit() targets a specific socket/room
 		} else {
@@ -90,25 +114,6 @@ module.exports = {
 		}
 	}
 }
-
-
-/*
-const configureSockets = ( io, socket ) => {
-	return {
-		driverLocation:userIODriver(io),
-		riderLocation:userIODriver(io),
-	};
-};
-const onSocketConnection = ( io) => ( socket ) => {
-	const { driverLocation } = configureSockets(io, socket);
-	socket.on("driver-move", driverLocation);
-};
-*/
-/*
-module.exports = {
-  initSocket,
-  getIO,
-  getIo
-};*/
+//module.exports = { getSocketIo, sendMessageToAll };
 
 // Trans Europ Expresss - transafr
