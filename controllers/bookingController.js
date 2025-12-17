@@ -4,14 +4,15 @@ const { pool } = require("../config/db");
 const driversDispatch = require("../dispatchEngine/DriversDispatch");
 const bookingService = require("../services/bookingService");
 const geoService = require("../services/geoService");
-const io = require("../server.js");
-
+const { getSocketIO } = require("../sockets/init");
 //const socketio = require("../sockets/init");
-//const { getSocketIO } = require("../sockets/init");
+//const io = require("../server.js");
 //const matcher = require("../matching-engine/DynamicTripVehicleAssignmentMatcher");  GetBookings
 
 exports.rideBook = async ( req, res, next ) => {
-	 console.log("io in booking controller:", io);
+	
+	const io = getSocketIO();
+	console.log("io in booking controller:", io);
 	 
 	const { originLat, originLng,  destinationCoords, contactInfo, specialInstructions, riderId } = req.body;
 	const bookingId = crypto.randomBytes(20).toString('hex');
@@ -35,7 +36,7 @@ exports.rideBook = async ( req, res, next ) => {
 		
 		const driverAccepted = await driversDispatch.DispatchBooking (riderId, driverId, originCoords, destinationCoords );
 		//const driverAccepted = true;
-		//const io = getSocketIO();
+		
 		
 		io.emit("onRideBooking", function() {
 			console.log("booking emitted from controller");

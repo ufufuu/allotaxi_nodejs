@@ -5,14 +5,13 @@ const swaggerUI = require('swagger-ui-express');
 const userController = require('./controllers/userController');
 const swaggerDocument = require('./swagger.js');
 const swaggerSpec = require('./swagger');
-const socketio = require("socket.io");
-const { Server } = require("socket.io");
-
 const path = require('path');
 const pg = require('pg');
 const { Client } = require("pg");
 const Postgis = require("postgis");
-//const socketio = require("./sockets/init");
+const socketio = require("./sockets/init");
+//const socketio = require("socket.io");
+//const { Server } = require("socket.io");
 //const dispatchDrivers = require("./dispatchEngine/DriversDispatch.js");
 //const { initSocket } = require("./sockets/initSocket");
 //const rideBookedHandler = require("./sockets/whandlers/rideBookingHandler");
@@ -33,14 +32,15 @@ const PORT = process.env.PORT || 3001;
 var options = {
   explorer: true
 };
-//const io = socketio.getSocketIO(httpServer,
-
-const io = new Server (httpServer, {
+const io = socketio.getSocketIO(httpServer);
+//const io = new Server (httpServer, {
+/*
   cors: {
     origin: "*", // Or '*' for any origin (less secure)
     methods: ["GET", "POST"],
     credentials: true
-}});
+}});*/
+
 const pool = new pg.Pool(connectionString);
 pool.connect((err, client, release) => {
     if (err) {
