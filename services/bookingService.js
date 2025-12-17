@@ -1,6 +1,6 @@
 const userModel = require("../models/userModel");
 const radius = process.env.LOCATION_MATCHING_RADIUS;
-const { userIODriver } = require("../sockets/driverSocket");
+const { userIODriver } = require("../sockets/driverGeoLocation");
 //const { usreIORider } = require("../sockets/riderSocket");
 //const { onSocketConnection } = require("../sockets/in");
 

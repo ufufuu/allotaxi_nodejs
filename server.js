@@ -9,7 +9,8 @@ const path = require('path');
 const pg = require('pg');
 const { Client } = require("pg");
 const Postgis = require("postgis");
-const socketio = require("./sockets/init");
+const socketio = require("./sockets/initSocket");
+
 //const socketio = require("socket.io");
 //const { Server } = require("socket.io");
 //const dispatchDrivers = require("./dispatchEngine/DriversDispatch.js");
@@ -29,7 +30,7 @@ const { connectionString } = require("./config/db");
 
 const app = express();
 const httpServer = http.createServer(app);
-const io = socketio.getSocketIO(httpServer);
+const io = socketio.getSocketIo(httpServer);
 
 app.use(cors({ origin: 'http://localhost:3001'}));
 const PORT = process.env.PORT || 3001;
@@ -70,26 +71,21 @@ app.use("/user", userRoutes);
 app.use("/bookings", bookingRoutes);  // userAuth, bookingRoutes);
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec)); //swaggerDocument, options));
 
+app.use((req, res, next ) => {
+	req.io =io;
+	next();
+});
 io.on('connection', (socket) => {
-	console.log('A user connected from main server', socket.id);  
-	if (process.env.ENVIRONMENT == "production") {
-      socket.on("log", async (log) => {
-        log.formattedTimestamp = moment().tz("Asia/Kolkata").format("MMM DD hh:mm:ss A");
-        try {
-          await frontendLogModel.create(log);
-        } catch (error) {
-          console.log("Error sending logs...");
-        }
-      });
-    }
+	
+	//console.log("A user connected from main server: ",io );
 	//socket.emit("onRideBooking", function() {
-		//console.log("booking emitted from index");
+		//console.log("event emitted from server");
 	//});
 	
 	//registerUserHandlers(io, socket);
 
 	socket.on('disconnect', () => {
-		console.log('User disconnected, server');
+		//console.log('User disconnected, server');
 	});
 });
 

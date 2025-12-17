@@ -6,16 +6,18 @@ const bookingService = require("../services/bookingService");
 const geoService = require("../services/geoService");
 
 //const { io } = require("../server");
-const { getSocketIO } = require("../sockets/init");
+//const { getSocketIO } = require("../sockets/initSocket");
+const socketIo = require("../sockets/initSocket");
 
-//const socketio = require("../sockets/init");
 //const io = require("../server.js");
 //const matcher = require("../matching-engine/DynamicTripVehicleAssignmentMatcher");  GetBookings
 
 exports.rideBook = async ( req, res, next ) => {
 	
-	const io = getSocketIO();
-	//console.log("io in booking controller:", io);
+	//const io= req.io;
+	
+	const io = socketIo.getIo();
+	//console.log(" io in booking controller: ", io);
 	
 	const { originLat, originLng,  destinationCoords, contactInfo, specialInstructions, riderId } = req.body;
 	const bookingId = crypto.randomBytes(20).toString('hex');
@@ -27,7 +29,6 @@ exports.rideBook = async ( req, res, next ) => {
         //if (!req?.session?.user?.id) {
 			//return res.status(400).json({ message: " Unauthorized " });
 		//}
-		
 		const Radius_Length = 2.5; // 6371 // process.env.LOCATION_MATCHING_RADIUS
 		const alldrivers = await geoService.queryNearByDrivers(currentLocation, Radius_Length );
 		const nearbyDrivers = await geoService.queryNearByDrivers(currentLocation, alldrivers, 2.5 );
@@ -37,19 +38,11 @@ exports.rideBook = async ( req, res, next ) => {
 		const driverId = bestDriverMatch.Id;
 		const driverAccepted = await driversDispatch.DispatchBooking (riderId, driverId, originCoords, destinationCoords );
 		//const driverAccepted = true;
-		
-			console.log("User connected from COntroller");
-		
-			io.emit("onRideBooking", function() {
-				console.log("booking emitted from controller");
-			});
-			//io.sockets.on('disconnect', () => {
-				//console.log('User disconnected, index');
-			//});
-		//});
-		
+			
+		io.emit("onRideBooking", function(originLat) {
+			//console.log(" booking emitted from controller:", originLat);
+		});
 		console.log(" Driver Accepted ?", driverAccepted);
-		
 		if(driverAccepted) {
 			const booking = await pool.query(
 			`INSERT INTO "Bookings"(
@@ -199,3 +192,16 @@ other heuristic approaches might be used to find the optimal global matching sol
 
 // ### 
 //https://blog.logrocket.com/building-real-time-location-app-node-js-socket-io/#rest-api-websockets
+
+// real time api gateway layer 
+
+// non-blocking i/o model
+// event-driven 
+// concurrent requests  handling 
+// deospatial db : quick query driver near spec. point
+//redis with geohash , for in=memory location + high speed location datamngmt
+// mongo db <- geospatial indexing capabilities 
+
+//Routing Services : OSRM , open source routing machine 4 calculations distance, fastest routes , eta-scored
+
+// Scalability , nodejs micro architec  <-- Kafka 

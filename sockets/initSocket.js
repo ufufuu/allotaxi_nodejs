@@ -76,22 +76,37 @@ const sendMessageToAll = (eventName, message) => {
 }*/
 	
 module.exports = {
-    getSocketIO: (server) => {
-        const io = new Server(server, {
+	
+	init: function (server ) {
+		io = require('socketio')(server);
+		return io;
+	},
+	
+	getIo: function () {
+		if(!io) {
+			throw new Error("socket not initialized");
+		}
+		return io;
+	},
+	
+    getSocketIo: (server) => {
+		
+        io = new Server(server, {
 			cors: {
 			origin: "*", // Or '*' for any origin (less secure)
 			methods: ["GET", "POST"],
 			credentials: true
 		}});
         io.on("connection", (socket) => {
-			console.log(" a User connected  from socket init:", socket.id);
+			
+			console.log(" User connected  from socket init: ", socket.id);
 			
 			/*socket.emit("onBookingRequest", function (data) {
 				console.log("emit onBookingRequest:", "baby");
 			});*/
 			
 			socket.on("disconnect", function () {
-				console.log(" user disconnected from init!");
+				console.log( " user disconnected from init!", sockets.id );
 			});
         });
         return io;
@@ -101,7 +116,7 @@ module.exports = {
 		if (io) {
 		  io.emit(eventName, message); // io.emit() sends to all connected clients
 		} else {
-		  console.error('Socket.io not initialized.');
+		  console.error( 'Socket.io not initialized.');
 		}
 	},
 	
@@ -110,7 +125,7 @@ module.exports = {
 		if (io) {
 		  io.to(socketId).emit(eventName, message); // io.to(roomId).emit() targets a specific socket/room
 		} else {
-		  console.error('Socket.io not initialized.');
+		  console.error( 'Socket.io not initialized.');
 		}
 	}
 }
