@@ -14,17 +14,14 @@ class DriversDispatch {
 	}
 	
 	async DispatchBooking ( rider, driverId, origin, destination ) {
-		
 		// Obtain from APi user-location post Api to Server: riderId, latCoords, lngCoords
 		// io.to(userId).emit('userStatus', { status: status });
-		
 		//const io = getSocketIO();
 		//const io = socketio.getIO(httpServer);
 		
 		var driver = await getPersistedSocketId(driverId);
 		
 		//sendMessageToAll("onBookingRequest", "baby");
-		
 		//io.sockets.on('my other event', (data) => {
 			//console.log('Received data:', data);
 			// Emit an event to all connected clients
@@ -33,11 +30,11 @@ class DriversDispatch {
 			//io.emit("onBookingRequest", function (data) {
 				//console.log("emitted onBookingRequest in driver dispatch:", origin);
 			//});
-			
-			
 		//});
 		
-		//console.log("B4 send true back:");
+		//Listens To 
+		// API Call to Accepted or Denied Request 
+		
 		return true;
 	}
 }

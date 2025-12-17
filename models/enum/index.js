@@ -1,14 +1,18 @@
-
-
 const BookingStatus ={
-	PENDING: "placed",
-	DISPATCHED: "dispathed",
+	PENDING: 1,
+	DISPATCHED: "dispatched",
 	REFUSED: "refused",
-	ACCEPTED: "accepted",
-	STARTED: "started",
-	COMPLETED: "completed",
+	ACCEPTED: 2,
+	STARTED: 4,
+	COMPLETED: 9,
 	CANCELED : "canceled"
-}
+};
+
+const UserRole = {
+    USER : "user",
+    DRIVER : "driver",
+	ADMIN : "admin",
+};
 
 const Colors = {
     RED: "red",
@@ -16,13 +20,8 @@ const Colors = {
     BLUE: "blue"
 };
 
-class Role {
-    static USER = "user";
-    static DRIVER = "driver";
-	static ADMIN = "admin";
-}
 module.exports ={
 	BookingStatus, 
-	Colors,
-	Role
+	UserRole,
+	Colors
 };

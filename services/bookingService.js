@@ -1,6 +1,7 @@
 const userModel = require("../models/userModel");
 const radius = process.env.LOCATION_MATCHING_RADIUS;
 const { userIODriver } = require("../sockets/driverGeoLocation");
+const { BookingStatus } = require("../models/enum/index.js");
 //const { usreIORider } = require("../sockets/riderSocket");
 //const { onSocketConnection } = require("../sockets/in");
 
@@ -47,8 +48,15 @@ class BookingService {
 		return bookings;
 	}
 	
-	async updateBooking ( Id, updatedValue ) {
-		const booking = this.getBooking(Id);
+	async updateBooking(bookingId, updatedValue ) {
+		//const booking = this.getBooking(bookingId);
+		const _query = `UPDATE "Bookings" SET "Status"=$1 "DriverId"=$2 WHERE "Id"=$3`;
+		try{
+			const res = await pool.query(_query,[2, updatedValue, bookingId]); //, BookingStatus.ACCEPTED]);
+			return res;
+		} catch(err) {
+			console.log("err:", err);
+		}
 		
 	}
 	

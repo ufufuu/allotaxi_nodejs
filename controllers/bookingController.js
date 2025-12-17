@@ -68,6 +68,7 @@ exports.rideBook = async ( req, res, next ) => {
 };
 
 exports.updateBooking = async (req, res) => {
+	
     const { email, password } = req.body;
     try {
         const user = await UserModel.findOne({ email, password }).select("-password");
@@ -114,10 +115,22 @@ exports.getBooking = async ( req, res, next ) => {
 };
 
 exports.miseajourBooking = async ( req, res, next ) => {
-	const { driveId, response } = req;// af55253452a826cca80c922b5878f767e216af95
-	if(!response) {
-		// Driver Accepted
+	//const { driveId } = req;
+	//const { bookingId } = req.headers;
+	
+	const bookingId ="c170b5181a26f7b99f461d98170ec9d4c0f14bfb";
+	console.log("booking Id:", bookingId);
+	//const { driverId } = req.body;
+	const driverId="68d0066fb3e7f3c82441964af8f9478009c211de";
+	try{
+		
+		//console.log("driver Id:", req.headers.bookingId);
+		const updated = await bookingService.updateBooking(bookingId, driverId);
+		return res.status(200).json({message :"updated"});
+	}catch(err){
+		console.log("Error:", err);
 	}
+	
 	
 };
 
