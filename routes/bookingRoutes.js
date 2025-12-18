@@ -140,7 +140,7 @@ router.get("/:id", bookingController.getBooking);
  *   description: API managing Bookings 
  * /bookings/{id}/accept:
  *   put:
- *     summary: Accept a booking
+ *     summary: Accept or Deny a Booking
  *     tags: [Bookings]
  *     requestBody:
  *       required: false
@@ -149,6 +149,8 @@ router.get("/:id", bookingController.getBooking);
  *           schema:
  *             type: object
  *             properties:
+ *               bookingId:
+ *                 type: string
  *               driverId:
  *                 type: string
  *               response:
@@ -163,37 +165,6 @@ router.get("/:id", bookingController.getBooking);
  *
  */
 router.put("/:id/accept", bookingController.miseajourBooking);
-
-/**
- * @swagger
- * tags:
- *   name: Bookings
- *   description: API managing Bookings 
- * /bookings/{id}/deny:
- *   put:
- *     summary: Deny Booking by Driver
- *     tags: [Bookings]
- *     requestBody:
- *       required: false
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               driverId:
- *                 type: string
- *               response:
- *                 type: boolean
- *     responses:
- *       200:
- *         description: booking Accepted
- *         content:
- *           application/json:
- *       500:
- *         description: Some server error
- *
- */
-router.post("/:id/deny", bookingController.updateBooking);
 
 /**
  * @swagger

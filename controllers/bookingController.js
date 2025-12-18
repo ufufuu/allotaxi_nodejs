@@ -1,31 +1,27 @@
 const events = require("events");
 const http = require("http");
-const crypto = require("crypto");
-const Booking = require('../models/BookingModel');
-const { pool } = require("../config/db");
+//const crypto = require("crypto");
+//const Booking = require('../models/BookingModel');
+//const { pool } = require("../config/db");
+
 const driversDispatch = require("../dispatchEngine/DriversDispatch");
 const bookingService = require("../services/bookingService");
 const geoService = require("../services/geoService");
-
-
-//const { io } = require("../server");
-//const { getSocketIO } = require("../sockets/initSocket");
 const socketIo = require("../sockets/initSocket");
 
-//const io = require("../server.js");
+//const { getSocketIO } = require("../sockets/initSocket");
 //const matcher = require("../matching-engine/DynamicTripVehicleAssignmentMatcher");  GetBookings
 
 const eventEmitter = new  events.EventEmitter();
 
 exports.rideBook = async ( req, res, next ) => {
 	
-	//const io= req.io;
-	
 	const io = socketIo.getIo();
-	//console.log(" io in booking controller: ", io);
+	const { originLat, originLng,  destinationCoords, contactInfo, specialInstructions } = req.body;
+	const riderId = "3e5975c5326e90ff05397a10b034ba62637aa025";
 	
-	const { originLat, originLng,  destinationCoords, contactInfo, specialInstructions, riderId } = req.body;
-	const bookingId = crypto.randomBytes(20).toString('hex');
+	
+	//const bookingId = crypto.randomBytes(20).toString('hex');
 	const originCoords ={ originLat, originLng };
 	const currentLocation= { Lat: originLat, Lng: originLng };
 	
@@ -47,9 +43,12 @@ exports.rideBook = async ( req, res, next ) => {
 		io.emit("onRideBooking", function(originLat) {
 			//console.log(" booking emitted from controller:", originLat);
 		});
-		console.log(" Driver Accepted ?", driverAccepted);
+		console.log( " Driver Accepted ? ", driverAccepted);
 		if(driverAccepted) {
-			const booking = await pool.query(
+			
+			const booking = bookingService.createBooking(riderId, driverAccepted, originLat, destinationCoords);
+			
+			/*const booking = await pool.query(
 			`INSERT INTO "Bookings"(
 			"Id",
 			"Origin",
@@ -62,6 +61,7 @@ exports.rideBook = async ( req, res, next ) => {
 			"DriverId")
 			values($1, $2, $3, $4, $5, $6, $7, $8, $9) returning *`,
 			[bookingId, originCoords, destinationCoords, 100, 1, "2020-03-10T04:05:06.157Z", "2020-03-10T04:05:06.157Z", null, null]);
+			*/
 			
 			return res.status(201).json(booking);
 			
@@ -98,10 +98,19 @@ exports.updateBooking = async (req, res) => {
 
 exports.getBookings = async ( req, res, next ) => {
 	const bookings = await bookingService.GetBookings();
-	console.log("Bookings:", bookings);
-	return res.status(201).json(bookings);
+	if(!bookings){
+	}
+	return res.status(200).json(bookings);
 };
 
+exports.getBooking = async ( req, res, next ) => {
+	//const { bookingId } = req;
+	const bookingId ="afd314b367a2c75580cbff9c9f16d5e61d65043b";
+	const booking = await bookingService.getBooking (bookingId);
+	
+	//return res.status(400).json({ message: "getting single get booking"});
+	return res.status(400).json(booking);
+};
 
 exports.cancelBooking = async ( req, res, next ) => {
 	return res.status(400).json({ message: "cancelling booking"});
@@ -115,38 +124,27 @@ exports.deleteBooking = async ( req, res, next ) => {
 	}
 };
 
-exports.getBooking = async ( req, res, next ) => {
-	return res.status(400).json({ message: "getting single get booking"});
-};
-
 exports.miseajourBooking = async ( req, res, next ) => {
-	//const { driveId } = req;
-	//const { bookingId } = req.headers;
+	const { bookingId, driverId , response } = req.body;
+	//console.log("booking Id:", bookingId);
+	//const driverId="68d0066fb3e7f3c82441964af8f9478009c211de";
 	
-	const bookingId ="c170b5181a26f7b99f461d98170ec9d4c0f14bfb";
-	console.log("booking Id:", bookingId);
-	//const { driverId } = req.body;
-	const driverId="68d0066fb3e7f3c82441964af8f9478009c211de";
 	try{
 		
-		//console.log("driver Id:", req.headers.bookingId);
 		const updated = await bookingService.updateBooking(bookingId, driverId);
 		
 		// Listening on Accepted Bookings and Dispacth and notify User for Acceptance
 		eventEmitter.on("onBookingAccepted", () => {
-			console.log("Booking Accepted from User");
+			console.log("Booking Accepted , notify Rider ! ");
 		});
-		
 		//Raising accepted Booking event
-		eventEmitter.emit("onBookingAccepted");
 		
+		eventEmitter.emit("onBookingAccepted");
 		
 		return res.status(200).json({message :"updated"});
 	}catch(err){
 		console.log("Error:", err);
 	}
-	
-	
 };
 
 
