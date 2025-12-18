@@ -106,7 +106,7 @@ module.exports = {
 			});*/
 			
 			socket.on("disconnect", function () {
-				console.log( " user disconnected from init!", sockets.id );
+				console.log( " user disconnected from init!", socket.id );
 			});
         });
         return io;

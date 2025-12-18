@@ -103,3 +103,36 @@ module.exports={
 	httpServer, 
 	io
 };
+/*
+- Ronal Reagan loto via 80 Edwin Fozo 
+- event Loop in JS and other features ?
+- moment js 
+- event Loop ,event Emitter, 
+*/
+/* Pembina - Emerson */
+// emerson: 650 hbts in  hotel emmerson inn
+//  Javascript is blocking , that is why it relies on callbacks , promises and async/await 
+
+// JavaScript	is	synchronous	by	default,	and	is	single	threaded
+/* JavaScript	is	synchronous	by	default,	and	is	single	threaded.	This	means
+that	code	cannot	create	new	threads	and	run	in	parallel.	Find	out	what
+asynchronous	code	means	and	how	it	looks	like
+*/
+/* Normally,	programming	languages	are	synchronous,	and	some	provide	a	way	to	manage
+asynchronicity,	i
+// non Blocking I/O ? how
+// 
+// Api Request
+/*
+const	xhr	=	new	XMLHttpRequest()
+xhr.onreadystatechange	=	()	=>	{
+	if	(xhr.readyState	===	4)	{
+		xhr.status	===	200	?	console.log(xhr.responseText)	:	console.error('error')
+	}
+}
+xhr.open('GET',	'https://yoursite.com')
+xhr.send()
+*/
+// Social media Manager
+// french Rotisserie Cafe 
+// Palm Springs 

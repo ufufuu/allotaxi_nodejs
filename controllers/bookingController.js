@@ -1,9 +1,12 @@
-const Booking = require('../models/BookingModel');
+const events = require("events");
+const http = require("http");
 const crypto = require("crypto");
+const Booking = require('../models/BookingModel');
 const { pool } = require("../config/db");
 const driversDispatch = require("../dispatchEngine/DriversDispatch");
 const bookingService = require("../services/bookingService");
 const geoService = require("../services/geoService");
+
 
 //const { io } = require("../server");
 //const { getSocketIO } = require("../sockets/initSocket");
@@ -11,6 +14,8 @@ const socketIo = require("../sockets/initSocket");
 
 //const io = require("../server.js");
 //const matcher = require("../matching-engine/DynamicTripVehicleAssignmentMatcher");  GetBookings
+
+const eventEmitter = new  events.EventEmitter();
 
 exports.rideBook = async ( req, res, next ) => {
 	
@@ -126,6 +131,16 @@ exports.miseajourBooking = async ( req, res, next ) => {
 		
 		//console.log("driver Id:", req.headers.bookingId);
 		const updated = await bookingService.updateBooking(bookingId, driverId);
+		
+		// Listening on Accepted Bookings and Dispacth and notify User for Acceptance
+		eventEmitter.on("onBookingAccepted", () => {
+			console.log("Booking Accepted from User");
+		});
+		
+		//Raising accepted Booking event
+		eventEmitter.emit("onBookingAccepted");
+		
+		
 		return res.status(200).json({message :"updated"});
 	}catch(err){
 		console.log("Error:", err);
@@ -133,6 +148,11 @@ exports.miseajourBooking = async ( req, res, next ) => {
 	
 	
 };
+
+
+
+
+
 
 
 
