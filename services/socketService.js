@@ -3,6 +3,10 @@ const crypto = require("crypto");
 
 const userModel = require("../models/userModel");
 
+module.exports.joinRoom = () => {
+	
+};
+
 module.exports.logInitialSocketConnection = async ( socketId ) => {
 	
 	const id = crypto.randomBytes(20).toString('hex');

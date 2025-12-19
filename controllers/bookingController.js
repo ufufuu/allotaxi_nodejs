@@ -1,5 +1,6 @@
 const events = require("events");
 const http = require("http");
+
 //const crypto = require("crypto");
 //const Booking = require('../models/BookingModel');
 //const { pool } = require("../config/db");
@@ -18,13 +19,15 @@ exports.rideBook = async ( req, res, next ) => {
 	
 	const io = socketIo.getIo();
 	const { originLat, originLng,  destinationCoords, contactInfo, specialInstructions } = req.body;
-	const riderId = "3e5975c5326e90ff05397a10b034ba62637aa025";
 	
+	//const  nearests = await geoService.getTurfNearest ([originLat, originLng]);
+	//console.log(" Nearest Is:", nearests);
+	
+	const riderId = "3e5975c5326e90ff05397a10b034ba62637aa025";
 	
 	//const bookingId = crypto.randomBytes(20).toString('hex');
 	const originCoords ={ originLat, originLng };
 	const currentLocation= { Lat: originLat, Lng: originLng };
-	
 	//try 
 	//{
         //if (!req?.session?.user?.id) {
@@ -34,35 +37,21 @@ exports.rideBook = async ( req, res, next ) => {
 		const alldrivers = await geoService.queryNearByDrivers(currentLocation, Radius_Length );
 		const nearbyDrivers = await geoService.queryNearByDrivers(currentLocation, alldrivers, 2.5 );
 		var bestDriverMatch =  await geoService.getBestDriverMatch(nearbyDrivers);
+		
 		//console.log(" best driver Match is:", bestDriverMatch);
 		
 		const driverId = bestDriverMatch.Id;
 		const driverAccepted = await driversDispatch.DispatchBooking (riderId, driverId, originCoords, destinationCoords );
-		//const driverAccepted = true;
-			
-		io.emit("onRideBooking", function(originLat) {
+		
+		/*
+		io.emit("onRideBooking", function(originLat) {	
 			//console.log(" booking emitted from controller:", originLat);
-		});
+		});*/
+		
+		
 		console.log( " Driver Accepted ? ", driverAccepted);
 		if(driverAccepted) {
-			
 			const booking = bookingService.createBooking(riderId, driverAccepted, originLat, destinationCoords);
-			
-			/*const booking = await pool.query(
-			`INSERT INTO "Bookings"(
-			"Id",
-			"Origin",
-			"Destination",
-			"Fare",
-			"Status",
-			"Created",
-			"Expiry",
-			"RiderId",
-			"DriverId")
-			values($1, $2, $3, $4, $5, $6, $7, $8, $9) returning *`,
-			[bookingId, originCoords, destinationCoords, 100, 1, "2020-03-10T04:05:06.157Z", "2020-03-10T04:05:06.157Z", null, null]);
-			*/
-			
 			return res.status(201).json(booking);
 			
 			//return res.status(200).json(currentLocation);
@@ -147,13 +136,6 @@ exports.miseajourBooking = async ( req, res, next ) => {
 	}
 };
 
-
-
-
-
-
-
-
 /*
 Core Components : real-time communication: Implements WebSockets (e.g., Socket.IO) to 
 facilitate instant updates of driver locations and ride requests/status.
@@ -167,7 +149,7 @@ indexing (e.g., Geohash or R-tree) to efficiently query nearby drivers based on 
 When a rider submits a request, the system first queries the database for drivers
 within a certain geographical radius of the rider's origin. This initial filtering is crucial for performance
 
-3. Feasibility Check (Spatial and Temporal)
+3. Feasibility Check (Spatial indexing for fast , and Temporal)
 For each potential driver match, the algorithm checks feasibility using constraints: 
 
     Spatial Feasibility: The rider's origin and destination must be along the driver's route or within a maximum allowed detour distance.
@@ -224,15 +206,40 @@ other heuristic approaches might be used to find the optimal global matching sol
 // ### 
 //https://blog.logrocket.com/building-real-time-location-app-node-js-socket-io/#rest-api-websockets
 
+
 // real time api gateway layer 
 
-// non-blocking i/o model
-// event-driven 
-// concurrent requests  handling 
-// deospatial db : quick query driver near spec. point
-//redis with geohash , for in=memory location + high speed location datamngmt
+// geospatial db : quick query driver near spec. point
+
+//redis with geohash , for in-memory location + high speed location data management
 // mongo db <- geospatial indexing capabilities 
 
 //Routing Services : OSRM , open source routing machine 4 calculations distance, fastest routes , eta-scored
 
-// Scalability , nodejs micro architec  <-- Kafka 
+// Scalability , nodejs micro architec  <-- Kafka
+
+
+// non-blocking i/o model
+// event-driven 
+// concurrent requests  handling 
+/*
+Since our architecture is microservices-based, services will be communicating with each other as well. 
+Generally, REST or
+ HTTP performs well but we can further improve the performance using gRPC which is more lightweight and efficient
+ Learn more about REST, GraphQL, gRPC and how they compare with each other.
+*/
+/*
+- google S2 library npm ?
+- All the active cabs keep on sending the location to the server once every 4 seconds through a web application firewall and load balancer.All the active cabs keep on sending the location
+ to the server once every 4 seconds through a web application firewall and load balancer.
+
+*/
+/*
+ - npm:  geo hashing  1spatial indexing : r-tree 
+*/
+
+// https://www.geeksforgeeks.org/system-design/system-design-of-uber-app-uber-system-architecture/
+
+// https://medium.com/@karan99/system-design-uber-33593137a4fe	* * * 
+
+//https://dev.to/kogab/mongodb-geospatial-queries-how-to-query-based-on-geographic-location-5cjh

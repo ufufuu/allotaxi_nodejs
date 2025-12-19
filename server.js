@@ -17,8 +17,6 @@ const socketio = require("./sockets/initSocket");
 //const { initSocket } = require("./sockets/initSocket");
 //const rideBookedHandler = require("./sockets/whandlers/rideBookingHandler");
 
-
-
 const bookingRoutes = require("./routes/bookingRoutes");
 const userRoutes = require('./routes/userRoutes');
 const driverRoutes = require("./routes/driverRoutes");

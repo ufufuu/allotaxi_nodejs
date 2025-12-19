@@ -1,3 +1,8 @@
+const {nearestPoint} = require("@turf/nearest-point");
+//import nearestPoint from "@turf/helpers";
+//import  { point, featureCollection } from "@turf/helpers";
+
+const { point, featureCollection } = require("@turf/helpers");
 const express = require("express");
 const axios = require("axios");
 const { Server } = require("socket.io");
@@ -147,6 +152,19 @@ class GeoService {
 			'lng': longitude
 		};
 	};
+	
+	async getTurfNearest ( targetPoint ) {
+		
+		const points = featureCollection ([
+			point([28.973865, 41.011122]),
+			point([28.948459, 41.024204]),
+			point([28.938674, 41.013324]),
+		]);
+		
+		const nearest = nearestPoint( targetPoint, points);
+		return nearest;
+	};
+	
 	
 	/*
 		const closestLocation = locations.reduce(( r, o) => {

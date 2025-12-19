@@ -3,7 +3,7 @@ const BookingStatus ={
 	DISPATCHED: "dispatched",
 	REFUSED: "refused",
 	ACCEPTED: 2,
-	STARTED: 4,
+	STARTED: 3,
 	COMPLETED: 9,
 	CANCELED : "canceled"
 };

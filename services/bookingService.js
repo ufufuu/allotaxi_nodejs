@@ -13,8 +13,6 @@ const radius = process.env.LOCATION_MATCHING_RADIUS;
 
 class BookingService {
 	
-	
-	
 	async createBooking ( riderId, driverId, origin, destination ) 
 	{
 		const bookingId = crypto.randomBytes(20).toString('hex');
@@ -37,7 +35,6 @@ class BookingService {
 		//var currentLocation = await geoService.getCurrentPosition();
 		//const lat = currentLocation.latitude;
 		//const lng = currentLocation.longitude;
-		
 		
 		//var nearbyDrivers = await geoService.queryNearByDrivers(lat, lng, radius );
 		//var bestDriverMatch =  await geoService.getBestDriverMatch(nearbyDrivers);
@@ -79,15 +76,13 @@ class BookingService {
 	
 	async updateBooking(bookingId, updatedValue, driverAccept ) {
 		//const booking = this.getBooking(bookingId);
-		
 		const _query = `UPDATE "Bookings" SET "Status"=$1, "DriverId"=$2 WHERE "Id"=$3`;
 		try{
 			const res = await pool.query(_query, [2, updatedValue, bookingId]);
 			return res;
 		} catch(err) {
 			console.log("err:", err);
-		}
-		
+		}	
 	}
 	
 	async deleteBooking( bookingId){
