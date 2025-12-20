@@ -2,10 +2,7 @@ const geoService = require("../services/geoService");
 const driversTracking = require("./DriversTracking");
 const bookingModel = require("../models/BookingModel");
 const { getPersistedSocketId } = require("../services/socketService");
-const io = require("../server.js");
-//const { sendMessageToAll } = require("../sockets/init");
-//const socketio = require("../sockets/init");
-//const { getSocketIO } = require("../sockets/init");
+const { getSocketIo } = require("../sockets/initSocket");
 
 class DriversDispatch {
 	
@@ -14,27 +11,29 @@ class DriversDispatch {
 	}
 	
 	async DispatchBooking ( rider, driverId, origin, destination ) {
+
 		// Obtain from APi user-location post Api to Server: riderId, latCoords, lngCoords
 		// io.to(userId).emit('userStatus', { status: status });
-		//const io = getSocketIO();
-		//const io = socketio.getIO(httpServer);
-		
+
+		const io = getSocketIo();		
 		var driver = await getPersistedSocketId(driverId);
 		
 		//sendMessageToAll("onBookingRequest", "baby");
-		//io.sockets.on('my other event', (data) => {
-			//console.log('Received data:', data);
-			// Emit an event to all connected clients
-			//io.emit('news', { hello: 'world' });
+	
+		io.emit("onRideBooking", function () {
+			console.log(" emitted onRideBoking in driver dispatch:", origin);
+		});
 			
-			//io.emit("onBookingRequest", function (data) {
-				//console.log("emitted onBookingRequest in driver dispatch:", origin);
-			//});
-		//});
+		io.to(userSocketId).emit("onBookingRequest", function (data) {
+			console.log(" emitted onBookingRequest in driver dispatch:", origin);
+		});
+
+		io.emit("onBookingRequest", function (data) {
+			console.log(" emitted onBookingRequest in driver dispatch:", origin);
+		});
 		
 		//Listens To 
 		// API Call to Accepted or Denied Request 
-		
 		return true;
 	}
 }

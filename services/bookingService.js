@@ -6,11 +6,6 @@ const { BookingStatus } = require("../models/enum/index.js");
 const userModel = require("../models/userModel");
 const radius = process.env.LOCATION_MATCHING_RADIUS;
 
-//const socketIo = require("../sockets/initSocket");
-//const { usreIORider } = require("../sockets/riderSocket");
-//const { onSocketConnection } = require("../sockets/in");
-//const io = socketIo.getIo();
-
 class BookingService {
 	
 	async createBooking ( riderId, driverId, origin, destination ) 

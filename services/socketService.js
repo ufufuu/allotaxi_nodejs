@@ -8,7 +8,6 @@ module.exports.joinRoom = () => {
 };
 
 module.exports.logInitialSocketConnection = async ( socketId ) => {
-	
 	const id = crypto.randomBytes(20).toString('hex');
 	const logQuery = `insert into "Connections" ("Id", "socketId", "UserId") values($1, $2, $3) returning *`;
 	

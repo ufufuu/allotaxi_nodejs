@@ -110,15 +110,6 @@ class GeoService {
 		  res.json(locations);
 		});
 	}
-	
-	//const closestLocation = locations.reduce(( r, o) => {
-	/*closestLocation (){
-		const distance= haversine (o, targetLocation);
-		if( distance < r.minDistance || !r.minDistance) {
-			return { location: o, minDistance: distance };
-		}
-		return r;
-	}, {});*/
 
 	async haversineDistance (location1, location2) {
 		const toRad = (x) => {
@@ -153,15 +144,18 @@ class GeoService {
 		};
 	};
 	
+	async getPoisByRadius ( lat, lng, rad ) {
+		let points = [];
+	}
+	
 	async getTurfNearest ( targetPoint ) {
-		
-		const points = featureCollection ([
-			point([28.973865, 41.011122]),
-			point([28.948459, 41.024204]),
-			point([28.938674, 41.013324]),
-		]);
-		
-		const nearest = nearestPoint( targetPoint, points);
+		const _query =`SELECT "Latitude", "Longitude" from "Locations" `;
+		const allLocations =  await pool.query(_query);
+		const points = [];
+		allLocations.rows.map(loc =>{
+			points.push(point([loc.Latitude, loc.Longitude]));
+		});
+		const nearest = nearestPoint( targetPoint, featureCollection(points));
 		return nearest;
 	};
 	
@@ -198,3 +192,45 @@ module.exports = new GeoService();
 // https://sigm.tg/portal/apps/webappviewer/index.html?id=a1cd40a866d14a8f9112bc887af88bda
 //WHERE ST_DWithin(geom, ST_SetSRID(ST_MakePoint (${lng}, ${lat}), 4326, ${radius})
 //name, ST_AsText(geom)
+
+// PostGIS geoSpatial Indexing 
+
+//https://dev.to/tanyonghe/redis-geohashing-storing-and-querying-location-data-with-ease-1gf4
+//https://socket.io/get-started/private-messaging-part-2/#Persistent-session-ID
+
+/*const getPoisByRadius = async (req, res) => {
+   let coords = [];
+   coords[0] = req.body.lng;
+   coords[1] = req.body.lat;
+   let maxDistance = 15000;
+   let place_id_list = [];
+
+
+   await PoiDB.Poi.find(
+      {
+         location: {
+            $near: {
+               $geometry: {
+                  type: 'Point',
+                  coordinates: coords,
+               },
+               $maxDistance: maxDistance,
+            },
+         },
+      },
+      '_id',
+      async (err, result) => {
+         if (err) return res.status(500).send({ errorMessage: err });
+         const idResArray = result.map((elem) => {
+            return String(elem._id);
+         });
+         const toursWithPoi = await TourDB.Tour.find({
+            $or: [{ 'sights._id': { $in: idResArray } }, { 'sights.place_id': { $in: place_id_list } }],
+         }).exec();
+         return res.status(200).send(toursWithPoi);
+      }
+   );
+   
+*/
+
+//https://www.ellej.dev/blog/how-to-write-geospatial-queries-to-mongodb-by-setting-up-a-ride-hailing-app/

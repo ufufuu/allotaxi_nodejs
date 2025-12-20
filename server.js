@@ -10,11 +10,6 @@ const pg = require('pg');
 const { Client } = require("pg");
 const Postgis = require("postgis");
 const socketio = require("./sockets/initSocket");
-
-//const socketio = require("socket.io");
-//const { Server } = require("socket.io");
-//const dispatchDrivers = require("./dispatchEngine/DriversDispatch.js");
-//const { initSocket } = require("./sockets/initSocket");
 //const rideBookedHandler = require("./sockets/whandlers/rideBookingHandler");
 
 const bookingRoutes = require("./routes/bookingRoutes");
@@ -74,17 +69,18 @@ app.use((req, res, next ) => {
 	next();
 });
 io.on('connection', (socket) => {
-	
-	//console.log("A user connected from main server: ",io );
-	//socket.emit("onRideBooking", function() {
-		//console.log("event emitted from server");
-	//});
-	
+
+	//console.log("A user connected from main server: " );
+	/*socket.emit("onRideBooking", function() {
+		console.log("event emitted from server");
+	});*/
+
 	//registerUserHandlers(io, socket);
 
-	socket.on('disconnect', () => {
+	//socket.on('disconnect', () => {
 		//console.log('User disconnected, server');
-	});
+	//});
+  
 });
 
 httpServer.listen( PORT, () =>{
