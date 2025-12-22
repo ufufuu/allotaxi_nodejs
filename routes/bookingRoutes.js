@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const bookingController = require("../controllers/bookingController");
-const { adminAuth } = require("../middlewares/auth")
+const { adminAuth } = require("../middlewares/auth");
+
 /**
  * @swagger
  * components:

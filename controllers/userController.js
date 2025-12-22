@@ -1,23 +1,19 @@
 const { createUser, loginUser } = require("../services/userService");
 const express = require("express");
 const app = express();
-
-//const UserModel = require('../models/userModel');
-//const { User } = require("../models/userModel");
-//const { City , Country } = require("../models/cityModel");
-/*const { QueryTypes } = require("sequelize");
-const jwt = require('../services/jwtService');
-const { pool, sequelize }  = require('../config/db');
-*/
-
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");
 const jwt = require("../services/jwtService");
 
+//const { QueryTypes } = require("sequelize");
+//const jwt = require("../services/jwtService");
+const { pool, sequelize }  = require("../config/db");
+
+
 exports.signupUser = async (req, res) => {
 	const { userName, userFirstName, userLastName, userLogin, userPassword, userPhoneNumber } = req.body;
 	
-	try {
+	//try {
 		/*
 		const [results ] = await sequelize.query(
 		'insert into Countries("countryId", "countryName", "regionId") values("2", "togo", "1")',
@@ -31,10 +27,10 @@ exports.signupUser = async (req, res) => {
 		if (userPassword.length < 6) {
 			return res.status(400).json({ message: "Password less than 6 characters" })
 		}
-		const saltRounds = 10;
+		//const saltRounds = 10;
 		const uId = crypto.randomBytes(20).toString('hex');
-
-		const hashedPwd = await bcrypt.hash(userPassword, saltRounds);	
+		const hashedPwd = crypto.createHash('md5').update(userPassword).digest('hex'); //, saltRounds);	
+    	//let hashedPassword = crypto.createHash('md5').update(password).digest('hex')
 		
 		const createUser = await pool.query(
 		`insert into "AspNetUsers"(
@@ -63,62 +59,22 @@ exports.signupUser = async (req, res) => {
 		"isAdmin",
 		"isDriver") 
 		values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21) returning $1, $2`,
-		[uId, userName, "JOE@ALLO.CC", userName, "JOE@ALLO.CC", false, hashedPwd ,"securityStamp", "concurrrencyStamp", userPhoneNumber, false, false, null, false, 0,  "discriminator", userFirstName, "lastName", "middleName", false,false ]);
-	}
-		/*
-		const [results] = sequelize.query(
-		'insert into Countries (countryId, countryName, regionId) values($1, $2, $3) returning * ", [1,Togo, 3]'
-		)*/
+		[uId, userName, "KEV21@ALLO.CC", userName, "KEV21@ALLO.CC", false, hashedPwd ,"securityStamp", "concurrrencyStamp", userPhoneNumber, false, false, null, false, 0,  "discriminator", userFirstName, "lastName", "middleName", false,false ]);
+	//}
+		
 
-	catch ( err )
+	/*catch ( err )
 	{
 		res.status(400).json({ yoomsg: err });
 	}
 		//await data.save();
 		//*/ //98 47 70 16 : citoyen modele ---visa schengen  
 		
-		/*
-		const id=2;
-		const name="Dapaong";
-		const country=1;
-		const region =null;
-		const data = await Country.create({
-			Id: "2",
-			Name: "name",
-			Region: "1"
-		});*/
-        //res.status(201).json(data);
-		
     //} catch (error) {
       //res.status(400).json({ message: "Failed to register user" });
 	  //res.send(error);
     //}
 	
-	//try 
-	//{
-		//console.log(" user Name:", JSON .stringify(app));
-		
-		//res.send("from User Controller");
-		
-        //const userExists = await UserModel.findOne({ email });
-        //if (userExists) return res.status(400).json({ message: " User already exists " });
-        //const user = new User({ name, email, password, role: "client" });
-		
-        //const savedUser = await user.save();
-		
-		/*
-		const user = await userService.createUser(
-			fullname.firstname,
-			fullname.lastname,
-			email,
-			password,
-			phone
-		);*
-        res.status(201).json(savedUser);
-		*/
-   // } catch (error) {
-     //   res.status(400).json({ message: "Failed to register user" });
-    //}
 };
 
 exports.UserLogin = async ( req, res ) => {
@@ -126,10 +82,9 @@ exports.UserLogin = async ( req, res ) => {
     try 
 	{
         if ((!userName) || (!userPassword)) {
-            return res.status(400).json({ error: "Invalid username or password." });
+            return res.status(400).json({ error: " Invalid username or password. " });
         }
 		
-		//const user = await UserModel.findOne({ userName, userPassword }).select("-password");
 		const userLogin = await loginUser (userName, userPassword);
 		console.log(" in controller, userLogin", userLogin);
 

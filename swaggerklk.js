@@ -1,7 +1,5 @@
-// swagger.jss
-
+// swagger.js
 const swaggerJsdoc = require('swagger-jsdoc');
-
 const options = {
 	definition:{
 		openapi: '3.0.0',
@@ -12,22 +10,16 @@ const options = {
       }
 	},
 	//Defining security schemes globally
-	components: {
-		securitySchemes: {
-			BearerAuth: {
-				type: 'http',
-				scheme: 'bearer',
-				bearerFormat: 'JWT',
-				description: 'Either your Bearer token  in the format **Bearer <token>**'
-			},
-			CustomHeader: {
-				type: 'apiKey',
-				in: 'header',
-				name: 'X-Custom-Header',
-				description: 'An example of a custom required header'
-			}
-		}
-	},
+	"components": {
+     "securitySchemes": {
+         "JWT": {
+            "description": "",
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+         }
+     }
+   },
 	security: [{
 		// this applied BearerAuth to all endpoints by default
 		"Bearer": []

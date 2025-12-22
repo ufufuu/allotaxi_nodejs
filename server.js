@@ -3,8 +3,9 @@ const http = require("http");
 const cors = require("cors");
 const swaggerUI = require('swagger-ui-express');
 const userController = require('./controllers/userController');
-const swaggerDocument = require('./swagger.js');
-const swaggerSpec = require('./swagger');
+//const swaggerDocument = require('./swagger.js');
+const swaggerSpec = require("./swagger.json");
+//const swaggerSpec = require('./swagger');
 const path = require('path');
 const pg = require('pg');
 const { Client } = require("pg");
@@ -62,7 +63,24 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use("/user", userRoutes);
 app.use("/bookings", bookingRoutes);  // userAuth, bookingRoutes);
-app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec)); //swaggerDocument, options));
+var customSwaggerOptions = {
+  explorer: true,
+  swaggerOptions: {
+    authAction: {
+      JWT: {
+        name: 'JWT',
+        schema: {
+          type: 'apiKey',
+          in: 'header',
+          name: 'Authorization',
+          description: ''
+        },
+        value: 'Bearer <my own JWT token>'
+      }
+    }
+  }
+}
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec, customSwaggerOptions)); //swaggerDocument, options));
 
 app.use((req, res, next ) => {
 	req.io =io;
