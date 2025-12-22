@@ -5,6 +5,7 @@ const bookingService = require("../services/bookingService");
 const geoService = require("../services/geoService");
 const socketIo = require("../sockets/initSocket");
 const { getPersistedSocketId } = require("../services/socketService");
+const Radius_Length = process.env.Radius_Length;
 
 //const matcher = require("../matching-engine/DynamicTripVehicleAssignmentMatcher");  GetBookings
 const eventEmitter = new  events.EventEmitter();
@@ -12,13 +13,13 @@ const eventEmitter = new  events.EventEmitter();
 exports.rideBook = async ( req, res, next ) => {
 	
 	const io = socketIo.getIo();
-	const { originLat, originLng,  destinationCoords, contactInfo, specialInstructions } = req.body;
+	const { originLat, originLng,  destinationCoords, contactInfo, specialInstructions, rider } = req.body;
 	const  nearests = await geoService.getTurfNearest ([originLat, originLng]);
 	const closestDriverCoords = nearests.geometry.coordinates;
-	const socketId= getPersistedSocketId(closestDriverCoords);
+	
 	console.log(" Nearest Driver Coordinates Are:", closestDriverCoords);
 	
-	const riderId = "3e5975c5326e90ff05397a10b034ba62637aa025";
+	const riderId = "8acc817e9c5601ab841c3c758934f384c12394a7";
 
 	const originCoords ={ originLat, originLng };
 	const currentLocation= { Lat: originLat, Lng: originLng };
@@ -27,23 +28,22 @@ exports.rideBook = async ( req, res, next ) => {
         //if (!req?.session?.user?.id) {
 			//return res.status(400).json({ message: " Unauthorized " });
 		//}
-
-		// Get Id for the Driver 
-		// Whose Locations match or close Within A certain Radius
-		const Radius_Length = 2.5; // 6371 // process.env.LOCATION_MATCHING_RADIUS
+		 
 		const alldrivers = await geoService.queryNearByDrivers(currentLocation, Radius_Length );
 		const nearbyDrivers = await geoService.queryNearByDrivers(currentLocation, alldrivers, 2.5 );
 		var bestDriverMatch =  await geoService.getBestDriverMatch(nearbyDrivers);
 		
-		//console.log(" best driver Match is:", bestDriverMatch);
-		
-		const driverId = bestDriverMatch.Id;
-		const driverAccepted = await driversDispatch.DispatchBooking (riderId, driverId, originCoords, destinationCoords );
-		
-		
+		const driverSocketId= getPersistedSocketId(closestDriverCoords);
+		const driverAccepted = await driversDispatch.DispatchBooking (driverSocketId, riderId, originCoords, destinationCoords );
+
+		/*
+		io.to(driverSocketId).emit("onRideBooking", function (data) {
+			console.log(" emitted onBookingRequest in driver dispatch:", origin);
+		});*/
+		/*
 		io.emit("onRideBooking", function() {	
 			//console.log(" booking emitted from controller:", originLat);
-		});
+		});*/
 		
 		
 		console.log( " Driver Accepted ? ", driverAccepted);

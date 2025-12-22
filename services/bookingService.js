@@ -11,7 +11,7 @@ class BookingService {
 	async createBooking ( riderId, driverId, origin, destination ) 
 	{
 		const bookingId = crypto.randomBytes(20).toString('hex');
-		riderId = "68d0066fb3e7f3c82441964af8f9478009c211de";
+		riderId = "8acc817e9c5601ab841c3c758934f384c12394a7";
 		const _query= `INSERT INTO "Bookings"(
 			"Id",
 			"Origin",
@@ -28,17 +28,11 @@ class BookingService {
 		
 		//io.on("connection", onSocketConnection(io));
 		//var currentLocation = await geoService.getCurrentPosition();
-		//const lat = currentLocation.latitude;
-		//const lng = currentLocation.longitude;
-		
 		//var nearbyDrivers = await geoService.queryNearByDrivers(lat, lng, radius );
 		//var bestDriverMatch =  await geoService.getBestDriverMatch(nearbyDrivers);
 	
 		//const passenger = await passengerService.find(passengerId)
-		//const driver = await driverService.find(driverId)
-		//io.to('bestDriverMatch.socketId').emit('onPickUpRider', data);   
 		//const booking = await this.insert({ driver, passenger, origin, destination })
-
 		//passenger.bookings.push(booking);
 		//await passenger.save();
 		

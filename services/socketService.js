@@ -3,8 +3,12 @@ const crypto = require("crypto");
 
 const userModel = require("../models/userModel");
 
-module.exports.joinRoom = () => {
-	
+module.exports.getPersistedSocketId = async (Id ) => {
+	Id = 1;
+	const getQuery = `select "socketId" from "Locations" where "Id" =$1`;
+	const res = await pool.query(getQuery, [Id]);
+	console.log(" in Socket service, socket Id is:", res.rows[0].socketId);
+	return res.rows[0].socketId;
 };
 
 module.exports.logInitialSocketConnection = async ( socketId ) => {
@@ -14,10 +18,6 @@ module.exports.logInitialSocketConnection = async ( socketId ) => {
 	await pool.query(logQuery, [id, socketId, "4d08af0312b492e4ef225422c140c5b45e8a833c"]);
 };
 
-module.exports.getPersistedSocketId = async (Id ) => {
-	const r = "4d08af0312b492e4ef225422c140c5b45e8a833c";
-	Id = r;
-	const getQuery = `select "socketId" from "Connections" where "UserId" =$1`;
-	const socketId = await pool.query(getQuery, [Id]);
-	return socketId.rows[0];
+module.exports.joinRoom = () => {
+	
 };

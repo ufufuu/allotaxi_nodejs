@@ -69,8 +69,8 @@ app.use((req, res, next ) => {
 	next();
 });
 io.on('connection', (socket) => {
+	console.log("A user connected from main server ID is :", socket.id);
 
-	//console.log("A user connected from main server: " );
 	/*socket.emit("onRideBooking", function() {
 		console.log("event emitted from server");
 	});*/
@@ -80,7 +80,6 @@ io.on('connection', (socket) => {
 	//socket.on('disconnect', () => {
 		//console.log('User disconnected, server');
 	//});
-  
 });
 
 httpServer.listen( PORT, () =>{

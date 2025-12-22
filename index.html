@@ -10,8 +10,8 @@
 			const socket = io('http://localhost:3001/');
 			//socket.emit('onBookingRequest', {'lat':latitude, 'lng':longitude });
 			
-			socket.on("onRideBooking", () => {
-				alert("Notification:");				
+			socket.on("onRideBooking", (data) => {
+				alert("Notification 2:"+ JSON.stringify(data));				
 			});
 		</script>
     </head> 
@@ -32,6 +32,15 @@
 </html>
 
 <!--
+	- https://www.lomeinfos.com/esidryss/2014/11/
+
+
+	- https://www.nidirect.gov.uk/articles/applying-pension-credit
+	
+	- https://www.workaway.info/en/signup/workawayer
+	- https://www.worldpackers.com/
+	-https://cityharvest.org.uk/food-near-me/
+	
 	- https://github.com/googlemaps/google-maps-services-js
 		- https://www.npmjs.com/package/@googlemaps/react-native-navigation-sdk
 

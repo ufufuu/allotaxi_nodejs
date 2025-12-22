@@ -88,13 +88,9 @@ const userController = require("../controllers/userController");
 */
 
 router.post("/register", userController.signupUser);
-router.post("/login", userController.loginUser);
-router.get("user:id", userController.loginUser);
+router.post("/login", userController.UserLogin);
+router.get("/user/:id", userController.UserLogin);
 
-//router.post('/signup/user', signupUser);
-
-
-router.get('/user/:id', userController.loginUser);
 module.exports = router;
 
 

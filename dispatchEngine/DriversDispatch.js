@@ -1,8 +1,8 @@
 const geoService = require("../services/geoService");
 const driversTracking = require("./DriversTracking");
 const bookingModel = require("../models/BookingModel");
-const { getPersistedSocketId } = require("../services/socketService");
-const { getSocketIo } = require("../sockets/initSocket");
+const socketIo = require("../sockets/initSocket");
+const { getPersistedSocketId } = require ("../services/socketService");
 
 class DriversDispatch {
 	
@@ -10,28 +10,19 @@ class DriversDispatch {
 	{
 	}
 	
-	async DispatchBooking ( rider, driverId, origin, destination ) {
+	async DispatchBooking ( driverId, rider, origin, destination ) {
 
-		// Obtain from APi user-location post Api to Server: riderId, latCoords, lngCoords
+		const io = socketIo.getIo();
+		var driverSocketId = await getPersistedSocketId(driverId);
+		origin= { "latitude": 1.23, "longitute": 4.32};
+		//console.log(" In Drivers Dispatch, Io:", io);
 		// io.to(userId).emit('userStatus', { status: status });
 
-		const io = getSocketIo();		
-		var driver = await getPersistedSocketId(driverId);
-		
-		//sendMessageToAll("onBookingRequest", "baby");
-	
-		io.emit("onRideBooking", function () {
-			console.log(" emitted onRideBoking in driver dispatch:", origin);
-		});
-			
-		io.to(userSocketId).emit("onBookingRequest", function (data) {
-			console.log(" emitted onBookingRequest in driver dispatch:", origin);
-		});
+		console.log(" Driver Accepting Request, in drivers dispatch :", driverSocketId);
 
-		io.emit("onBookingRequest", function (data) {
+		io.sockets.to(`${driverSocketId}`).emit("onRideBooking", function (origin) {
 			console.log(" emitted onBookingRequest in driver dispatch:", origin);
 		});
-		
 		//Listens To 
 		// API Call to Accepted or Denied Request 
 		return true;
@@ -56,7 +47,6 @@ module.exports = (socket) => {
   });
 };
 */
-
 
 /*
 2. 📍 Real-Time Location Tracking
@@ -103,4 +93,3 @@ Tech used:
 // https://stackoverflow.com/questions/11234413/node-js-library-for-geospatial-operations/11942832
 // https://dev.to/biswasprasana001/designing-a-ride-hailing-service-system-eg-uberlyft-a-beginner-friendly-guide-252o
 // https://stackoverflow.com/questions/68294906/how-does-uber-send-new-ride-requests-to-drivers
-

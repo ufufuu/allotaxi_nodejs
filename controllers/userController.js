@@ -1,21 +1,23 @@
-const UserModel = require('../models/userModel');
+const { createUser, loginUser } = require("../services/userService");
 const express = require("express");
 const app = express();
-const { User } = require("../models/userModel");
-const { City , Country } = require("../models/cityModel");
-const { QueryTypes } = require("sequelize");
+
+//const UserModel = require('../models/userModel');
+//const { User } = require("../models/userModel");
+//const { City , Country } = require("../models/cityModel");
+/*const { QueryTypes } = require("sequelize");
 const jwt = require('../services/jwtService');
 const { pool, sequelize }  = require('../config/db');
+*/
 
-//const { Pool } = require("pg");
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");
+const jwt = require("../services/jwtService");
 
 exports.signupUser = async (req, res) => {
 	const { userName, userFirstName, userLastName, userLogin, userPassword, userPhoneNumber } = req.body;
 	
-	//res.status(400).json({message:userPassword});mnmnmn
-	//try {
+	try {
 		/*
 		const [results ] = await sequelize.query(
 		'insert into Countries("countryId", "countryName", "regionId") values("2", "togo", "1")',
@@ -31,11 +33,11 @@ exports.signupUser = async (req, res) => {
 		}
 		const saltRounds = 10;
 		const uId = crypto.randomBytes(20).toString('hex');
+
 		const hashedPwd = await bcrypt.hash(userPassword, saltRounds);	
 		
 		const createUser = await pool.query(
 		`insert into "AspNetUsers"(
-		
 		"Id",
 		"UserName",
 		"NormalizedUserName",
@@ -61,24 +63,19 @@ exports.signupUser = async (req, res) => {
 		"isAdmin",
 		"isDriver") 
 		values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21) returning $1, $2`,
-		[uId, userName, "USERNAME8", userName, "USERNAME8", false, hashedPwd ,"securityStamp", "concurrrencyStamp", userPhoneNumber, false, false, null, false, 0,  "discriminator", userFirstName, "lastName", "middleName", false,false ]);
-		
-		res.status(201).json(createUser);
-		//res.status(201).json(createUser["userName"]);
-		res.status(201).json(userName);
-		
-		//const result = await pool.query(
-		//'insert into "Countries" ("countryId", "countryName", "regionId") values($1, $2, $3) returning *',[4, "Mali", null]);
-		
+		[uId, userName, "JOE@ALLO.CC", userName, "JOE@ALLO.CC", false, hashedPwd ,"securityStamp", "concurrrencyStamp", userPhoneNumber, false, false, null, false, 0,  "discriminator", userFirstName, "lastName", "middleName", false,false ]);
+	}
 		/*
 		const [results] = sequelize.query(
 		'insert into Countries (countryId, countryName, regionId) values($1, $2, $3) returning * ", [1,Togo, 3]'
-		)
-		.catch(err =>{
-			res.status(400).json({ yoomsg: err });
-		});
+		)*/
+
+	catch ( err )
+	{
+		res.status(400).json({ yoomsg: err });
+	}
 		//await data.save();
-		*/ //98 47 70 16 : citoyen modele ---visa schengen  
+		//*/ //98 47 70 16 : citoyen modele ---visa schengen  
 		
 		/*
 		const id=2;
@@ -124,46 +121,31 @@ exports.signupUser = async (req, res) => {
     //}
 };
 
-exports.loginUser = async(req, res) => {
-	
+exports.UserLogin = async ( req, res ) => {
     const { userName, userPassword } = req.body;
     try 
 	{
         if ((!userName) || (!userPassword)) {
-            return res.status(400).json({ error: "Invalid nnbn email or password." });
+            return res.status(400).json({ error: "Invalid username or password." });
         }
-		let hashedPwd = crypto.createHash('md5').update(userPassword).digest('hex');
 		
 		//const user = await UserModel.findOne({ userName, userPassword }).select("-password");
+		const userLogin = await loginUser (userName, userPassword);
+		console.log(" in controller, userLogin", userLogin);
 
-		/*
-		const  pool = new Pool({
-			user: 'allopromo_user',
-			host: 'localhost',
-			database: 'allopromo_dbPostGres',
-			password: 'Kad@1207',
-			port: 5432,
-		});
-		*/
-		
-		const userLogin = await pool.query(`SELECT * from "AspNetUsers" where "UserName" =$1 and "PasswordHash"=$2`,[
-        userName,
-        userPassword
-		]);
 		// bcrypt.compare(password, user.password).then(function (result)
 		
-		if(userLogin.rowCount > 0) {
-			return res.status(200).json(
+		if(userLogin) {
+			return res.status(200).json (
             {
                 "status": "success",
-                "message": "Login successful Jiop",
+                "message": "Login Successful ",
                 "data": {
                     "accessToken": await jwt.generateToken({
                         userId: userName
                     }),
                 }
-            }
-        )
+            })
 		} else {
 			return res.status(401).json({
             "status": "Bad request",
@@ -171,7 +153,7 @@ exports.loginUser = async(req, res) => {
             "statusCode": 401
 			});
 		}
-    }catch (error){
+    } catch (error){
         console.error("Login error:", error);
         return res.status(500).json({ error: "Failed to log in." });
     }
@@ -236,10 +218,12 @@ exports.userAuth = (req, res, next) => {
   }
 }
 
-app.get("/logout", (req, res) => {
-  res.cookie("jwt", "", { maxAge: "1" })
-  res.redirect("/")
-});
+
+//app.get("/logout", (req, res) => {
+  //res.cookie("jwt", "", { maxAge: "1" })
+ //res.redirect("/")
+//});
+
 
 // https://www.geeksforgeeks.org/sql/how-to-design-a-database-for-ride-sharing-and-carpooling-services/
 
