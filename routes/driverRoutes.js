@@ -41,34 +41,12 @@ router.post("/register",
     driverController.registerDriver
 );
 
-/**
- * @swagger
- * tags:
- *   name: Drivers
- *   description: API managing Drivers 
- * /driver:
- *   post:
- *     summary: Become a new Driver
- *     tags: [Drivers]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/Driver'
- *     responses:
- *       200:
- *         description: The created booking.
- *         content:
- *           application/json:
- *       500:
- *         description: Some server error
- *
- */
 
 router.post("/login", 
     driverController.loginDriver
 );
+
+
 /*
 router.post("/verify-account", 
 	driverController.verifyEmail);

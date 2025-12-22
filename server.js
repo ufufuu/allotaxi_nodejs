@@ -4,8 +4,9 @@ const cors = require("cors");
 const swaggerUI = require('swagger-ui-express');
 const userController = require('./controllers/userController');
 //const swaggerDocument = require('./swagger.js');
-const swaggerSpec = require("./swagger.json");
+const swaggerSpec = require("./swaggerDoc.json");
 //const swaggerSpec = require('./swagger');
+
 const path = require('path');
 const pg = require('pg');
 const { Client } = require("pg");

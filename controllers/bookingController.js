@@ -44,7 +44,12 @@ exports.rideBook = async ( req, res, next ) => {
 		io.emit("onRideBooking", function() {	
 			//console.log(" booking emitted from controller:", originLat);
 		});*/
-		
+		const authToken = req.header("Authorization");
+		if(authToken === 'valid-token') {
+			//res200
+		} else {
+			//res 401
+		}
 		
 		console.log( " Driver Accepted ? ", driverAccepted);
 		if(driverAccepted) {

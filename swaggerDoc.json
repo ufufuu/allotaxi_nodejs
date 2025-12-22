@@ -1,0 +1,373 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "allotaxi API"
+    },
+    "host": "localhost:3001",
+    "basePath": "/",
+    "tags": [
+		{
+			"name": "Users",
+			"description": "API for Users"
+		},
+		{
+			"name": "Bookings",
+			"description": "API for Bookings"
+		},
+		{
+			"name": "Drivers",
+			"description": "API for Drivers"
+		}
+	],
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+	
+    "securityDefinitions": {
+        "Bearer": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        },
+        "JWT": {
+            "type": "apiKey",
+            "name": "token",
+            "in": "header"
+        }
+    },
+    "paths": {
+		
+		"/user/register": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "description": "Create new customer in system",
+                "parameters": [{
+                    "name": "customer",
+                    "in": "body",
+                    "description": "Customer that we want to create",
+                    "schema": {
+                        "$ref": "#/definitions/Customer"
+                    }
+                }],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "New customer is created",
+                        "schema": {
+                            "$ref": "#/definitions/Customer"
+                        }
+                    }
+                }
+            }
+		},
+		"/user/login": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "description": "Create new customer in system",
+                "parameters": [{
+                    "name": "customer",
+                    "in": "body",
+                    "description": "Customer that we want to create",
+                    "schema": {
+                        "$ref": "#/definitions/Customer"
+                    }
+                }],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "New customer is created",
+                        "schema": {
+                            "$ref": "#/definitions/Customer"
+                        }
+                    }
+                }
+            }
+		},
+		"/users": {
+			"put": {
+				"security": [ { "Bearer": [] } ],
+                "tags": [
+                    "Users"
+                ],
+                "description": "Create new customer in system",
+                "parameters": [{
+                    "name": "customer",
+                    "in": "body",
+                    "description": "Customer that we want to create",
+                    "schema": {
+                        "$ref": "#/definitions/Customer"
+                    }
+                }],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "New customer is created",
+                        "schema": {
+                            "$ref": "#/definitions/Customer"
+                        }
+                    }
+                }
+            }
+        },
+        "/bookings": {
+            "post": {
+				"security": [ { "Bearer": [] } ],
+                "tags": [
+                    "Bookings"
+                ],
+                "description": "Create new customer in system",
+                "parameters": [{
+                    "name": "customer",
+                    "in": "body",
+                    "description": "Customer that we want to create",
+                    "schema": {
+                        "$ref": "#/definitions/Booking"
+                    }
+                }],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "New customer is created",
+                        "schema": {
+                            "$ref": "#/definitions/Customer"
+                        }
+                    }
+                }
+            },
+		
+			"get": {
+				"security": [ { "Bearer": [] } ],
+                "tags": [
+                    "Bookings"
+                ],
+                "description": "Create new customer in system",
+                "parameters": [{
+                    "name": "customer",
+                    "in": "body",
+                    "description": "Customer that we want to create",
+                    "schema": {
+                        "$ref": "#/definitions/Customer"
+                    }
+                }],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "New customer is created",
+                        "schema": {
+                            "$ref": "#/definitions/Customer"
+                        }
+                    }
+                }
+            }
+		},
+		"/bookings/id": {
+			"get": {
+				"security": [ { "Bearer": [] } ],
+                "tags": [
+                    "Bookings"
+                ],
+                "description": "Create new customer in system",
+                "parameters": [{
+                    "name": "customer",
+                    "in": "body",
+                    "description": "Customer that we want to create",
+                    "schema": {
+                        "$ref": "#/definitions/Customer"
+                    }
+                }],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "New customer is created",
+                        "schema": {
+                            "$ref": "#/definitions/Customer"
+                        }
+                    }
+                }
+            }
+		},
+		"/bookings/id/accept": {
+			"put": {
+                "tags": [
+                    "Bookings"
+                ],
+                "description": "Create new customer in system",
+                "parameters": [{
+                    "name": "customer",
+                    "in": "body",
+                    "description": "Customer that we want to create",
+                    "schema": {
+                        "$ref": "#/definitions/Customer"
+                    }
+                }],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "New customer is created",
+                        "schema": {
+                            "$ref": "#/definitions/Customer"
+                        }
+                    }
+                }
+            }
+		},
+		"/bookings/id/delete": {
+			"delete": {
+				"security": [ { "Bearer": [] } ],
+                "tags": [
+                    "Bookings"
+                ],
+                "description": "Create new customer in system",
+                "parameters": [{
+                    "name": "customer",
+                    "in": "body",
+                    "description": "Customer that we want to create",
+                    "schema": {
+                        "$ref": "#/definitions/Customer"
+                    }
+                }],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "New customer is created",
+                        "schema": {
+                            "$ref": "#/definitions/Customer"
+                        }
+                    }
+                }
+            }
+        },
+		"/drivers": {
+            "post": {
+				"security": [ { "Bearer": [] } ],
+                "tags": [
+                    "Drivers"
+                ],
+                "description": "Create new customer in system",
+                "parameters": [{
+                    "name": "customer",
+                    "in": "body",
+                    "description": "Customer that we want to create",
+                    "schema": {
+                        "$ref": "#/definitions/Customer"
+                    }
+                }],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "New customer is created",
+                        "schema": {
+                            "$ref": "#/definitions/Customer"
+                        }
+                    }
+                }
+            }
+		},
+		"/drivers/id": {
+			"put": {
+                "tags": [
+                    "Drivers"
+                ],
+                "description": "Create new customer in system",
+                "parameters": [{
+                    "name": "customer",
+                    "in": "body",
+                    "description": "Customer that we want to create",
+                    "schema": {
+                        "$ref": "#/definitions/Customer"
+                    }
+                }],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "New customer is created",
+                        "schema": {
+                            "$ref": "#/definitions/Customer"
+                        }
+                    }
+                }
+            }
+        }
+		
+    },
+    "definitions": {
+        "Customer": {
+            "required": [
+                "email"
+            ],
+            "properties": {
+                "userName": {
+                    "type": "string"
+                },
+                "userPassword": {
+                    "type": "string"
+                }
+            }
+        },
+		"Booking": {
+            "required": [
+                "email"
+            ],
+            "properties": {
+                "origin": {
+                    "type": "string"
+                },
+				"originLat": {
+                    "type": "string"
+                },
+				"originLng": {
+                    "type": "string"
+                },
+				"destination": {
+                    "type": "string"
+                },
+				"destinationLat": {
+                    "type": "string"
+                },
+				"destinationLng": {
+                    "type": "string"
+                },
+				"contactInfo":{
+                    "type": "string"
+                },
+				"specialInstructions": {
+                    "type": "string"
+                },
+				"rider": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

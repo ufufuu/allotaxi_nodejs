@@ -4,42 +4,7 @@ const userController = require("../controllers/userController");
 
 /**
 * @swagger
-* tags:
-*   name: User
-*   description: API managing Users
-* /user/register:
-*   post:
-*     summary: Create a new user
-*     tags: [User]
-*     requestBody:
-*       required: true
-*       content:
-*         application/json:
-*           schema:
-*             type: object
-*             properties:
-*               userName:
-*                 type: string
-*               userFirstName:
-*                 type: string
-*               userLogin:
-*                 type: string
-*               userPassword:
-*                 type: string
-*               userRole:
-*                 type: string
-*               userPhoneNumber:
-*                 type: string
-*     responses:
-*       '200':
-*         description: OK
-*         content:
-*           'application/json':
-*             schema:
-*               type: object
-*               properties:
-*                 id:
-*                   type:string
+
 * /user/login:
 *   post:
 *     summary: login a user
@@ -93,10 +58,7 @@ router.get("/user/:id", userController.UserLogin);
 module.exports = router;
 
 
-
-
 //res.json([{ id: '1', name: 'John Doe' }, { id: '2', name: 'Jane Doe'}]);
-
 // Appsmith /
 /*
 https://aws.amazon.com/marketplace/pp/prodview-ncouicgslpim4
