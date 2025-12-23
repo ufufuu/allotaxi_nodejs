@@ -104,7 +104,7 @@ io.on('connection', (socket) => {
 	//});
 });
 
-httpServer.listen( PORT, () =>{
+httpServer.listen( hostPORT, () =>{
 	console.log(`app started and listening on ${hostName} and ${hostPORT}`);
 });
 
