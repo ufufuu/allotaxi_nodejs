@@ -17,11 +17,10 @@ const socketio = require("./sockets/initSocket");
 const bookingRoutes = require("./routes/bookingRoutes");
 const userRoutes = require('./routes/userRoutes');
 const driverRoutes = require("./routes/driverRoutes");
-const userAuth = require("./middlewares/auth");
-
 const { connectionString } = require("./config/db");
 //const cookieParser = require("cookie-parser");
 //const jwt = require('jsonwebtoken');
+//const userAuth = require("./middlewares/auth");
 
 const app = express();
 const httpServer = http.createServer(app);

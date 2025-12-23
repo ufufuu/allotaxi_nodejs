@@ -16,7 +16,10 @@ exports.rideBook = async ( req, res, next ) => {
 	const { originLat, originLng,  destinationCoords, contactInfo, specialInstructions, rider } = req.body;
 	const  nearests = await geoService.getTurfNearest ([originLat, originLng]);
 	const closestDriverCoords = nearests.geometry.coordinates;
+	const token = req.headers.authorization || req.headers.Authorization;
 	
+	//console.log(" Token in booking controller is :", token);
+
 	console.log(" Nearest Driver Coordinates Are:", closestDriverCoords);
 	
 	const riderId = "8acc817e9c5601ab841c3c758934f384c12394a7";

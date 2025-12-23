@@ -1,8 +1,8 @@
 const router = require("express").Router();
 const bookingController = require("../controllers/bookingController");
-const { adminAuth } = require("../middlewares/auth");
+const { userAuth } = require("../middlewares/auth_middleware");
 
-router.post("/", bookingController.rideBook);
+router.post("/", userAuth, bookingController.rideBook);
 router.put("/:id/accept", bookingController.miseajourBooking);
 router.delete("/:id/delete", bookingController.deleteBooking);
 

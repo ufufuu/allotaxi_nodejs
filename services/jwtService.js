@@ -19,13 +19,27 @@ class JwtService {
 		  });
 		});
 	};
-	
+	TokenVerify ( req, res, next ) {
+		const authHeader = req.headers[' authorization '];
+		const token = authHeader && authHeader.split('')[1];
+		if( token ==null ){
+			return res.sendStatus(401);
+		}
+		jwt.verify( token, secretKey, (err, decodedPayLoad )=> {
+			if( err ){
+				console.log( " Jwt verification failed: ", err.message);
+				return res.sendStatus(403);
+			}
+				req.user = decodedPayLoad;
+				next();
+			});
+	}
+
 	verifyToken (token) {
 		return new Promise((resolve, reject) => {
 			
 		});
-		
-	}
+	};
 	
 }
 module.exports = new JwtService;

@@ -96,6 +96,7 @@ exports.UserLogin = async ( req, res ) => {
                 "status": "success",
                 "message": "Login Successful ",
                 "data": {
+					"userName": userName,
                     "accessToken": await jwt.generateToken({
                         userId: userName
                     }),
