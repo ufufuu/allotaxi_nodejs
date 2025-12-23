@@ -6,13 +6,13 @@ const userController = require('./controllers/userController');
 //const swaggerDocument = require('./swagger.js');
 const swaggerSpec = require("./swaggerDoc.json");
 //const swaggerSpec = require('./swagger');
-//const host = `http://localhost:3001`;
-const HOST =`0.0.0.0`;
+const hostName = `http://localhost:3001`;
+//const HOST =`0.0.0.0`;
+//const host = process.env.HOST;
 
 const path = require('path');
 const pg = require('pg');
 const { Client } = require("pg");
-const Postgis = require("postgis");
 const socketio = require("./sockets/initSocket");
 //const rideBookedHandler = require("./sockets/whandlers/rideBookingHandler");
 
@@ -28,8 +28,9 @@ const app = express();
 const httpServer = http.createServer(app);
 const io = socketio.getSocketIo(httpServer);
 
-app.use(cors({ origin: HOST}));
+app.use(cors({ origin: hostName}));
 const PORT = process.env.PORT || 3001;
+
 var options = {
   explorer: true
 };
@@ -103,7 +104,7 @@ io.on('connection', (socket) => {
 });
 
 httpServer.listen( PORT, () =>{
-	console.log(`app started and listening on ${HOST} and ${PORT}`);
+	console.log(`app started and listening on ${hostName} and ${PORT}`);
 });
 
 app.on("unhandledRejection", err => {
