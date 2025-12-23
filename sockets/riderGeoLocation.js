@@ -1,5 +1,5 @@
 const { updateDbWithNewLocation } = require("../helpers");
-const db = require("../models/LocationModel");
+const db = require("../models/locationModel");
 
 const hoistedIOUser = (io, socket) => {
   return async function driverLocation(payload) {
