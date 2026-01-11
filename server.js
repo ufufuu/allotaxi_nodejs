@@ -131,6 +131,7 @@ module.exports={
 	httpServer, 
 	io
 };
+
 /*
 - Ronal Reagan loto via 80 Edwin Fozo 
 - event Loop in JS and other features ?
@@ -163,4 +164,5 @@ xhr.send()
 */
 // Social media Manager
 // french Rotisserie Cafe 
-// Palm Springs 
+// Palm Springs
+// https://www.codemag.com/Article/2305031/Building-Web-APIs-Using-Node.js-and-Express-Part-1

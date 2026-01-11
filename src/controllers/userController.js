@@ -84,13 +84,9 @@ exports.UserLogin = async ( req, res ) => {
         if ((!userName) || (!userPassword)) {
             return res.status(400).json({ error: " Invalid username or password. " });
         }
-		
-		const userLogin = await loginUser (userName, userPassword);
-		console.log(" in controller, userLogin", userLogin);
-
-		// bcrypt.compare(password, user.password).then(function (result)
-		
-		if(userLogin) {
+		const login = await loginUser (userName, userPassword);
+		console.log(" in controller, userLogin:", login);
+		if(login) {
 			return res.status(200).json (
             {
                 "status": "success",

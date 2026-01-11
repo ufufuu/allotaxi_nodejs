@@ -53,12 +53,15 @@ module.exports.createUser = async ( firstname, lastname, email, password, phone 
 module.exports.loginUser = async ( userName, userPassword ) => {
 	
 	const hashedPwd = crypto.createHash('md5').update(userPassword).digest('hex');
-	//const hashedP = await bcrypt.hash(userPassword, saltRounds);
-	const _query = `SELECT * from "AspNetUsers" where "UserName" =$1 and "PasswordHash"=$2`;
-	const userLogin = await pool.query (_query, [userName, hashedPwd]);
+
+	console.log("in User service, hashed is:", hashedPwd);
+	console.log ("in User service, user name is:", userName);
+	const _query = `SELECT * from "AspNetUsers" where "UserName"=$1 and "PasswordHash"=$2`;
+	console.log("query:", _query);
+	const userLogin = await pool.query (_query, [userName, hashedPwd ]);
+
 	if (userLogin.rowCount>0 ){
 		return true;
 	}
 	return false;
 }
-
