@@ -91,6 +91,9 @@ exports.updateBooking = async (req, res) => {
 };
 
 exports.getBookings = async ( req, res, next ) => {
+	console.log( " returning Bookings ");
+	return res.status(200).json("Booking returned");
+
 	const bookings = await bookingService.GetBookings();
 	if(!bookings){
 	}
@@ -104,18 +107,6 @@ exports.getBooking = async ( req, res, next ) => {
 	
 	//return res.status(400).json({ message: "getting single get booking"});
 	return res.status(400).json(booking);
-};
-
-exports.cancelBooking = async ( req, res, next ) => {
-	return res.status(400).json({ message: "cancelling booking"});
-};
-
-exports.deleteBooking = async ( req, res, next ) => {
-	const { bookingId } = req.body;
-	const deleted = await bookingService.deleteBooking(bookingId);
-	if(deleted){
-		return res.status(400).json({ message: "booking deleted !"});
-	}
 };
 
 exports.miseajourBooking = async ( req, res, next ) => {
@@ -138,5 +129,17 @@ exports.miseajourBooking = async ( req, res, next ) => {
 		return res.status(200).json({message :"updated"});
 	}catch(err){
 		console.log("Error:", err);
+	}
+};
+
+exports.cancelBooking = async ( req, res, next ) => {
+	return res.status(400).json({ message: "cancelling booking"});
+};
+
+exports.deleteBooking = async ( req, res, next ) => {
+	const { bookingId } = req.body;
+	const deleted = await bookingService.deleteBooking(bookingId);
+	if(deleted){
+		return res.status(400).json({ message: "booking deleted !"});
 	}
 };

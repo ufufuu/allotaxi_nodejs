@@ -2,25 +2,21 @@ const express = require('express');
 const http = require("http");
 const cors = require("cors");
 const swaggerUI = require('swagger-ui-express');
-const { dbConnString, dbConnString0, dbProd } = require("./config/db");
-
+const { dbConnString, dbConnString0, dbProd, localConnString } = require("./src/config/db");
 
 const swaggerSpec = require("./swaggerDoc.json");
-//const swaggerSpec = require('./swagger');
-//const userController = require('./controllers/userController');
-
 const hostName=process.env.RENDER_HOST || 'http://localhost';
 //const hostName = process.env.HOST;
 
 const path = require('path');
 const pg = require('pg');
 const { Client } = require("pg");
-const socketio = require("./sockets/initSocket");
+const socketio = require("./src/sockets/initSocket");
 //const rideBookedHandler = require("./sockets/whandlers/rideBookingHandler");
 
-const bookingRoutes = require("./routes/bookingRoutes");
-const userRoutes = require('./routes/userRoutes');
-const driverRoutes = require("./routes/driverRoutes");
+const bookingRoutes = require("./src/routes/bookingRoutes");
+const userRoutes = require('./src/routes/userRoutes');
+const driverRoutes = require("./src/routes/driverRoutes");
 
 //const cookieParser = require("cookie-parser");
 //const jwt = require('jsonwebtoken');
@@ -45,13 +41,17 @@ var options = {
     credentials: true
 }});*/
 
-const pool = new pg.Pool('postgresql://allotaxi_db_user:SU0Z9B7OFMsxuhnZ4t5nMqWxdVot9kJq@dpg-d55c8l15pdvs73c2eo8g-a.oregon-postgres.render.com/allotaxi_db?ssl=true');
+//const pool = new pg.Pool('postgresql://allotaxi_db_user:SU0Z9B7OFMsxuhnZ4t5nMqWxdVot9kJq@dpg-d55c8l15pdvs73c2eo8g-a.oregon-postgres.render.com/allotaxi_db?ssl=true');
 //const pool = new pg.Pool(process.env.RENDER_DB_URL);
+const pool = new pg.Pool(localConnString);
 
+/*
 const pool546 = new pg.Pool({
   connectionString: `postgres://allopromo_db_px8b_user:Gel30X8RPqqksAO1LDHlJRali2hFA1ep@Hdpg-d4909rm3jp1c73cqqo00-a.oregon-postgres.render.com/allopromo_db_px8b?ssl=true`
 })
+*/
 
+/*
 pool.connect((err, client, release) => {
     if (err) {
         return console.error(
@@ -66,6 +66,7 @@ pool.connect((err, client, release) => {
         console.log("Connected to Database !")
     })
 });
+*/
 
 //app.disable("x-powered-by");
 //app.use(cookieParser());

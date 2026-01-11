@@ -34,6 +34,13 @@ const dbConnString23 = {
   port: 5432,
 };
 
+const localConnString = {
+  user: 'postgres',
+  host: 'localhost',
+  database: 'postgres',
+  password: 'Kad@1207',
+  port: 5432,
+};
 //const dbProductionUrl= `"Server=dpg-d4909rm3jp1c73cqqo00-a.oregon-postgres.render.com;Database=allopromo_db_px8b;User ID=allopromo_db_px8b_user;Password=Gel30X8RPqqksAO1LDHlJRali2hFA1ep;Persist Security Info=True;SSL Mode=Require"`;
 
 const dbProd =`postgresql://${process.env.REMOTE_DB_USER}:${process.env.REMOTE_DB_PASSWORD}@${process.env.REMOTE_DB_HOST}:${process.env.DB_PORT}/${process.env.REMOTE_DB_DATABASE}`;
@@ -99,7 +106,8 @@ module.exports = {
   pool,
   dbConnString,
   dbProd,
-  dbConnString0
+  dbConnString0,
+  localConnString
 }
 
 /*

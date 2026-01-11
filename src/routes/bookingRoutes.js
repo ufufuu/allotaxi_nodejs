@@ -3,6 +3,7 @@ const bookingController = require("../controllers/bookingController");
 const { userAuth } = require("../middlewares/auth_middleware");
 
 router.post("/", userAuth, bookingController.rideBook);
+router.get("/", bookingController.getBookings);
 router.put("/:id/accept", bookingController.miseajourBooking);
 router.delete("/:id/delete", bookingController.deleteBooking);
 

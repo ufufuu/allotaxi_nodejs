@@ -155,29 +155,17 @@
             },
 		
 			"get": {
-				"security": [ { "Bearer": [] } ],
+				
                 "tags": [
                     "Bookings"
                 ],
-                "description": "Create new customer in system",
-                "parameters": [{
-                    "name": "customer",
-                    "in": "body",
-                    "description": "Customer that we want to create",
-                    "schema": {
-                        "$ref": "#/definitions/Customer"
-                    }
-                }],
+                "description": "get Bookings ",
+                
                 "produces": [
                     "application/json"
                 ],
                 "responses": {
-                    "201": {
-                        "description": "New customer is created",
-                        "schema": {
-                            "$ref": "#/definitions/Customer"
-                        }
-                    }
+                    
                 }
             }
 		},
