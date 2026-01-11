@@ -2,12 +2,10 @@ const express = require('express');
 const http = require("http");
 const cors = require("cors");
 const swaggerUI = require('swagger-ui-express');
-const { dbConnString, dbConnString0, dbProd, localConnString } = require("./src/config/db");
+const { remoteDBConn, localDbConn } = require("./src/config/db");
 
 const swaggerSpec = require("./swaggerDoc.json");
 const hostName=process.env.RENDER_HOST || 'http://localhost';
-//const hostName = process.env.HOST;
-
 const path = require('path');
 const pg = require('pg');
 const { Client } = require("pg");
@@ -43,7 +41,7 @@ var options = {
 
 //const pool = new pg.Pool('postgresql://allotaxi_db_user:SU0Z9B7OFMsxuhnZ4t5nMqWxdVot9kJq@dpg-d55c8l15pdvs73c2eo8g-a.oregon-postgres.render.com/allotaxi_db?ssl=true');
 //const pool = new pg.Pool(process.env.RENDER_DB_URL);
-const pool = new pg.Pool(localConnString);
+const pool = new pg.Pool(remoteDBConn);
 
 /*
 const pool546 = new pg.Pool({
@@ -68,6 +66,13 @@ pool.connect((err, client, release) => {
 });
 */
 
+pool.connect()
+.then(()=>{
+  console.log("Db Started");
+})
+.catch((err) => {
+  console.log(" Error in Db Connection ", err);
+})
 //app.disable("x-powered-by");
 //app.use(cookieParser());
 

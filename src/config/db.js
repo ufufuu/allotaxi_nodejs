@@ -34,7 +34,7 @@ const dbConnString23 = {
   port: 5432,
 };
 
-const localConnString = {
+const localDbConn = {
   user: 'postgres',
   host: 'localhost',
   database: 'postgres',
@@ -48,19 +48,22 @@ const pool = new Pool({
   connectionString:'postgres://allopromo_db_px8b_user:Gel30X8RPqqksAO1LDHlJRali2hFA1ep@Hdpg-d4909rm3jp1c73cqqo00-a.oregon-postgres.render.com/allopromo_db_px8b?ssl=true'
    
 });
+
+/*
 const dbConnString =`postgresql://allopromo_db_px8b_user`+
-  `:Gel30X8RPqqksAO1LDHlJRali2hFA1ep`+
+  `:SU0Z9B7OFMsxuhnZ4t5nMqWxdVot9kJq`+
   `@dpg-d4909rm3jp1c73cqqo00-a.oregon-postgres.render.com`+
   `/allopromo_db_px8b`;
+*/
 
-const dbConnString0= {
-  "host": 'dpg-d4909rm3jp1c73cqqo00-a.oregon-postgres.render.com',
-  "database": 'allopromo_db_px8b',
-  "user": 'allopromo_db_px8b_user',
-  "password": 'Kad@Gel30X8RPqqksAO1LDHlJRali2hFA1ep',
-  "port": 5432,
+const remoteDBConn= {
+  "host": 'dpg-d55c8l15pdvs73c2eo8g-a.oregon-postgres.render.com',
+  "database": 'allotaxi_db',
+  "user": 'allotaxi_db_user',
+  "password": 'SU0Z9B7OFMsxuhnZ4t5nMqWxdVot9kJq',
+  //"port": 5432,
   "dialect":'postgres',
-  "sslmode":'true',
+  "ssl":'true',
   /*
   "dialectOptions": {
 
@@ -68,15 +71,15 @@ const dbConnString0= {
     },*/
   //ssl:true,
 
-  ssl: {
-    rejectUnauthorized: false,
+  //ssl: {
+    //rejectUnauthorized: false,
     //ca: fs.readFileSync('/path/to/server-certificates/root.crt').toString(),
     //key: fs.readFileSync('/path/to/client-key/postgresql.key').toString(),
     //cert: fs.readFileSync('/path/to/client-certificates/postgresql.crt').toString(),
     //ca: fs.readFileSync("server-ca.pem").toString(),
     //key: fs.readFileSync("client-key.pem").toString(),
     //cert: fs.readFileSync("client-cert.pem").toString(),
-  },
+  //},
 };
 
 
@@ -104,10 +107,9 @@ const prodConnectionString ={
 module.exports = {
   sequelize,
   pool,
-  dbConnString,
-  dbProd,
-  dbConnString0,
-  localConnString
+  //dbProd,
+  remoteDBConn,
+  localDbConn
 }
 
 /*
