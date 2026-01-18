@@ -16,6 +16,7 @@ const baseApiUrl = process.env.BASE_API_URL;
 
 const app = express();
 app.use(express.json());
+
 const io = new Server (httpServer, {
 	cors: {
     origin: "*",

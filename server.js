@@ -3,19 +3,21 @@ const http = require("http");
 const cors = require("cors");
 const swaggerUI = require('swagger-ui-express');
 const { remoteDBConn, localDbConn } = require("./src/config/db");
-
 const swaggerSpec = require("./swaggerDoc.json");
 const hostName=process.env.RENDER_HOST || 'http://localhost';
 const path = require('path');
 const pg = require('pg');
 const { Client } = require("pg");
 const socketio = require("./src/sockets/initSocket");
-//const rideBookedHandler = require("./sockets/whandlers/rideBookingHandler");
+
+const { WebSocketServer }= require("ws");
+const WebSocket = require("ws");
 
 const bookingRoutes = require("./src/routes/bookingRoutes");
 const userRoutes = require('./src/routes/userRoutes');
 const driverRoutes = require("./src/routes/driverRoutes");
 
+//const rideBookedHandler = require("./sockets/whandlers/rideBookingHandler");
 //const cookieParser = require("cookie-parser");
 //const jwt = require('jsonwebtoken');
 //const userAuth = require("./middlewares/auth");
@@ -31,18 +33,7 @@ var options = {
   explorer: true
 };
 
-//const io = new Server (httpServer, {
-/*
-  cors: {
-    origin: "*", // Or '*' for any origin (less secure)
-    methods: ["GET", "POST"],
-    credentials: true
-}});*/
-
-//const pool = new pg.Pool('postgresql://allotaxi_db_user:SU0Z9B7OFMsxuhnZ4t5nMqWxdVot9kJq@dpg-d55c8l15pdvs73c2eo8g-a.oregon-postgres.render.com/allotaxi_db?ssl=true');
-//const pool = new pg.Pool(process.env.RENDER_DB_URL);
-const pool = new pg.Pool(remoteDBConn);
-
+const pool = new pg.Pool(localDbConn);
 /*
 const pool546 = new pg.Pool({
   connectionString: `postgres://allopromo_db_px8b_user:Gel30X8RPqqksAO1LDHlJRali2hFA1ep@Hdpg-d4909rm3jp1c73cqqo00-a.oregon-postgres.render.com/allopromo_db_px8b?ssl=true`
@@ -66,13 +57,16 @@ pool.connect((err, client, release) => {
 });
 */
 
+/*
 pool.connect()
 .then(()=>{
   console.log("Db Started");
 })
 .catch((err) => {
   console.log(" Error in Db Connection ", err);
-})
+});
+*/
+
 //app.disable("x-powered-by");
 //app.use(cookieParser());
 
@@ -80,6 +74,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use("/user", userRoutes);
 app.use("/bookings", bookingRoutes);  // userAuth, bookingRoutes);
+
 var customSwaggerOptions = {
   explorer: true,
   swaggerOptions: {
@@ -103,6 +98,7 @@ app.use((req, res, next ) => {
 	req.io =io;
 	next();
 });
+
 io.on('connection', (socket) => {
 	console.log("A user connected from main server ID is :", socket.id);
 
@@ -116,6 +112,23 @@ io.on('connection', (socket) => {
 		//console.log('User disconnected, server');
 	//});
 });
+
+const wss = new WebSocket.Server({
+	port:3003
+});
+
+wss.on("connection", function connection(ws) {
+	console.log("web Sockets on Connected, ID in WS is:");
+	ws.on('error', console.error);
+
+	ws.on("message", function message(data) {
+		console.log('received: %s', data);
+	});
+
+	ws.send("something");
+});
+
+
 
 httpServer.listen( hostPORT, () =>{
 	console.log(`app started and listening on ${hostName} and ${hostPORT}`);
@@ -166,3 +179,19 @@ xhr.send()
 // french Rotisserie Cafe 
 // Palm Springs
 // https://www.codemag.com/Article/2305031/Building-Web-APIs-Using-Node.js-and-Express-Part-1
+
+/*
+Comptes
+
+    Non enregistré
+    REER
+    CELI
+    CELIAPP
+    REEE
+    CRI
+    FERR
+    FRV
+*/
+
+
+// https://socket.io/docs/v4/listening-to-events/

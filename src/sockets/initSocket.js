@@ -20,10 +20,10 @@ module.exports = {
 			cors: {
 			origin: "*", // Or '*' for any origin (less secure)
 			methods: ["GET", "POST"],
-			credentials: true
+			credentials: true,
+			allowEIO3: true,
 		}});
         io.on("connection", (socket) => {
-			
 			//console.log(" User connected  from socket init: ", io);
 			
 			/*socket.emit("onRideBooking", function () {
@@ -53,7 +53,8 @@ module.exports = {
 		  console.error( 'Socket.io not initialized.');
 		}
 	}
-}
-//module.exports = { getSocketIo, sendMessageToAll };
+};
 
+
+//module.exports = { getSocketIo, sendMessageToAll };
 // Trans Europ Expresss - transafr

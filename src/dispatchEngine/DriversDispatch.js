@@ -8,19 +8,25 @@ class DriversDispatch {
 	
 	async matchBookingToDriver ( bookingModel ) 
 	{
+
 	}
 	
 	async DispatchBooking ( driverId, rider, origin, destination ) {
 
 		const io = socketIo.getIo();
-		var driverSocketId = await getPersistedSocketId(driverId);
-		origin= { "latitude": 1.23, "longitute": 4.32};
+		var socketId = await getPersistedSocketId(driverId);
+		origin= { "latitude": 1.23, "longitute": 4.32}
+    const socketID= `7pwCijrfp43dO2nLAAAB`;
+
 		//console.log(" In Drivers Dispatch, Io:", io);
 		// io.to(userId).emit('userStatus', { status: status });
+    //io.emit("onRideBooking", function() {
+    
+    io.sockets.emit("onRideBooking");
 
-		console.log(" Driver Accepting Request, in drivers dispatch :", driverSocketId);
+		console.log(" Driver Accepting Request, in drivers dispatch :", socketId);
 
-		io.sockets.to(`${driverSocketId}`).emit("onRideBooking", function (origin) {
+		io.sockets.to(`${socketID}`).emit("onRideBooking", function (origin) {
 			console.log(" emitted onBookingRequest in driver dispatch:", origin);
 		});
 		//Listens To 

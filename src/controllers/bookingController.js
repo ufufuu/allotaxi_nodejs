@@ -39,14 +39,6 @@ exports.rideBook = async ( req, res, next ) => {
 		const driverSocketId= getPersistedSocketId(closestDriverCoords);
 		const driverAccepted = await driversDispatch.DispatchBooking (driverSocketId, riderId, originCoords, destinationCoords );
 
-		/*
-		io.to(driverSocketId).emit("onRideBooking", function (data) {
-			console.log(" emitted onBookingRequest in driver dispatch:", origin);
-		});*/
-		/*
-		io.emit("onRideBooking", function() {	
-			//console.log(" booking emitted from controller:", originLat);
-		});*/
 		const authToken = req.header("Authorization");
 		if(authToken === 'valid-token') {
 			//res200
