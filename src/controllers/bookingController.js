@@ -6,7 +6,6 @@ const geoService = require("../services/geoService");
 const socketIo = require("../sockets/initSocket");
 const { getPersistedSocketId } = require("../services/socketService");
 const Radius_Length = process.env.Radius_Length;
-
 //const matcher = require("../matching-engine/DynamicTripVehicleAssignmentMatcher");  GetBookings
 const eventEmitter = new  events.EventEmitter();
 
@@ -14,16 +13,15 @@ exports.rideBook = async ( req, res, next ) => {
 	
 	const io = socketIo.getIo();
 	const { originLat, originLng,  destinationCoords, contactInfo, specialInstructions, rider } = req.body;
+	
+	/*
 	const  nearests = await geoService.getTurfNearest ([originLat, originLng]);
 	const closestDriverCoords = nearests.geometry.coordinates;
-	const token = req.headers.authorization || req.headers.Authorization;
-	
-	//console.log(" Token in booking controller is :", token);
-
+	const token = req.headers.authorization || req.headers.Authorization;	
 	console.log(" Nearest Driver Coordinates Are:", closestDriverCoords);
+	*/
 	
 	const riderId = "8acc817e9c5601ab841c3c758934f384c12394a7";
-
 	const originCoords ={ originLat, originLng };
 	const currentLocation= { Lat: originLat, Lng: originLng };
 	//try 
@@ -32,12 +30,15 @@ exports.rideBook = async ( req, res, next ) => {
 			//return res.status(400).json({ message: " Unauthorized " });
 		//}
 		 
+		await driversDispatch.DispatchBooking();
+		
 		const alldrivers = await geoService.queryNearByDrivers(currentLocation, Radius_Length );
 		const nearbyDrivers = await geoService.queryNearByDrivers(currentLocation, alldrivers, 2.5 );
 		var bestDriverMatch =  await geoService.getBestDriverMatch(nearbyDrivers);
 		
 		const driverSocketId= getPersistedSocketId(closestDriverCoords);
-		const driverAccepted = await driversDispatch.DispatchBooking (driverSocketId, riderId, originCoords, destinationCoords );
+		
+		const driverAccepted = await driversDispatch.DispatchBookingAll(); // (driverSocketId, riderId, originCoords, destinationCoords );
 
 		const authToken = req.header("Authorization");
 		if(authToken === 'valid-token') {
@@ -48,10 +49,8 @@ exports.rideBook = async ( req, res, next ) => {
 		
 		console.log( " Driver Accepted ? ", driverAccepted);
 		if(driverAccepted) {
-			const booking = bookingService.createBooking(riderId, driverAccepted, originLat, destinationCoords);
+			//const booking = bookingService.createBooking(riderId, driverAccepted, originLat, destinationCoords);
 			return res.status(201).json(booking);
-			
-			//return res.status(200).json(currentLocation);
 		}
     //} catch(error){
 		//res.status(400).json({ message: error });

@@ -4,12 +4,14 @@ const crypto = require("crypto");
 const userModel = require("../models/userModel");
 
 module.exports.getPersistedSocketId = async (Id ) => {
+	
 	Id = 1;
 	const getQuery = `select "socketId" from "Locations" where "Id" =$1`;
 	const res = await pool.query(getQuery, [Id]);
 	console.log(" in Socket service, socket Id is:", res.rows[0].socketId);
 	return res.rows[0].socketId;
 };
+
 
 module.exports.logInitialSocketConnection = async ( socketId ) => {
 	const id = crypto.randomBytes(20).toString('hex');

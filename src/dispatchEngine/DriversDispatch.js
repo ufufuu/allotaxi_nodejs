@@ -10,19 +10,25 @@ class DriversDispatch {
 	{
 
 	}
-	
+	async DispatchBooking() {
+		const io = socketIo.getIo();
+		io.sockets.emit("onRideBooking", function(data) {
+			
+		});
+	}
 	async DispatchBooking ( driverId, rider, origin, destination ) {
 
 		const io = socketIo.getIo();
-		var socketId = await getPersistedSocketId(driverId);
+		//var socketId = await getPersistedSocketId(driverId);
 		origin= { "latitude": 1.23, "longitute": 4.32}
-    const socketID= `7pwCijrfp43dO2nLAAAB`;
+		const socketID= `7pwCijrfp43dO2nLAAAB`;
 
 		//console.log(" In Drivers Dispatch, Io:", io);
 		// io.to(userId).emit('userStatus', { status: status });
-    //io.emit("onRideBooking", function() {
+		
+		//io.emit("onRideBooking", function() {
     
-    io.sockets.emit("onRideBooking");
+		io.sockets.emit("onRideBooking");
 
 		console.log(" Driver Accepting Request, in drivers dispatch :", socketId);
 
