@@ -33,7 +33,7 @@ var options = {
   explorer: true
 };
 
-const pool = new pg.Pool(localDbConn);
+const pool = new pg.Pool(remoteDBConn);
 /*
 const pool546 = new pg.Pool({
   connectionString: `postgres://allopromo_db_px8b_user:Gel30X8RPqqksAO1LDHlJRali2hFA1ep@Hdpg-d4909rm3jp1c73cqqo00-a.oregon-postgres.render.com/allopromo_db_px8b?ssl=true`
@@ -57,7 +57,7 @@ pool.connect((err, client, release) => {
 });
 */
 
-/*
+
 pool.connect()
 .then(()=>{
   console.log("Db Started");
@@ -65,7 +65,7 @@ pool.connect()
 .catch((err) => {
   console.log(" Error in Db Connection ", err);
 });
-*/
+
 
 //app.disable("x-powered-by");
 //app.use(cookieParser());
