@@ -49,13 +49,13 @@
                 "tags": [
                     "Users"
                 ],
-                "description": "Create new customer in system",
+                "description": "Create new User ",
                 "parameters": [{
-                    "name": "customer",
+                    "name": "user",
                     "in": "body",
-                    "description": "Customer that we want to create",
+                    "description": "Create new User",
                     "schema": {
-                        "$ref": "#/definitions/Customer"
+                        "$ref": "#/definitions/RegisterUser"
                     }
                 }],
                 "produces": [
@@ -63,9 +63,9 @@
                 ],
                 "responses": {
                     "201": {
-                        "description": "New customer is created",
+                        "description": "New User is created",
                         "schema": {
-                            "$ref": "#/definitions/Customer"
+                            "$ref": "#/definitions/RegisterUser"
                         }
                     }
                 }
@@ -76,13 +76,13 @@
                 "tags": [
                     "Users"
                 ],
-                "description": "Create new customer in system",
+                "description": "Login User",
                 "parameters": [{
                     "name": "customer",
                     "in": "body",
-                    "description": "Customer that we want to create",
+                    "description": "Login User",
                     "schema": {
-                        "$ref": "#/definitions/Customer"
+                        "$ref": "#/definitions/LoginUser"
                     }
                 }],
                 "produces": [
@@ -90,9 +90,9 @@
                 ],
                 "responses": {
                     "201": {
-                        "description": "New customer is created",
+                        "description": " User is Logged",
                         "schema": {
-                            "$ref": "#/definitions/Customer"
+                            "$ref": "#/definitions/LoginUser"
                         }
                     }
                 }
@@ -104,13 +104,13 @@
                 "tags": [
                     "Users"
                 ],
-                "description": "Create new customer in system",
+                "description": "Modify User",
                 "parameters": [{
-                    "name": "customer",
+                    "name": "Users",
                     "in": "body",
-                    "description": "Customer that we want to create",
+                    "description": "User",
                     "schema": {
-                        "$ref": "#/definitions/Customer"
+                        "$ref": "#/definitions/User"
                     }
                 }],
                 "produces": [
@@ -118,9 +118,9 @@
                 ],
                 "responses": {
                     "201": {
-                        "description": "New customer is created",
+                        "description": "User",
                         "schema": {
-                            "$ref": "#/definitions/Customer"
+                            "$ref": "#/definitions/User"
                         }
                     }
                 }
@@ -132,11 +132,11 @@
                 "tags": [
                     "Bookings"
                 ],
-                "description": "Create new customer in system",
+                "description": " Create Bookings",
                 "parameters": [{
-                    "name": "customer",
+                    "name": "booking",
                     "in": "body",
-                    "description": "Customer that we want to create",
+                    "description": "Bookings ",
                     "schema": {
                         "$ref": "#/definitions/Booking"
                     }
@@ -146,9 +146,9 @@
                 ],
                 "responses": {
                     "201": {
-                        "description": "New customer is created",
+                        "description": "Bookings",
                         "schema": {
-                            "$ref": "#/definitions/Customer"
+                            "$ref": "#/definitions/Booking"
                         }
                     }
                 }
@@ -175,13 +175,13 @@
                 "tags": [
                     "Bookings"
                 ],
-                "description": "Create new customer in system",
+                "description": "Get Booking by id",
                 "parameters": [{
                     "name": "customer",
                     "in": "body",
-                    "description": "Customer that we want to create",
+                    "description": "Booking",
                     "schema": {
-                        "$ref": "#/definitions/Customer"
+                        "$ref": "#/definitions/Booking"
                     }
                 }],
                 "produces": [
@@ -189,9 +189,9 @@
                 ],
                 "responses": {
                     "201": {
-                        "description": "New customer is created",
+                        "description": "Booking",
                         "schema": {
-                            "$ref": "#/definitions/Customer"
+                            "$ref": "#/definitions/Booking"
                         }
                     }
                 }
@@ -202,13 +202,13 @@
                 "tags": [
                     "Bookings"
                 ],
-                "description": "Create new customer in system",
+                "description": "Driver accept Booking",
                 "parameters": [{
                     "name": "customer",
                     "in": "body",
-                    "description": "Customer that we want to create",
+                    "description": "Booking Accepted",
                     "schema": {
-                        "$ref": "#/definitions/Customer"
+                        "$ref": "#/definitions/Booking"
                     }
                 }],
                 "produces": [
@@ -218,7 +218,7 @@
                     "201": {
                         "description": "New customer is created",
                         "schema": {
-                            "$ref": "#/definitions/Customer"
+                            "$ref": "#/definitions/Booking"
                         }
                     }
                 }
@@ -230,13 +230,13 @@
                 "tags": [
                     "Bookings"
                 ],
-                "description": "Create new customer in system",
+                "description": "Rider cancel Booking",
                 "parameters": [{
-                    "name": "customer",
+                    "name": "Booking",
                     "in": "body",
-                    "description": "Customer that we want to create",
+                    "description": "Booking",
                     "schema": {
-                        "$ref": "#/definitions/Customer"
+                        "$ref": "#/definitions/Booking"
                     }
                 }],
                 "produces": [
@@ -244,9 +244,9 @@
                 ],
                 "responses": {
                     "201": {
-                        "description": "New customer is created",
+                        "description": "Booking is canceled",
                         "schema": {
-                            "$ref": "#/definitions/Customer"
+                            "$ref": "#/definitions/Booking"
                         }
                     }
                 }
@@ -258,13 +258,13 @@
                 "tags": [
                     "Drivers"
                 ],
-                "description": "Create new customer in system",
+                "description": "Create new Driver",
                 "parameters": [{
-                    "name": "customer",
+                    "name": "driver",
                     "in": "body",
-                    "description": "Customer that we want to create",
+                    "description": "Driver",
                     "schema": {
-                        "$ref": "#/definitions/Customer"
+                        "$ref": "#/definitions/User"
                     }
                 }],
                 "produces": [
@@ -272,9 +272,9 @@
                 ],
                 "responses": {
                     "201": {
-                        "description": "New customer is created",
+                        "description": "New driver is created",
                         "schema": {
-                            "$ref": "#/definitions/Customer"
+                            "$ref": "#/definitions/User"
                         }
                     }
                 }
@@ -285,13 +285,13 @@
                 "tags": [
                     "Drivers"
                 ],
-                "description": "Create new customer in system",
+                "description": "Create new Driver",
                 "parameters": [{
-                    "name": "customer",
+                    "name": "driver",
                     "in": "body",
-                    "description": "Customer that we want to create",
+                    "description": "Driver that we want to create",
                     "schema": {
-                        "$ref": "#/definitions/Customer"
+                        "$ref": "#/definitions/User"
                     }
                 }],
                 "produces": [
@@ -299,9 +299,9 @@
                 ],
                 "responses": {
                     "201": {
-                        "description": "New customer is created",
+                        "description": "New Driver is created",
                         "schema": {
-                            "$ref": "#/definitions/Customer"
+                            "$ref": "#/definitions/User"
                         }
                     }
                 }
@@ -310,12 +310,37 @@
 		
     },
     "definitions": {
-        "Customer": {
+		"RegisterUser": {
             "required": [
                 "email"
             ],
             "properties": {
-                "userName": {
+				"userFirstName": {
+                    "type": "string"
+                },
+				"userLastName": {
+                    "type": "string"
+                },
+				"userTelephone": {
+                    "type": "string"
+                },
+                "userLogin": {
+                    "type": "string"
+                },
+                "userPassword": {
+                    "type": "string"
+                },
+                "userRole": {
+                    "type": "string"
+                }
+            }
+        },
+        "LoginUser": {
+            "required": [
+                "email"
+            ],
+            "properties": {
+                "userLogin": {
                     "type": "string"
                 },
                 "userPassword": {
@@ -323,6 +348,16 @@
                 }
             }
         },
+		"User":{
+			"properties": {
+                "userLogin": {
+                    "type": "string"
+                },
+                "userPassword": {
+                    "type": "string"
+                }
+            }
+		},
 		"Booking": {
             "required": [
                 "email"

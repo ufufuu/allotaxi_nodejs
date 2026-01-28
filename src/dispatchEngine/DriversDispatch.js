@@ -10,33 +10,36 @@ class DriversDispatch {
 	{
 
 	}
-	async DispatchBooking() {
+	async DispatchBookingAll( rideInfo ) {
 		const io = socketIo.getIo();
-		io.sockets.emit("onRideBooking", function(data) {
-			
-		});
+		//const origin= { "latitude": 1.23, "longitute": 4.32 }
+		//const destination = { "latitude": 6.43, "longitute": 1.32 };
+		
+		io.sockets.emit("onRideBooking", rideInfo ); //, function(data) {
+		//});
 	}
 	async DispatchBooking ( driverId, rider, origin, destination ) {
 
 		const io = socketIo.getIo();
 		//var socketId = await getPersistedSocketId(driverId);
+		
 		origin= { "latitude": 1.23, "longitute": 4.32}
+		destination = {"latitude": 6.43, "longitute": 1.32};
+		
 		const socketID= `7pwCijrfp43dO2nLAAAB`;
 
-		//console.log(" In Drivers Dispatch, Io:", io);
 		// io.to(userId).emit('userStatus', { status: status });
 		
 		//io.emit("onRideBooking", function() {
     
-		io.sockets.emit("onRideBooking");
+		io.sockets.emit("onRideBooking", origin);
+		//console.log(" Driver Accepting Request, in drivers dispatch :", socketID);
 
-		console.log(" Driver Accepting Request, in drivers dispatch :", socketId);
-
+		/*
 		io.sockets.to(`${socketID}`).emit("onRideBooking", function (origin) {
 			console.log(" emitted onBookingRequest in driver dispatch:", origin);
 		});
-		//Listens To 
-		// API Call to Accepted or Denied Request 
+		*/
 		return true;
 	}
 }

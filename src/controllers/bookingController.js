@@ -12,7 +12,10 @@ const eventEmitter = new  events.EventEmitter();
 exports.rideBook = async ( req, res, next ) => {
 	
 	const io = socketIo.getIo();
-	const { originLat, originLng,  destinationCoords, contactInfo, specialInstructions, rider } = req.body;
+	const {	origin, originLat, originLng,
+			destination, destinationLat, destinationLng,
+			contactInfo, specialInstructions, rider 
+		} = req.body;
 	
 	/*
 	const  nearests = await geoService.getTurfNearest ([originLat, originLng]);
@@ -22,23 +25,28 @@ exports.rideBook = async ( req, res, next ) => {
 	*/
 	
 	const riderId = "8acc817e9c5601ab841c3c758934f384c12394a7";
+	const riderU = { contactInfo, rider } ;
 	const originCoords ={ originLat, originLng };
-	const currentLocation= { Lat: originLat, Lng: originLng };
+	const destinationCoords = { destinationLat, destinationLng };
+	
+	//const currentLocation= { Lat: originLat, Lng: originLng };
 	//try 
 	//{
         //if (!req?.session?.user?.id) {
 			//return res.status(400).json({ message: " Unauthorized " });
 		//}
 		 
-		await driversDispatch.DispatchBooking();
+		await driversDispatch.DispatchBookingAll(req.body);
 		
+		/*
 		const alldrivers = await geoService.queryNearByDrivers(currentLocation, Radius_Length );
 		const nearbyDrivers = await geoService.queryNearByDrivers(currentLocation, alldrivers, 2.5 );
 		var bestDriverMatch =  await geoService.getBestDriverMatch(nearbyDrivers);
+		*/
 		
-		const driverSocketId= getPersistedSocketId(closestDriverCoords);
+		//const driverSocketId= getPersistedSocketId(closestDriverCoords);
 		
-		const driverAccepted = await driversDispatch.DispatchBookingAll(); // (driverSocketId, riderId, originCoords, destinationCoords );
+		//const driverAccepted = await driversDispatch.DispatchBookingAll(); // (driverSocketId, riderId, originCoords, destinationCoords );
 
 		const authToken = req.header("Authorization");
 		if(authToken === 'valid-token') {
@@ -46,12 +54,12 @@ exports.rideBook = async ( req, res, next ) => {
 		} else {
 			//res 401
 		}
+		//console.log( " Driver Accepted ? ", driverAccepted);
 		
-		console.log( " Driver Accepted ? ", driverAccepted);
-		if(driverAccepted) {
+		//if(driverAccepted) {
 			//const booking = bookingService.createBooking(riderId, driverAccepted, originLat, destinationCoords);
-			return res.status(201).json(booking);
-		}
+			return res.status(201).json();   //json(booing);
+		//}
     //} catch(error){
 		//res.status(400).json({ message: error });
     //}
@@ -134,3 +142,20 @@ exports.deleteBooking = async ( req, res, next ) => {
 		return res.status(400).json({ message: "booking deleted !"});
 	}
 };
+
+
+/*
+
+{
+  "origin": "SALT",
+  "originLat": "6.21",
+  "originLng": "1.12",
+  "destination": "Camp GP",
+  "destinationLat": "5.32",
+  "destinationLng": "4.53",
+  "contactInfo": "+22870565011",
+  "specialInstructions": "Je suis a la porte",
+  "rider": "Kevin"
+}
+
+*/
